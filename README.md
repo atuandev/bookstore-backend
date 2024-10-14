@@ -24,3 +24,5 @@ Tutorial MySQL in Docker: https://www.youtube.com/watch?v=Oa7bpIZ6RxI&t=777s&ab_
 
 3. Use **Intellij** to run a project
 4. Test API with **Postman** or **SwaggerUI** at `http://localhost:8080/bookstore/swagger-ui/index.html`
+
+![image](https://github.com/user-attachments/assets/2278a8d4-2c85-4356-805b-59ad743a58a3)
