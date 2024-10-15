@@ -2,17 +2,12 @@ spring:
   config:
     activate:
       on-profile: dev
-  devtools:
-    add-properties: true
   datasource:
     url: jdbc:mysql://localhost:3307/bookstore?createDatabaseIfNotExist=true
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: root
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -31,5 +26,5 @@ openapi:
     title: Bookstore API documentation
     version: 1.0.0
     description: API for managing books in a bookstore
-    server: http://localhost:${server.port}
+    server: http://localhost:${server.port}${server.servlet.context-path}
     api-docs: bookstore-api

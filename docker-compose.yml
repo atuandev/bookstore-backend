@@ -19,8 +19,6 @@ services:
     restart: unless-stopped
     networks:
       - backend
-    volumes:
-      - ./dump-db:/docker-entrypoint-initdb.d
 
 networks:
   backend:
