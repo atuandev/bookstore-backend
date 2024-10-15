@@ -1,7 +1,6 @@
 # Spring API for BookStore
 
 ## Techs
-- Spring
 - Spring Boot
 - Spring Security
 - Spring Data JPA
@@ -9,20 +8,25 @@
 - Mapstruct
 
 ## Tools
-- Intellij idea
+- IntelliJ IDEA 2024
 - MySQL
 - Docker
 - Swagger UI
 
 ## Getting Started
 1. Clone project: `git clone git@github.com:atuandev/bookstore-backend.git`
-2. View all setting at `application.yaml` 
-3. Set up **MySQL** - username: `root`, password: `root`, port: `3307`
-> You can use **Docker** to pull images **Mysql**
+2. View all settings at `application.yml`
+3. Install MySQL from Docker `docker pull mysql:8.4.0`
+4. Run Container Docker `docker run --name mysql-8.4.0 -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.4.0`
 
-Tutorial MySQL in Docker: https://www.youtube.com/watch?v=Oa7bpIZ6RxI&t=777s&ab_channel=Devteria
+![image](https://github.com/user-attachments/assets/8983555b-0924-4956-8583-d9aa46621d18)
+> Tutorial MySQL in Docker: https://www.youtube.com/watch?v=Oa7bpIZ6RxI&t=777s&ab_channel=Devteria
 
-3. Use **Intellij** to run a project
-4. Test API with **Postman** or **SwaggerUI** at `http://localhost:8080/bookstore/swagger-ui/index.html`
+6. Use HeidiSQL to connect database
+
+![image](https://github.com/user-attachments/assets/bd02d5cd-69d3-47bc-9201-e583209b8f0d)
+
+8. Use **Intellij** to run a project
+9. Test API with **Postman** or **SwaggerUI** at `http://localhost:8080/bookstore/swagger-ui/index.html`
 
 ![image](https://github.com/user-attachments/assets/2278a8d4-2c85-4356-805b-59ad743a58a3)
