@@ -11,22 +11,23 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.util.List;
 
 @Configuration
+@Profile("!prod")
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI openAPI(@Value("${open.api.title}") String title,
-                           @Value("${open.api.description}") String description,
-                           @Value("${open.api.version}") String version,
-                           @Value("${open.api.serverUrl}") String serverUrl,
-                           @Value("${open.api.serverName}") String serverName) {
+    public OpenAPI openAPI(@Value("${openapi.service.title}") String title,
+                           @Value("${openapi.service.description}") String description,
+                           @Value("${openapi.service.version}") String version,
+                           @Value("${openapi.service.server}") String server) {
         return new OpenAPI().info(new Info().title(title)
                         .description(description)
-                        .version(version).license(new License().name("API License").url("https://atuandev.vercel.app")))
-                .servers(List.of(new Server().url(serverUrl).description(serverName)))
+                        .version(version).license(new License().name("Apache 2.0").url("https://springdoc.org")))
+                .servers(List.of(new Server().url(server)))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
@@ -37,9 +38,9 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public GroupedOpenApi groupedOpenApi() {
+    public GroupedOpenApi groupedOpenApi(@Value("${openapi.service.api-docs}") String apiDocs) {
         return GroupedOpenApi.builder()
-                .group("api-bookstore")
+                .group(apiDocs)
                 .packagesToScan("com.iuh.controller")
                 .build();
     }

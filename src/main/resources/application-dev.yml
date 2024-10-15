@@ -1,0 +1,35 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  devtools:
+    add-properties: true
+  datasource:
+    url: jdbc:mysql://localhost:3307/bookstore?createDatabaseIfNotExist=true
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+jwt:
+  signerKey: uGn1btxMAz77FBExhcThICMJpEWG4fwLu6pJiwlObSIubo7ivat3KSD54PRN0467
+  valid-duration: 3600 # seconds
+  refreshable-duration: 360000 # seconds
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+openapi:
+  service:
+    title: Bookstore API documentation
+    version: 1.0.0
+    description: API for managing books in a bookstore
+    server: http://localhost:${server.port}
+    api-docs: bookstore-api
