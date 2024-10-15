@@ -3,11 +3,13 @@ package com.iuh.controller;
 import com.iuh.dto.ApiResponse;
 import com.iuh.dto.request.UserCreationRequest;
 import com.iuh.dto.request.UserUpdateRequest;
+import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.UserResponse;
 import com.iuh.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,6 +40,19 @@ public class UserController {
 
         return ApiResponse.<List<UserResponse>>builder()
                 .data(userService.findAll())
+                .build();
+    }
+
+    @Operation(summary = "Get all users with sort by")
+    @GetMapping("/list")
+    ApiResponse<PageResponse<Object>> getAllUsersWithSortBy(
+            @RequestParam(defaultValue = "0", required = false) int pageNo,
+            @Min(5) @RequestParam(defaultValue = "20", required = false) int pageSize,
+            @RequestParam(required = false) String sortBy
+    ) {
+        SecurityContextHolder.getContext().getAuthentication();
+        return ApiResponse.<PageResponse<Object>>builder()
+                .data(userService.findAllUsersWithSortBy(pageNo, pageSize, sortBy))
                 .build();
     }
 
