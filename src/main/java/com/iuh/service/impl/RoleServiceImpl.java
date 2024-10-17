@@ -25,6 +25,7 @@ public class RoleServiceImpl implements RoleService {
     PermissionRepository permissionRepository;
     RoleMapper roleMapper;
 
+    @Override
     public RoleResponse save(RoleRequest request) {
         var role = roleMapper.toRole(request);
 
@@ -36,10 +37,12 @@ public class RoleServiceImpl implements RoleService {
         return roleMapper.toRoleResponse(role);
     }
 
+    @Override
     public List<RoleResponse> findAll() {
         return roleRepository.findAll().stream().map(roleMapper::toRoleResponse).toList();
     }
 
+    @Override
     public void delete(String role) {
         roleRepository.deleteById(role);
     }

@@ -7,21 +7,17 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class UserResponse {
+public class UserAddressResponse {
     String id;
-    String username;
-    String name;
-    String email;
-    String avatar;
-    Boolean status;
-    Set<RoleResponse> roles;
+    String receiverName;
+    String receiverPhone;
+    String address;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

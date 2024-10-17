@@ -22,6 +22,10 @@ public enum ErrorCode {
     INVALID_PHONE(1009, "Phone number must be 10 characters", HttpStatus.BAD_REQUEST),
     INVALID_EMAIL(1010, "Invalid email", HttpStatus.BAD_REQUEST),
     INVALID_NAME(1011, "Name must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_ADDRESS(1012, "Address must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_USER_ID(1013, "User id must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_PHONE_FORMAT(1014, "Phone number must be in the format 0xxxxxxxxx", HttpStatus.BAD_REQUEST),
+    USER_ADDRESS_NOT_FOUND(1015, "User address not found", HttpStatus.NOT_FOUND),
     ;
 
     int code;

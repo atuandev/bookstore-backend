@@ -18,7 +18,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.mapping.Set;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,10 +36,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@Slf4j
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
@@ -48,6 +47,7 @@ public class UserServiceImpl implements UserService {
     RoleMapper roleMapper;
     PasswordEncoder passwordEncoder;
 
+    @Override
     public UserResponse save(UserCreationRequest request) {
         User user = userMapper.toUser(request);
 
@@ -68,11 +68,13 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(user);
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> findAll() {
         return userMapper.toUserResponseList(userRepository.findAll());
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse findById(String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -80,6 +82,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(user);
     }
 
+    @Override
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -89,6 +92,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(user);
     }
 
+    @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse update(String id, UserUpdateRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -102,17 +106,20 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(String id) {
         userRepository.deleteById(id);
     }
 
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteAll() {
         userRepository.deleteAll();
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<Object> findAllUsersWithSortBy(int pageNo, int pageSize, String sortBy) {
         int page = 0;
         if (pageNo > 0) {
@@ -122,7 +129,9 @@ public class UserServiceImpl implements UserService {
         List<Sort.Order> sorts = new ArrayList<>();
 
         if (StringUtils.hasLength(sortBy)) {
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            // Regex to match the pattern of sortBy
+            // Example: name:asc
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(asc|desc)");
             Matcher matcher = pattern.matcher(sortBy);
             if (matcher.find()) {
                 if (matcher.group(3).equalsIgnoreCase("asc")) {
@@ -143,7 +152,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Convert Page<User> to PageResponse
      *
-     * @param users  Page<User>
+     * @param users    Page<User>
      * @param pageable Pageable
      * @return PageResponse
      */
@@ -156,7 +165,6 @@ public class UserServiceImpl implements UserService {
                 .avatar(user.getAvatar())
                 .status(user.getStatus())
                 .roles(new HashSet<>(roleRepository.findAll().stream().map(roleMapper::toRoleResponse).toList()))
-                .addresses(user.getAddresses())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build()).toList();

@@ -1,10 +1,12 @@
 package com.iuh.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -34,6 +36,7 @@ public class User extends AbstractEntity {
     @ManyToMany
     Set<Role> roles;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    Set<UserAddress> addresses;
+    Set<UserAddress> addresses = new HashSet<>();
 }

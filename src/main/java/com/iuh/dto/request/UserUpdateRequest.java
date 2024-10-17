@@ -1,7 +1,7 @@
 package com.iuh.dto.request;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +21,10 @@ public class UserUpdateRequest {
     @Size(min = 4, message = "INVALID_USERNAME")
     String username;
 
-    @Size(min = 8, message = "INVALID_PASSWORD")
+    @Size(min = 6, message = "INVALID_PASSWORD")
     String password;
 
-    @NotNull(message = "INVALID_NAME")
+    @NotBlank(message = "INVALID_NAME")
     String name;
 
     @Email(message = "INVALID_EMAIL")

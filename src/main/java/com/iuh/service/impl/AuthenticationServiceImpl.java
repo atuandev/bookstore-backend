@@ -57,6 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.refreshable-duration}")
     protected long refreshableDuration;
 
+    @Override
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         boolean isValid = true;
 
@@ -69,6 +70,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return IntrospectResponse.builder().valid(isValid).build();
     }
 
+    @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         var user = userRepository
                 .findByUsername(request.getUsername())
@@ -86,6 +88,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder().authenticated(true).token(token).build();
     }
 
+    @Override
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
         try {
             SignedJWT signedJWT = verifyToken(request.getToken(), true);
@@ -126,6 +129,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return signedJWT;
     }
 
+    @Override
     public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
         var signedJWT = verifyToken(request.getToken(), true);
 
