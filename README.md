@@ -6,12 +6,13 @@
 - Spring Data JPA
 - Lombok
 - Mapstruct
+- Swagger UI
+- MySQL
 
 ## Tools
 - IntelliJ IDEA 2024
-- MySQL
 - Docker
-- Swagger UI
+- HeidiSQL
 
 ## Getting Started
 1. Clone project: `git clone git@github.com:atuandev/bookstore-backend.git`
@@ -22,7 +23,7 @@
 ![image](https://github.com/user-attachments/assets/8983555b-0924-4956-8583-d9aa46621d18)
 > Tutorial MySQL in Docker: https://www.youtube.com/watch?v=Oa7bpIZ6RxI&t=777s&ab_channel=Devteria
 
-6. Use HeidiSQL to connect database
+6. Use HeidiSQL to connect the database
 
 ![image](https://github.com/user-attachments/assets/bd02d5cd-69d3-47bc-9201-e583209b8f0d)
 
