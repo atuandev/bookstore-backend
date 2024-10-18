@@ -26,7 +26,7 @@ public class UserAddress extends AbstractEntity {
     @Column(name = "address")
     String address;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     User user;
 }

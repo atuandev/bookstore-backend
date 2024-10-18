@@ -1,7 +1,7 @@
 package com.iuh.dto.request;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,15 +16,15 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class UserCreationRequest {
 
-    @Size(min = 4, message = "INVALID_USERNAME")
+    @Size(min = 3, message = "INVALID_USERNAME")
     String username;
 
-    @Size(min = 8, message = "INVALID_PASSWORD")
+    @Size(min = 6, message = "INVALID_PASSWORD")
     String password;
 
     @NotNull(message = "INVALID_NAME")
     String name;
 
-    @Email(message = "INVALID_EMAIL")
+    @Pattern(regexp = "(\\w)+(.\\w+)*@(\\w+)+(.\\w+)*$", message = "INVALID_EMAIL")
     String email;
 }

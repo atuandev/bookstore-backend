@@ -12,7 +12,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserAddressServiceImpl implements UserAddressService {
-    UserAddressRepository userAddressRepository;
     UserRepository userRepository;
+    UserAddressRepository userAddressRepository;
     UserAddressMapper userAddressMapper;
 
     @Override
@@ -44,13 +43,9 @@ public class UserAddressServiceImpl implements UserAddressService {
     @PreAuthorize("hasRole('ADMIN')")
     @Override
     public UserAddressResponse findById(String id) {
-        return userAddressRepository.findById(id).map(userAddressMapper::toUserAddressResponse)
+        var userAddress = userAddressRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_ADDRESS_NOT_FOUND));
-    }
-
-    @Override
-    public List<UserAddressResponse> findAllByUserId(String userId) {
-        return userAddressRepository.findAllByUserId(userId).stream().map(userAddressMapper::toUserAddressResponse).toList();
+        return userAddressMapper.toUserAddressResponse(userAddress);
     }
 
     @Override
@@ -58,9 +53,6 @@ public class UserAddressServiceImpl implements UserAddressService {
         var userAddress = userAddressRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_ADDRESS_NOT_FOUND));
         userAddressMapper.updateUserAddress(userAddress, request);
-
-        userAddress.setUser(userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
 
         return userAddressMapper.toUserAddressResponse(userAddressRepository.save(userAddress));
     }

@@ -8,17 +8,6 @@ services:
       - '8080:8080'
     networks:
       - backend
-  mysql:
-    container_name: db-container-bookstore
-    image: mysql:8.4.0
-    ports:
-      - '3307:3306'
-    environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: bookstore
-    restart: unless-stopped
-    networks:
-      - backend
 
 networks:
   backend:
