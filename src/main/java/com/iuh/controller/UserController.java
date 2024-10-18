@@ -43,7 +43,7 @@ public class UserController {
                 .build();
     }
 
-    @Operation(summary = "Get all users with sort by")
+    @Operation(summary = "Get all users with pagination and sort by")
     @GetMapping("/list")
     ApiResponse<PageResponse<Object>> getAllUsersWithSortBy(
             @RequestParam(defaultValue = "0", required = false) int pageNo,
@@ -86,12 +86,5 @@ public class UserController {
     ApiResponse<String> deleteUser(@PathVariable("userId") String userId) {
         userService.delete(userId);
         return ApiResponse.<String>builder().data("User deleted").build();
-    }
-
-    @Operation(summary = "Delete all users")
-    @DeleteMapping
-    ApiResponse<String> deleteAllUsers() {
-        userService.deleteAll();
-        return ApiResponse.<String>builder().data("All users deleted").build();
     }
 }

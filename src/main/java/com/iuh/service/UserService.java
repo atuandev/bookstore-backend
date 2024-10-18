@@ -20,7 +20,5 @@ public interface UserService {
 
     public void delete(String id);
 
-    public void deleteAll();
-
     public PageResponse<Object> findAllUsersWithSortBy(int pageNo, int pageSize, String sortBy);
 }

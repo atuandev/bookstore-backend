@@ -10,8 +10,6 @@ public interface UserAddressService {
 
     public List<UserAddressResponse> findAll();
 
-    public List<UserAddressResponse> findAllByUserId(String userId);
-
     public UserAddressResponse findById(String id);
 
     public UserAddressResponse update(String id, UserAddressRequest request);

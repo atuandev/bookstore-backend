@@ -9,7 +9,6 @@ import com.iuh.entity.Role;
 import com.iuh.entity.User;
 import com.iuh.exception.AppException;
 import com.iuh.exception.ErrorCode;
-import com.iuh.mapper.RoleMapper;
 import com.iuh.mapper.UserMapper;
 import com.iuh.repository.RoleRepository;
 import com.iuh.repository.UserRepository;
@@ -44,9 +43,13 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     RoleRepository roleRepository;
     UserMapper userMapper;
-    RoleMapper roleMapper;
     PasswordEncoder passwordEncoder;
 
+    /**
+     * Save user to database
+     * @param request UserCreationRequest
+     * @return UserResponse
+     */
     @Override
     public UserResponse save(UserCreationRequest request) {
         User user = userMapper.toUser(request);
@@ -82,6 +85,10 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(user);
     }
 
+    /**
+     * Get user info
+     * @return UserResponse
+     */
     @Override
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
@@ -92,6 +99,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(user);
     }
 
+    /**
+     * Update user by id
+     * @param id User id
+     * @param request UserUpdateRequest
+     * @return UserResponse
+     */
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse update(String id, UserUpdateRequest request) {
@@ -112,12 +125,13 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public void deleteAll() {
-        userRepository.deleteAll();
-    }
-
+    /**
+     * Find all users with sort by
+     * @param pageNo Page number
+     * @param pageSize Page size
+     * @param sortBy Sort by
+     * @return PageResponse
+     */
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<Object> findAllUsersWithSortBy(int pageNo, int pageSize, String sortBy) {
@@ -157,22 +171,12 @@ public class UserServiceImpl implements UserService {
      * @return PageResponse
      */
     private PageResponse<Object> convertToPageResponse(Page<User> users, Pageable pageable) {
-        List<UserResponse> response = users.stream().map(user -> UserResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .name(user.getName())
-                .email(user.getEmail())
-                .avatar(user.getAvatar())
-                .status(user.getStatus())
-                .roles(new HashSet<>(roleRepository.findAll().stream().map(roleMapper::toRoleResponse).toList()))
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .build()).toList();
+        List<UserResponse> response = users.stream().map(userMapper::toUserResponse).toList();
 
         return PageResponse.builder()
-                .page(pageable.getPageNumber())
-                .size(pageable.getPageSize())
-                .total(users.getTotalPages())
+                .pageNo(pageable.getPageNumber())
+                .pageSize(pageable.getPageSize())
+                .totalPages(users.getTotalPages())
                 .items(response)
                 .build();
     }

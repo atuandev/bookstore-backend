@@ -15,7 +15,7 @@ import java.util.List;
 
 @Tag(name = "User Address Controller")
 @RestController
-@RequestMapping("/user-addresses")
+@RequestMapping("/addresses")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class UserAddressController {
@@ -37,35 +37,27 @@ public class UserAddressController {
                 .build();
     }
 
-    @Operation(summary = "Get all user addresses by user id")
-    @GetMapping("/user/{userId}")
-    ApiResponse<List<UserAddressResponse>> getAllUserAddressesByUserId(@PathVariable String userId) {
-        return ApiResponse.<List<UserAddressResponse>>builder()
-                .data(userAddressService.findAllByUserId(userId))
-                .build();
-    }
-
     @Operation(summary = "Get user address details")
-    @GetMapping("/{userAddressId}")
-    ApiResponse<UserAddressResponse> getUserAddressDetails(@PathVariable String userAddressId) {
+    @GetMapping("/{addressId}")
+    ApiResponse<UserAddressResponse> getUserAddressDetails(@PathVariable String addressId) {
         return ApiResponse.<UserAddressResponse>builder()
-                .data(userAddressService.findById(userAddressId))
+                .data(userAddressService.findById(addressId))
                 .build();
     }
 
     @Operation(summary = "Update user address")
-    @PutMapping("/{userAddressId}")
+    @PutMapping("/{addressId}")
     ApiResponse<UserAddressResponse> updateUserAddress(
-            @PathVariable String userAddressId, @RequestBody @Valid UserAddressRequest request) {
+            @PathVariable String addressId, @RequestBody @Valid UserAddressRequest request) {
         return ApiResponse.<UserAddressResponse>builder()
-                .data(userAddressService.update(userAddressId, request))
+                .data(userAddressService.update(addressId, request))
                 .build();
     }
 
     @Operation(summary = "Delete user address")
-    @DeleteMapping("/{userAddressId}")
-    ApiResponse<Void> deleteUserAddress(@PathVariable String userAddressId) {
-        userAddressService.delete(userAddressId);
+    @DeleteMapping("/{addressId}")
+    ApiResponse<Void> deleteUserAddress(@PathVariable String addressId) {
+        userAddressService.delete(addressId);
         return ApiResponse.<Void>builder()
                 .build();
     }

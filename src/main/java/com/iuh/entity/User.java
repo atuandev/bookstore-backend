@@ -37,6 +37,6 @@ public class User extends AbstractEntity {
     Set<Role> roles;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     Set<UserAddress> addresses = new HashSet<>();
 }
