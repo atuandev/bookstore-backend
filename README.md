@@ -30,4 +30,5 @@
 8. Use **Intellij** to run a project
 9. Test API with **Postman** or **SwaggerUI** at `http://localhost:8080/bookstore/swagger-ui/index.html`
 
-![image](https://github.com/user-attachments/assets/2278a8d4-2c85-4356-805b-59ad743a58a3)
+![image](https://github.com/user-attachments/assets/5685947b-ee0b-4b32-b388-d5fdcd407861)
+
