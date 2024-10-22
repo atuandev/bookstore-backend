@@ -1,9 +1,6 @@
 package com.iuh.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,10 +11,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "permissions")
-public class Permission {
-    @Id
+@Table(name = "authors")
+public class Author extends AbstractEntity {
+
     String name;
 
-    String description;
+    @ManyToOne()
+    @JoinColumn(name = "book_id")
+    Book book;
 }
