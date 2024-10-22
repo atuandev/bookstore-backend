@@ -37,7 +37,16 @@ public enum ErrorCode {
     INVALID_BOOK_PRICE(1024, "Price must be at least {min}", HttpStatus.BAD_REQUEST),
     INVALID_BOOK_STOCK(1025, "Stock must be at least {min}", HttpStatus.BAD_REQUEST),
     INVALID_BOOK_SLUG(1026, "Slug must not be null", HttpStatus.BAD_REQUEST),
-    BOOK_NOT_FOUND(1027, "Book not found", HttpStatus.NOT_FOUND),
+    INVALID_BOOK_SOLD(1027, "Sold must be at least {min}", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_CATEGORY(1028, "Category must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_DISCOUNT_NAME(1029, "Name must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_DISCOUNT_CODE(1030, "Code must be in the format A-Z,0-9", HttpStatus.BAD_REQUEST),
+    INVALID_DISCOUNT_PERCENT(1031, "Percent must be at least {min}", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_IMAGE_URL(1032, "Url must not be null", HttpStatus.BAD_REQUEST),
+    CATEGORY_NOT_FOUND(1033, "Category not found", HttpStatus.NOT_FOUND),
+    PUBLISHER_NOT_FOUND(1034, "Publisher not found", HttpStatus.NOT_FOUND),
+    BOOK_NOT_FOUND(1035, "Book not found", HttpStatus.NOT_FOUND),
+    DISCOUNT_NOT_FOUND(1036, "Discount not found", HttpStatus.NOT_FOUND),
     ;
 
     int code;

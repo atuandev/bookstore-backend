@@ -1,7 +1,8 @@
 package com.iuh.dto.response;
 
-import com.iuh.entity.Author;
-import com.iuh.entity.BookImage;
+import com.iuh.entity.Category;
+import com.iuh.entity.Discount;
+import com.iuh.entity.Publisher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,9 @@ public class BookResponse {
     Integer sold;
     Boolean isNew;
     Boolean isFeatured;
-    Set<BookImage> images;
-    Set<Author> authors;
+    Category category;
+    Publisher publisher;
+    Discount discount;
+    Set<BookImageResponse> images;
+    Set<AuthorResponse> authors;
 }

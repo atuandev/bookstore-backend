@@ -8,17 +8,17 @@ import com.iuh.dto.response.UserResponse;
 import java.util.List;
 
 public interface UserService {
-    public UserResponse save(UserCreationRequest request);
+    UserResponse save(UserCreationRequest request);
 
-    public List<UserResponse> findAll();
+    List<UserResponse> findAll();
 
-    public UserResponse findById(String id);
+    UserResponse findById(String id);
 
-    public UserResponse getMyInfo();
+    UserResponse getMyInfo();
 
-    public UserResponse update(String id, UserUpdateRequest request);
+    UserResponse update(String id, UserUpdateRequest request);
 
-    public void delete(String id);
+    void delete(String id);
 
-    public PageResponse<Object> findAllUsersWithSortBy(int pageNo, int pageSize, String sortBy);
+    PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy);
 }

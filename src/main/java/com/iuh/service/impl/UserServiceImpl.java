@@ -134,11 +134,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public PageResponse<Object> findAllUsersWithSortBy(int pageNo, int pageSize, String sortBy) {
-        int page = 0;
-        if (pageNo > 0) {
-            page = pageNo - 1;
-        }
+    public PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy) {
+        int page = pageNo > 0 ? pageNo - 1 : 0;
 
         List<Sort.Order> sorts = new ArrayList<>();
 
@@ -160,24 +157,13 @@ public class UserServiceImpl implements UserService {
 
         Page<User> users = userRepository.findAll(pageable);
 
-        return convertToPageResponse(users, pageable);
-    }
-
-    /**
-     * Convert Page<User> to PageResponse
-     *
-     * @param users    Page<User>
-     * @param pageable Pageable
-     * @return PageResponse
-     */
-    private PageResponse<Object> convertToPageResponse(Page<User> users, Pageable pageable) {
-        List<UserResponse> response = users.stream().map(userMapper::toUserResponse).toList();
+        List<UserResponse> items = users.map(userMapper::toUserResponse).getContent();
 
         return PageResponse.builder()
-                .pageNo(pageable.getPageNumber())
+                .pageNo(pageable.getPageNumber() + 1)
                 .pageSize(pageable.getPageSize())
                 .totalPages(users.getTotalPages())
-                .items(response)
+                .items(items)
                 .build();
     }
 }

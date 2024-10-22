@@ -6,7 +6,9 @@ import com.iuh.dto.response.PermissionResponse;
 import java.util.List;
 
 public interface PermissionService {
-    public PermissionResponse save(PermissionRequest request);
-    public List<PermissionResponse> findAll();
-    public void delete(String permission);
+    PermissionResponse save(PermissionRequest request);
+
+    List<PermissionResponse> findAll();
+
+    void delete(String permission);
 }

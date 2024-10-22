@@ -46,13 +46,13 @@ public class UserController {
     @Operation(summary = "Get all users with pagination and sort by")
     @GetMapping("/list")
     ApiResponse<PageResponse<Object>> getAllUsersWithSortBy(
-            @RequestParam(defaultValue = "0", required = false) int pageNo,
-            @Min(5) @RequestParam(defaultValue = "20", required = false) int pageSize,
+            @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
+            @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
             @RequestParam(required = false) String sortBy
     ) {
         SecurityContextHolder.getContext().getAuthentication();
         return ApiResponse.<PageResponse<Object>>builder()
-                .data(userService.findAllUsersWithSortBy(pageNo, pageSize, sortBy))
+                .data(userService.findAllWithSortBy(pageNo, pageSize, sortBy))
                 .build();
     }
 
