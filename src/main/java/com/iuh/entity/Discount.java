@@ -23,7 +23,7 @@ public class Discount extends AbstractEntity {
     @Column(unique = true)
     String code;
 
-    Integer discountPercent;
+    Integer percent;
 
     LocalDate startDate;
 

@@ -6,7 +6,9 @@ import com.iuh.dto.response.RoleResponse;
 import java.util.List;
 
 public interface RoleService {
-    public RoleResponse save(RoleRequest request);
-    public List<RoleResponse> findAll();
-    public void delete(String role);
+    RoleResponse save(RoleRequest request);
+
+    List<RoleResponse> findAll();
+
+    void delete(String role);
 }

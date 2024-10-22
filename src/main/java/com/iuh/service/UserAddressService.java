@@ -6,13 +6,13 @@ import com.iuh.dto.response.UserAddressResponse;
 import java.util.List;
 
 public interface UserAddressService {
-    public UserAddressResponse save(UserAddressRequest request);
+    UserAddressResponse save(UserAddressRequest request);
 
-    public List<UserAddressResponse> findAll();
+    List<UserAddressResponse> findAll();
 
-    public UserAddressResponse findById(String id);
+    UserAddressResponse findById(String id);
 
-    public UserAddressResponse update(String id, UserAddressRequest request);
+    UserAddressResponse update(String id, UserAddressRequest request);
 
-    public void delete(String id);
+    void delete(String id);
 }

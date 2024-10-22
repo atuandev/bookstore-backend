@@ -28,10 +28,7 @@ public class BookCreationRequest {
     @Size(min = 1, message = "INVALID_BOOK_DESCRIPTION")
     String description;
 
-    @NotNull(message = "INVALID_BOOK_AUTHOR")
-    List<String> author;
-
-    @Pattern(regexp = "^[0-9]+(\\.[0-9]+)?x[0-9]+(\\.[0-9]+)?$", message = "INVALID_BOOK_SIZE")
+    @Pattern(regexp = "^\\d+(\\.\\d+)?x\\d+(\\.\\d+)?$", message = "INVALID_BOOK_SIZE")
     String size;
 
     @Min(value = 0, message = "INVALID_BOOK_PAGES")
@@ -52,13 +49,23 @@ public class BookCreationRequest {
     @Min(value = 0, message = "INVALID_BOOK_STOCK")
     Integer stock;
 
+    @Min(value = 0, message = "INVALID_BOOK_SOLD")
+    Integer sold;
+
     Boolean isNew;
 
     Boolean isFeatured;
+
+    Boolean status;
 
     String categoryId;
 
     String publisherId;
 
-    List<String> imagesUrl;
+    String discountCode;
+
+    List<BookImageRequest> images;
+
+    @NotNull(message = "INVALID_BOOK_AUTHOR")
+    List<AuthorRequest> author;
 }

@@ -26,4 +26,6 @@ public class Publisher extends AbstractEntity {
 
     @Column(columnDefinition = "TEXT")
     String image;
+
+    String address;
 }
