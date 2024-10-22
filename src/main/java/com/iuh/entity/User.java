@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "users")
 public class User extends AbstractEntity {
     @Column(name = "username", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
     String username;
@@ -30,8 +30,8 @@ public class User extends AbstractEntity {
     @Column(columnDefinition = "TEXT")
     String avatar;
 
-    @ColumnDefault(value = "1")
-    Boolean status;
+    @Builder.Default
+    Boolean status = true;
 
     @ManyToMany
     Set<Role> roles;

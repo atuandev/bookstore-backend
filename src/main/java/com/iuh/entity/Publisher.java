@@ -1,6 +1,8 @@
 package com.iuh.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,7 +13,17 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "publishers")
 public class Publisher extends AbstractEntity {
+
     String name;
+
+    @Column(unique = true)
     String slug;
+
+    @Column(columnDefinition = "TEXT")
+    String description;
+
+    @Column(columnDefinition = "TEXT")
+    String image;
 }

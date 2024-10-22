@@ -11,19 +11,20 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "addresses")
-public class UserAddress extends AbstractEntity {
+@Table(name = "reviews")
+public class Review extends AbstractEntity {
 
-    @Column(name = "receiver_name")
-    String receiverName;
+    @Column(columnDefinition = "TEXT")
+    String comment;
 
-    @Column(name = "receiver_phone")
-    String receiverPhone;
-
-    @Column(name = "address")
-    String address;
+    Integer rating;
 
     @ManyToOne()
     @JoinColumn(name = "user_id")
     User user;
+
+    @ManyToOne()
+    @JoinColumn(name = "book_id")
+    Book book;
+
 }

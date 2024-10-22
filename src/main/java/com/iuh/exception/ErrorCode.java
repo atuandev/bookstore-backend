@@ -26,6 +26,18 @@ public enum ErrorCode {
     INVALID_USER_ID(1013, "User id must not be null", HttpStatus.BAD_REQUEST),
     INVALID_PHONE_FORMAT(1014, "Phone number must be in the format 0xxxxxxxxx", HttpStatus.BAD_REQUEST),
     USER_ADDRESS_NOT_FOUND(1015, "User address not found", HttpStatus.NOT_FOUND),
+    INVALID_BOOK_TITLE(1016, "Title must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_DESCRIPTION(1017, "Description must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_AUTHOR(1018, "Author must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_SIZE(1019, "Size must be in the format WxH", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_PAGES(1020, "Pages must be at least {min}", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_WEIGHT(1021, "Weight must be at least {min}", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_PUBLISH_YEAR(1022, "Publish year must be at least {min}", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_IMPORT_PRICE(1023, "Import price must be at least {min}", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_PRICE(1024, "Price must be at least {min}", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_STOCK(1025, "Stock must be at least {min}", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_SLUG(1026, "Slug must not be null", HttpStatus.BAD_REQUEST),
+    BOOK_NOT_FOUND(1027, "Book not found", HttpStatus.NOT_FOUND),
     ;
 
     int code;
