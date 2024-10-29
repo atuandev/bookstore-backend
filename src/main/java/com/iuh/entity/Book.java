@@ -26,6 +26,8 @@ public class Book extends AbstractEntity {
     @Column(columnDefinition = "TEXT")
     String description;
 
+    String author;
+
     String size;
 
     Integer pages;
@@ -38,20 +40,15 @@ public class Book extends AbstractEntity {
 
     Double price;
 
-    @Builder.Default
-    Integer stock = 0;
+    Integer stock;
 
-    @Builder.Default
-    Integer sold = 0;
+    Integer sold;
 
-    @Builder.Default
-    Boolean isNew = false;
+    Boolean isNew;
 
-    @Builder.Default
-    Boolean isFeatured = false;
+    Boolean isFeatured;
 
-    @Builder.Default
-    Boolean status = true;
+    Boolean status;
 
     @ManyToOne()
     @JoinColumn(name = "category_id")
@@ -68,8 +65,4 @@ public class Book extends AbstractEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     Set<BookImage> bookImages = new HashSet<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    Set<Author> authors = new HashSet<>();
 }

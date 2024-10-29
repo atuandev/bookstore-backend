@@ -25,7 +25,7 @@ public class BookController {
     BookService bookService;
 
     @Operation(summary = "Create book")
-    @PostMapping
+    @PostMapping("/add")
     ApiResponse<BookResponse> createBook(@RequestBody @Valid BookCreationRequest request) {
         return ApiResponse.<BookResponse>builder()
                 .data(bookService.save(request))
@@ -52,11 +52,19 @@ public class BookController {
                 .build();
     }
 
-    @Operation(summary = "Get book details")
+    @Operation(summary = "Get book details by id")
     @GetMapping("/{bookId}")
     ApiResponse<BookResponse> getBookDetails(@PathVariable String bookId) {
         return ApiResponse.<BookResponse>builder()
                 .data(bookService.findById(bookId))
+                .build();
+    }
+
+    @Operation(summary = "Get book details by slug")
+    @GetMapping("/{slug}")
+    ApiResponse<BookResponse> getBookDetailsBySlug(@PathVariable String slug) {
+        return ApiResponse.<BookResponse>builder()
+                .data(bookService.findBySlug(slug))
                 .build();
     }
 

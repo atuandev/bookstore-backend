@@ -21,7 +21,7 @@ public class RoleController {
     RoleService roleService;
 
     @Operation(summary = "Create role")
-    @PostMapping
+    @PostMapping("/add")
     ApiResponse<RoleResponse> create(@RequestBody RoleRequest request) {
         return ApiResponse.<RoleResponse>builder()
                 .data(roleService.save(request))

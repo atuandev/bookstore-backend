@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface BookImageRepository extends JpaRepository<BookImage, String> {
     @Query("SELECT b FROM BookImage b WHERE b.book.id = :bookId")
     Optional<BookImage> findAllByBookId(String bookId);
+
+    void deleteAllByBookId(String bookId);
 }

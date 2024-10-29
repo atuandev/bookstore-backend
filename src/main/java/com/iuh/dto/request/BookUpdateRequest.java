@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -28,7 +28,10 @@ public class BookUpdateRequest {
     @Size(min = 1, message = "INVALID_BOOK_DESCRIPTION")
     String description;
 
-    @Pattern(regexp = "^\\d+(\\.\\d+)?x\\d+(\\.\\d+)?$", message = "INVALID_BOOK_SIZE")
+    @Size(min = 1, message = "INVALID_BOOK_AUTHOR")
+    String author;
+
+    @Size(min = 1, message = "INVALID_BOOK_SIZE")
     String size;
 
     @Min(value = 0, message = "INVALID_BOOK_PAGES")
@@ -64,8 +67,6 @@ public class BookUpdateRequest {
 
     String discountCode;
 
-    List<BookImageRequest> images;
-
-    @NotNull(message = "INVALID_BOOK_AUTHOR")
-    List<AuthorRequest> author;
+    @NotNull(message = "INVALID_BOOK_IMAGE_URL")
+    Set<BookImageRequest> bookImages;
 }

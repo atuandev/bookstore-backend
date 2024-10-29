@@ -1,15 +1,14 @@
 package com.iuh.service.impl;
 
 import com.iuh.dto.request.BookCreationRequest;
+import com.iuh.dto.request.BookImageRequest;
 import com.iuh.dto.request.BookUpdateRequest;
 import com.iuh.dto.response.BookResponse;
 import com.iuh.dto.response.PageResponse;
-import com.iuh.entity.Author;
 import com.iuh.entity.Book;
 import com.iuh.entity.BookImage;
 import com.iuh.exception.AppException;
 import com.iuh.exception.ErrorCode;
-import com.iuh.mapper.AuthorMapper;
 import com.iuh.mapper.BookImageMapper;
 import com.iuh.mapper.BookMapper;
 import com.iuh.repository.*;
@@ -18,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -44,12 +43,11 @@ public class BookServiceImpl implements BookService {
     CategoryRepository categoryRepository;
     PublisherRepository publisherRepository;
     DiscountRepository discountRepository;
-    AuthorRepository authorRepository;
     BookMapper bookMapper;
     BookImageMapper bookImageMapper;
-    AuthorMapper authorMapper;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public BookResponse save(BookCreationRequest request) {
         Book book = bookMapper.toEntity(request);
 
@@ -60,29 +58,29 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
         book.setDiscount(discountRepository.findByCode(request.getCategoryId())
-                .orElseThrow(() -> new AppException(ErrorCode.DISCOUNT_NOT_FOUND)));
+                .orElse(null));
 
-        Set<Author> authors = request.getAuthor().stream()
-                .map(authorMapper::toEntity)
-                .map(authorRepository::save)
-                .collect(Collectors.toSet());
-        book.setAuthors(authors);
+        try {
+            book = bookRepository.save(book);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCode.BOOK_EXISTS);
+        }
 
-        Set<BookImage> bookImages = request.getImages().stream()
-                .map(bookImageMapper::toEntity)
-                .map(bookImageRepository::save)
-                .collect(Collectors.toSet());
+        Set<BookImage> bookImages = new HashSet<>();
+        for (BookImageRequest bookImageRequest : request.getBookImages()) {
+            BookImage bookImage = bookImageMapper.toEntity(bookImageRequest);
+            bookImage.setBook(book);
+            bookImages.add(bookImageRepository.save(bookImage));
+        }
         book.setBookImages(bookImages);
 
-        return bookMapper.toResponse(bookRepository.save(book));
+        return bookMapper.toResponse(book);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public List<BookResponse> findAll() {
-        return bookRepository.findAll().stream()
-                .map(bookMapper::toResponse)
-                .collect(Collectors.toList());
+        return bookRepository.findAll().stream().map(bookMapper::toResponse).toList();
     }
 
     @Override
@@ -120,42 +118,49 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public BookResponse findById(String id) {
         return bookRepository.findById(id).map(bookMapper::toResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
     }
 
     @Override
-    public BookResponse update(String id, BookUpdateRequest request) {
+    public BookResponse findBySlug(String slug) {
+        return bookRepository.findBySlug(slug).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public BookResponse update(String id, BookUpdateRequest updateRequest) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+        bookMapper.toUpdateEntity(book, updateRequest);
 
-        bookMapper.toUpdateEntity(book, request);
-
-        book.setCategory(categoryRepository.findById(request.getCategoryId())
+        book.setCategory(categoryRepository.findById(updateRequest.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
 
-        book.setPublisher(publisherRepository.findById(request.getCategoryId())
+        book.setPublisher(publisherRepository.findById(updateRequest.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
-        book.setDiscount(discountRepository.findByCode(request.getCategoryId())
-                .orElseThrow(() -> new AppException(ErrorCode.DISCOUNT_NOT_FOUND)));
+        book.setDiscount(discountRepository.findByCode(updateRequest.getCategoryId())
+                .orElse(null));
 
-        Set<Author> authors = request.getAuthor().stream()
-                .map(authorMapper::toEntity)
-                .map(authorRepository::save)
-                .collect(Collectors.toSet());
-        book.setAuthors(authors);
+        // Remove existing authors and book images
+        bookImageRepository.deleteAllByBookId(id);
 
-        Set<BookImage> bookImages = request.getImages().stream()
-                .map(bookImageMapper::toEntity)
-                .map(bookImageRepository::save)
-                .collect(Collectors.toSet());
+        // Add new book images
+        Set<BookImage> bookImages = new HashSet<>();
+        for (BookImageRequest bookImageRequest : updateRequest.getBookImages()) {
+            BookImage bookImage = bookImageMapper.toEntity(bookImageRequest);
+            bookImage.setBook(book);
+            bookImages.add(bookImageRepository.save(bookImage));
+        }
         book.setBookImages(bookImages);
 
         return bookMapper.toResponse(bookRepository.save(book));
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(String id) {
         bookRepository.deleteById(id);
     }

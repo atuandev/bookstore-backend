@@ -10,14 +10,15 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
+    @Mapping(target = "bookImages", ignore = true)
     Book toEntity(BookCreationRequest request);
 
+    @Mapping(target = "bookImages", source = "bookImages")
     BookResponse toResponse(Book book);
 
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "publisher", ignore = true)
     @Mapping(target = "discount", ignore = true)
-    @Mapping(target = "authors", ignore = true)
     @Mapping(target = "bookImages", ignore = true)
     void toUpdateEntity(@MappingTarget Book category, BookUpdateRequest request);
 }

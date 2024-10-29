@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -21,6 +22,7 @@ public class BookResponse {
     String title;
     String slug;
     String description;
+    String author;
     String size;
     Integer pages;
     Integer weight;
@@ -33,6 +35,7 @@ public class BookResponse {
     Category category;
     Publisher publisher;
     Discount discount;
-    Set<BookImageResponse> images;
-    Set<AuthorResponse> authors;
+    Set<BookImageResponse> bookImages;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

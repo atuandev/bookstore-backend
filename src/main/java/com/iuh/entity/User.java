@@ -30,8 +30,7 @@ public class User extends AbstractEntity {
     @Column(columnDefinition = "TEXT")
     String avatar;
 
-    @Builder.Default
-    Boolean status = true;
+    Boolean status;
 
     @ManyToMany
     Set<Role> roles;

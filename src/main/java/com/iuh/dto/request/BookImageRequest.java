@@ -16,6 +16,4 @@ public class BookImageRequest {
 
     @Size(min = 1, message = "INVALID_BOOK_IMAGE_URL")
     String url;
-
-    String bookId;
 }
