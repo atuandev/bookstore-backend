@@ -3,13 +3,13 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3307/bookstore?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/bookstore?createDatabaseIfNotExist=true
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: root
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
 
 jwt:

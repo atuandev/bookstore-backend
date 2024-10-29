@@ -17,7 +17,8 @@ public interface BookRepository extends JpaRepository<Book, String> {
 
     Optional<List<BookResponse>> findAllByStatusTrue();
 
-    Optional<BookResponse> findBySlugAndStatusTrue(String slug);
+    @Query("SELECT b FROM Book b WHERE b.slug = :slug")
+    Optional<BookResponse> findBySlug(String slug);
 
     @Query("SELECT b FROM Book b WHERE b.category.slug = :slug AND b.status = true")
     Optional<List<BookResponse>> findAllByCategorySlugAndStatusTrue(String slug);

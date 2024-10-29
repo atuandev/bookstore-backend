@@ -28,7 +28,7 @@ public class SecurityConfig {
     };
 
     private static final String[] SWAGGER_ENDPOINTS = {
-            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
+            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/books/**"
     };
 
     private final CustomJwtDecoder customJwtDecoder;

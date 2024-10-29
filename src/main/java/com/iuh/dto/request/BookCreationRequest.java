@@ -2,7 +2,6 @@ package com.iuh.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -28,7 +27,10 @@ public class BookCreationRequest {
     @Size(min = 1, message = "INVALID_BOOK_DESCRIPTION")
     String description;
 
-    @Pattern(regexp = "^\\d+(\\.\\d+)?x\\d+(\\.\\d+)?$", message = "INVALID_BOOK_SIZE")
+    @Size(min = 1, message = "INVALID_BOOK_AUTHOR")
+    String author;
+
+    @Size(min = 1, message = "INVALID_BOOK_SIZE")
     String size;
 
     @Min(value = 0, message = "INVALID_BOOK_PAGES")
@@ -47,16 +49,16 @@ public class BookCreationRequest {
     Double price;
 
     @Min(value = 0, message = "INVALID_BOOK_STOCK")
-    Integer stock;
+    Integer stock = 0;
 
     @Min(value = 0, message = "INVALID_BOOK_SOLD")
-    Integer sold;
+    Integer sold = 0;
 
-    Boolean isNew;
+    Boolean isNew = false;
 
-    Boolean isFeatured;
+    Boolean isFeatured = false;
 
-    Boolean status;
+    Boolean status = true;
 
     String categoryId;
 
@@ -64,8 +66,6 @@ public class BookCreationRequest {
 
     String discountCode;
 
-    List<BookImageRequest> images;
-
-    @NotNull(message = "INVALID_BOOK_AUTHOR")
-    List<AuthorRequest> author;
+    @NotNull(message = "INVALID_BOOK_IMAGE_URL")
+    Set<BookImageRequest> bookImages;
 }

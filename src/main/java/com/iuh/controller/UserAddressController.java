@@ -22,7 +22,7 @@ public class UserAddressController {
     UserAddressService userAddressService;
 
     @Operation(summary = "Create user address")
-    @PostMapping
+    @PostMapping("/add")
     ApiResponse<UserAddressResponse> createUserAddress(@RequestBody @Valid UserAddressRequest request) {
         return ApiResponse.<UserAddressResponse>builder()
                 .data(userAddressService.save(request))

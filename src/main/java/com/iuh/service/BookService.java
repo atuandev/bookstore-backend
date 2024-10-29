@@ -16,6 +16,8 @@ public interface BookService {
 
     BookResponse findById(String id);
 
+    BookResponse findBySlug(String slug);
+
     BookResponse update(String id, BookUpdateRequest request);
 
     void delete(String id);

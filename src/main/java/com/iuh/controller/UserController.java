@@ -26,7 +26,7 @@ public class UserController {
     UserService userService;
 
     @Operation(summary = "Create user")
-    @PostMapping
+    @PostMapping("/add")
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .data(userService.save(request))

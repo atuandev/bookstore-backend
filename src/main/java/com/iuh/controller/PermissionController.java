@@ -21,7 +21,7 @@ public class PermissionController {
     PermissionService permissionService;
 
     @Operation(summary = "Create permission")
-    @PostMapping
+    @PostMapping("/add")
     ApiResponse<PermissionResponse> create(@RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
                 .data(permissionService.save(request))
