@@ -1,5 +1,8 @@
 # Spring API for BookStore
 
+## Requirement
+- JDK 21
+
 ## Techs
 - Spring Boot
 - Spring Security
@@ -18,17 +21,21 @@
 1. Clone project: `git clone git@github.com:atuandev/bookstore-backend.git`
 2. View all settings at `application.yml`
 3. Install MySQL from Docker `docker pull mysql:8.4.0`
-4. Run Container Docker `docker run --name mysql-8.4.0 -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.4.0`
+4. Run Container Docker `docker run --name mysql-8.4.0 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.4.0`
 
-![image](https://github.com/user-attachments/assets/8983555b-0924-4956-8583-d9aa46621d18)
+![image](https://github.com/user-attachments/assets/b59e4dd2-124a-4cce-86d5-2b5a1311af92)
 > Tutorial MySQL in Docker: https://www.youtube.com/watch?v=Oa7bpIZ6RxI&t=777s&ab_channel=Devteria
 
-6. Use HeidiSQL to connect the database
+6. Use HeidiSQL to connect the database with **username**: `root`, **password**: `root`
 
-![image](https://github.com/user-attachments/assets/bd02d5cd-69d3-47bc-9201-e583209b8f0d)
+![image](https://github.com/user-attachments/assets/96e321da-49f6-4188-9724-74c2f3d759e1)
 
 8. Use **Intellij** to run a project
 9. Test API with **Postman** or **SwaggerUI** at `http://localhost:8080/bookstore/swagger-ui/index.html`
+
+Login Admin account:
+- username: `admin`
+- password: `admin`
 
 ![image](https://github.com/user-attachments/assets/5685947b-ee0b-4b32-b388-d5fdcd407861)
 
