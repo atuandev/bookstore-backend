@@ -27,11 +27,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -54,25 +54,23 @@ public class BookServiceImpl implements BookService {
         book.setCategory(categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
 
-        book.setPublisher(publisherRepository.findById(request.getCategoryId())
+        book.setPublisher(publisherRepository.findById(request.getPublisherId())
                 .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
-        book.setDiscount(discountRepository.findByCode(request.getCategoryId())
+        book.setDiscount(discountRepository.findByCode(request.getDiscountCode())
                 .orElse(null));
+
+        for (BookImageRequest bookImageRequest : request.getBookImages()) {
+            book.addBookImage(BookImage.builder()
+                    .url(bookImageRequest.getUrl())
+                    .build());
+        }
 
         try {
             book = bookRepository.save(book);
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.BOOK_EXISTS);
         }
-
-        Set<BookImage> bookImages = new HashSet<>();
-        for (BookImageRequest bookImageRequest : request.getBookImages()) {
-            BookImage bookImage = bookImageMapper.toEntity(bookImageRequest);
-            bookImage.setBook(book);
-            bookImages.add(bookImageRepository.save(bookImage));
-        }
-        book.setBookImages(bookImages);
 
         return bookMapper.toResponse(book);
     }
@@ -131,32 +129,34 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public BookResponse update(String id, BookUpdateRequest updateRequest) {
+    public BookResponse update(String id, BookUpdateRequest request) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
-        bookMapper.toUpdateEntity(book, updateRequest);
+        bookMapper.toUpdateEntity(book, request);
 
-        book.setCategory(categoryRepository.findById(updateRequest.getCategoryId())
+        book.setCategory(categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
 
-        book.setPublisher(publisherRepository.findById(updateRequest.getCategoryId())
+        book.setPublisher(publisherRepository.findById(request.getPublisherId())
                 .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
-        book.setDiscount(discountRepository.findByCode(updateRequest.getCategoryId())
+        book.setDiscount(discountRepository.findByCode(request.getDiscountCode())
                 .orElse(null));
 
-        // Remove existing authors and book images
-        bookImageRepository.deleteAllByBookId(id);
-
-        // Add new book images
-        Set<BookImage> bookImages = new HashSet<>();
-        for (BookImageRequest bookImageRequest : updateRequest.getBookImages()) {
-            BookImage bookImage = bookImageMapper.toEntity(bookImageRequest);
-            bookImage.setBook(book);
-            bookImages.add(bookImageRepository.save(bookImage));
+        // update book images
+        book.getBookImages().clear();
+        for (BookImageRequest bookImageRequest : request.getBookImages()) {
+            book.addBookImage(BookImage.builder()
+                    .url(bookImageRequest.getUrl())
+                    .build());
         }
-        book.setBookImages(bookImages);
 
-        return bookMapper.toResponse(bookRepository.save(book));
+        try {
+            book = bookRepository.save(book);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCode.BOOK_EXISTS);
+        }
+
+        return bookMapper.toResponse(book);
     }
 
     @Override
