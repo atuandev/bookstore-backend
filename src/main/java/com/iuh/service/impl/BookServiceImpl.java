@@ -9,9 +9,11 @@ import com.iuh.entity.Book;
 import com.iuh.entity.BookImage;
 import com.iuh.exception.AppException;
 import com.iuh.exception.ErrorCode;
-import com.iuh.mapper.BookImageMapper;
 import com.iuh.mapper.BookMapper;
-import com.iuh.repository.*;
+import com.iuh.repository.BookRepository;
+import com.iuh.repository.CategoryRepository;
+import com.iuh.repository.DiscountRepository;
+import com.iuh.repository.PublisherRepository;
 import com.iuh.service.BookService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +30,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,12 +39,10 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BookServiceImpl implements BookService {
     BookRepository bookRepository;
-    BookImageRepository bookImageRepository;
     CategoryRepository categoryRepository;
     PublisherRepository publisherRepository;
     DiscountRepository discountRepository;
     BookMapper bookMapper;
-    BookImageMapper bookImageMapper;
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")

@@ -37,10 +37,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
-@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
     UserRepository userRepository;
     InvalidatedTokenRepository invalidatedTokenRepository;
@@ -83,7 +83,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
-        var token = generateToken(user);
+        String token = generateToken(user);
 
         return AuthenticationResponse.builder().authenticated(true).token(token).build();
     }
@@ -105,12 +105,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
+    /**
+     * Verify token by checking signature, expiration time and existence in invalidated token repository.
+     *
+     * @param token     String
+     * @param isRefresh boolean to check if token is refresh token otherwise access token
+     * @return SignedJWT
+     */
     private SignedJWT verifyToken(String token, boolean isRefresh) throws ParseException, JOSEException {
         JWSVerifier jwsVerifier = new MACVerifier(signerKey.getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
 
-        Date expirationTime = isRefresh
+        Date expirationTime = (isRefresh)
                 ? new Date(signedJWT
                 .getJWTClaimsSet()
                 .getIssueTime()
@@ -119,9 +126,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .toEpochMilli())
                 : signedJWT.getJWTClaimsSet().getExpirationTime();
 
-        var verified = signedJWT.verify(jwsVerifier);
+        boolean verified = signedJWT.verify(jwsVerifier);
 
-        if (!(verified && expirationTime.after(new Date()))) throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if (!(verified && expirationTime.after(new Date())))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         if (invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -129,15 +137,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return signedJWT;
     }
 
+    /**
+     * Refresh token by creating new token with new expiration time and invalidating old token.
+     *
+     * @param request RefreshRequest
+     * @return AuthenticationResponse
+     */
     @Override
     public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
-        var signedJWT = verifyToken(request.getToken(), true);
+        SignedJWT signedJWT = verifyToken(request.getToken(), true);
 
         var jti = signedJWT.getJWTClaimsSet().getJWTID();
         var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
-        InvalidatedToken invalidatedToken =
-                InvalidatedToken.builder().id(jti).expiryTime(expiryTime).build();
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder().id(jti).expiryTime(expiryTime).build();
 
         invalidatedTokenRepository.save(invalidatedToken);
 
@@ -150,6 +163,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder().authenticated(true).token(token).build();
     }
 
+    /**
+     * Generate token for user with HS512 algorithm. Subject is username of user.
+     *
+     * @param user User
+     * @return String
+     */
     private String generateToken(User user) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
@@ -157,8 +176,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .subject(user.getUsername())
                 .issuer("atuandev.vercel.app")
                 .issueTime(new Date())
-                .expirationTime(new Date(
-                        Instant.now().plus(validDuration, ChronoUnit.SECONDS).toEpochMilli()))
+                .expirationTime(new Date(Instant.now().plus(validDuration, ChronoUnit.SECONDS).toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
@@ -176,8 +194,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
+    /**
+     * Build scope for user.
+     * scope: USER -> ROLE_USER
+     *
+     * @param user User
+     * @return String
+     */
     private String buildScope(User user) {
         StringJoiner joiner = new StringJoiner(" ");
+
         if (!CollectionUtils.isEmpty(user.getRoles()))
             user.getRoles().forEach(role -> {
                 joiner.add("ROLE_" + role.getName());

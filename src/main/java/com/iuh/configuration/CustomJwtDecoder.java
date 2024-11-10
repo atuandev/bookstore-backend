@@ -3,7 +3,8 @@ package com.iuh.configuration;
 import com.iuh.dto.request.IntrospectRequest;
 import com.iuh.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -17,14 +18,15 @@ import java.text.ParseException;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class CustomJwtDecoder implements JwtDecoder {
     @Value("${jwt.signerKey}")
-    private String SIGNER_KEY;
+    String signerKey;
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    final AuthenticationService authenticationService;
 
-    private NimbusJwtDecoder nimbusJwtDecoder = null;
+    NimbusJwtDecoder nimbusJwtDecoder = null;
 
     @Override
     public Jwt decode(String token) throws JwtException {
@@ -38,7 +40,7 @@ public class CustomJwtDecoder implements JwtDecoder {
         }
 
         if (Objects.isNull(nimbusJwtDecoder)) {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS512");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
             nimbusJwtDecoder = NimbusJwtDecoder.withSecretKey(secretKeySpec)
                     .macAlgorithm(MacAlgorithm.HS512)
                     .build();
