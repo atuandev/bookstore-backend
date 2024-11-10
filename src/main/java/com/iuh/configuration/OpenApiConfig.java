@@ -28,8 +28,8 @@ public class OpenApiConfig {
                         .description(description)
                         .version(version).license(new License().name("Apache 2.0").url("https://springdoc.org")))
                 .servers(List.of(new Server().url(server)))
-                .components(new Components()
-                        .addSecuritySchemes("bearerAuth",
+                .components(
+                        new Components().addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")

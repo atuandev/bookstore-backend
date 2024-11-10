@@ -24,7 +24,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {
-            "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh"
+            "/users/add", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh"
     };
 
     private static final String[] SWAGGER_ENDPOINTS = {
@@ -40,12 +40,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
-                .permitAll()
-                .requestMatchers(SWAGGER_ENDPOINTS)
-                .permitAll()
-                .anyRequest()
-                .authenticated());
+                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(SWAGGER_ENDPOINTS).permitAll()
+                .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwt -> jwt
