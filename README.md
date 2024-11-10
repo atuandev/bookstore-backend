@@ -35,7 +35,7 @@
 
 Login Admin account:
 - username: `admin`
-- password: `admin`
+- password: `admin123`
 
 ![image](https://github.com/user-attachments/assets/5685947b-ee0b-4b32-b388-d5fdcd407861)
 
