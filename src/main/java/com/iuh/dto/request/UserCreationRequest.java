@@ -25,7 +25,7 @@ public class UserCreationRequest {
     @NotNull(message = "INVALID_NAME")
     String name;
 
-    @Pattern(regexp = "^(\\w)+(.\\w+)@(\\w)+(.\\w+)*", message = "INVALID_EMAIL")
+    @Pattern(regexp = "^(\\w)+(.\\w+)@(\\w)+(.\\w+)*+", message = "INVALID_EMAIL")
     @Size(max = 50, message = "INVALID_EMAIL")
     String email;
 }
