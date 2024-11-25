@@ -39,3 +39,9 @@ Login Admin account:
 
 ![image](https://github.com/user-attachments/assets/5685947b-ee0b-4b32-b388-d5fdcd407861)
 
+## Environment Variable
+- MYSQL_PORT:... (default: 3306)
+- MYSQL_USER: (default: root)
+- MYSQL_PASS: (default: root)
+
+
