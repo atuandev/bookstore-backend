@@ -59,14 +59,15 @@ public class BookController {
                 .data(bookService.findById(bookId))
                 .build();
     }
-
-    @Operation(summary = "Get book details by slug")
-    @GetMapping("/{slug}")
-    ApiResponse<BookResponse> getBookDetailsBySlug(@PathVariable String slug) {
-        return ApiResponse.<BookResponse>builder()
-                .data(bookService.findBySlug(slug))
-                .build();
-    }
+// Chố này phải thay API nếu không bị trùng api ở trên
+//   Author: @Phạm Thế Mạnh
+//    @Operation(summary = "Get book details by slug")
+//    @GetMapping("/{slug}")
+//    ApiResponse<BookResponse> getBookDetailsBySlug(@PathVariable String slug) {
+//        return ApiResponse.<BookResponse>builder()
+//                .data(bookService.findBySlug(slug))
+//                .build();
+//    }
 
     @Operation(summary = "Update book")
     @PutMapping("/{bookId}")

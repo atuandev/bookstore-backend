@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-@Tag(name = "Book Controller")
+@Tag(name = "Category Controller")
 @RestController
 @RequestMapping("/categories")
 @RequiredArgsConstructor

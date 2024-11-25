@@ -48,6 +48,7 @@ public enum ErrorCode {
     BOOK_NOT_FOUND(1035, "Book not found", HttpStatus.NOT_FOUND),
     DISCOUNT_NOT_FOUND(1036, "Discount not found", HttpStatus.NOT_FOUND),
     BOOK_EXISTS(1037, "Book already exists", HttpStatus.BAD_REQUEST),
+    DISCOUNT_CODE_EXISTED(1038, "Discount code already exists", HttpStatus.BAD_REQUEST),
     ;
 
     int code;
