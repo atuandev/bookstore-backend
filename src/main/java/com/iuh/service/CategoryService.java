@@ -1,18 +1,23 @@
 package com.iuh.service;
 
 import com.iuh.dto.request.CategoryRequest;
+import com.iuh.dto.response.CategoryResponse;
 import com.iuh.entity.Category;
 
 import java.util.List;
 
 public interface CategoryService {
-    Category save(CategoryRequest request);
+    CategoryResponse save(CategoryRequest request);
 
-    List<Category> findAll();
+    List<CategoryResponse> findAll();
 
-    Category findById(String id);
+    CategoryResponse findById(String id);
+    
+    CategoryResponse findByName(String name);
 
-    Category update(String id, CategoryRequest request);
+    CategoryResponse update(String id, CategoryRequest request);
 
     void delete(String id);
+    
+    void deleteByName(String name);
 }

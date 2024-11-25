@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/bookstore?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:${MYSQL_PORT:3306}/bookstore?createDatabaseIfNotExist=true
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: root
@@ -14,7 +14,7 @@ spring:
 
 jwt:
   signerKey: uGn1btxMAz77FBExhcThICMJpEWG4fwLu6pJiwlObSIubo7ivat3KSD54PRN0467
-  valid-duration: 3600 # seconds
+  valid-duration: 36000 # seconds
   refreshable-duration: 720000 # seconds
 springdoc:
   api-docs:

@@ -18,54 +18,59 @@ import java.util.Set;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class BookCreationRequest {
 
-    @Size(min = 1, message = "INVALID_BOOK_TITLE")
-    String title;
+	@Size(min = 1, message = "INVALID_BOOK_TITLE")
+	String title;
 
-    @Size(min = 1, message = "INVALID_BOOK_SLUG")
-    String slug;
+	@Size(min = 1, message = "INVALID_BOOK_SLUG")
+	String slug;
 
-    @Size(min = 1, message = "INVALID_BOOK_DESCRIPTION")
-    String description;
+	@Size(min = 1, message = "INVALID_BOOK_DESCRIPTION")
+	String description;
 
-    @Size(min = 1, message = "INVALID_BOOK_AUTHOR")
-    String author;
+	@Size(min = 1, message = "INVALID_BOOK_AUTHOR")
+	String author;
 
-    @Size(min = 1, message = "INVALID_BOOK_SIZE")
-    String size;
+	@Size(min = 1, message = "INVALID_BOOK_SIZE")
+	String size;
 
-    @Min(value = 0, message = "INVALID_BOOK_PAGES")
-    Integer pages;
+	@Min(value = 0, message = "INVALID_BOOK_PAGES")
+	Integer pages;
 
-    @Min(value = 0, message = "INVALID_BOOK_WEIGHT")
-    Integer weight;
+	@Min(value = 0, message = "INVALID_BOOK_WEIGHT")
+	Integer weight;
 
-    @Min(value = 1900, message = "INVALID_BOOK_PUBLISH_YEAR")
-    Integer publishYear;
+	@Min(value = 1900, message = "INVALID_BOOK_PUBLISH_YEAR")
+	Integer publishYear;
 
-    @Min(value = 0, message = "INVALID_BOOK_IMPORT_PRICE")
-    Double importPrice;
+	@Min(value = 0, message = "INVALID_BOOK_IMPORT_PRICE")
+	Double importPrice;
 
-    @Min(value = 0, message = "INVALID_BOOK_PRICE")
-    Double price;
+	@Min(value = 0, message = "INVALID_BOOK_PRICE")
+	Double price;
 
-    @Min(value = 0, message = "INVALID_BOOK_STOCK")
-    Integer stock = 0;
+	@Min(value = 0, message = "INVALID_BOOK_STOCK")
+	@Builder.Default()
+	Integer stock = 0;
 
-    @Min(value = 0, message = "INVALID_BOOK_SOLD")
-    Integer sold = 0;
+	@Min(value = 0, message = "INVALID_BOOK_SOLD")
+	@Builder.Default()
+	Integer sold = 0;
 
-    Boolean isNew = false;
+	@Builder.Default()
+	Boolean isNew = false;
 
-    Boolean isFeatured = false;
+	@Builder.Default()
+	Boolean isFeatured = false;
 
-    Boolean status = true;
+	@Builder.Default()
+	Boolean status = true;
 
-    String categoryId;
+	String categoryId;
 
-    String publisherId;
+	String publisherId;
 
-    String discountCode;
+	String discountCode;
 
-    @NotNull(message = "INVALID_BOOK_IMAGE_URL")
-    Set<BookImageRequest> bookImages;
+	@NotNull(message = "INVALID_BOOK_IMAGE_URL")
+	Set<BookImageRequest> bookImages;
 }
