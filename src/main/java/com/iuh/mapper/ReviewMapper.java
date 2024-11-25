@@ -16,7 +16,12 @@ public interface ReviewMapper {
 	@Mapping(target = "user", ignore = true)
     Review toEntity(ReviewRequest request);
 
-	@BeanMapping(ignoreByDefault = true)
+//	@BeanMapping(ignoreByDefault = true)
+	@Mapping(target = "book", ignore = true)
+	@Mapping(target = "user", ignore = true)
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "createdAt", ignore = true)
+	@Mapping(target = "updatedAt", ignore = true)
     void toUpdateEntity(@MappingTarget Review review, ReviewRequest request);
 	
 	ReviewResponse toResponse(Review review);

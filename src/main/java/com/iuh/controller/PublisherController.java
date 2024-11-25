@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iuh.dto.ApiResponse;
 import com.iuh.dto.request.PublisherRequest;
 import com.iuh.entity.Publisher;
 import com.iuh.service.PublisherService;
@@ -30,27 +31,36 @@ public class PublisherController {
 	PublisherService publisherService;
 	
 	@GetMapping
-	public List<Publisher> findAll() {
-		return publisherService.findAll();
+	public ApiResponse<List<Publisher>> findAll() {
+		return ApiResponse.<List<Publisher>>builder()
+				.data(publisherService.findAll())
+				.build();
 	}
 	
 	@GetMapping("/{id}")
-	public Publisher findById(@PathVariable String id) {
-        return publisherService.findById(id);
+	public ApiResponse<Publisher> findById(@PathVariable String id) {
+        return ApiResponse.<Publisher>builder()
+        		.data(publisherService.findById(id))
+        		.build();
 	}
 	
 	@PostMapping("/add")
-	public Publisher addPublisher(@RequestBody PublisherRequest request) {
-		return publisherService.save(request);
+	public ApiResponse<Publisher> addPublisher(@RequestBody PublisherRequest request) {
+		return ApiResponse.<Publisher>builder()
+				.data(publisherService.save(request))
+				.build();
 	}
 	
 	@PutMapping("/{id}")
-	public Publisher updatePublisher(@PathVariable String id ,@RequestBody PublisherRequest request) {
+	public ApiResponse<Publisher> updatePublisher(@PathVariable String id ,@RequestBody PublisherRequest request) {
 		log.info("Id: {}",id);
-		return publisherService.update(id,request);
+		return ApiResponse.<Publisher>builder()
+				.data(publisherService.update(id,request))
+				.build();
 	}
 	@DeleteMapping("/{id}")
-	public void deletePublisher(@PathVariable String id) {
+	public ApiResponse<Void> deletePublisher(@PathVariable String id) {
 		publisherService.delete(id);
+		return ApiResponse.<Void>builder().build();
 	}
 }

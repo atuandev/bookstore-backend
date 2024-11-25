@@ -82,4 +82,14 @@ public class ReviewServiceImpl implements ReviewService {
 		return response;
 	}
 
+	@Override
+	public ReviewResponse update(String id, ReviewRequest review) {
+		Review review2 = reviewRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.REVIEW_NOT_FOUND));
+		reviewMapper.toUpdateEntity(review2, review);
+		ReviewResponse response = reviewMapper.toResponse(reviewRepository.save(review2));
+		response.setBookTitle(review2.getBook().getTitle());
+		response.setUserName(review2.getUser().getName());
+		return response;
+	}
+
 }

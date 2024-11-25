@@ -8,12 +8,11 @@ import com.iuh.dto.response.ReviewResponse;
 public interface ReviewService {
 	void delete(String id);
 	
-	
 	List<ReviewResponse> findAllByBookId(String bookId);
 	
 	List<ReviewResponse> findAllByUserId(String userId);
 	
 	ReviewResponse save(ReviewRequest review);
 
-	
+	ReviewResponse update(String id, ReviewRequest review);
 }

@@ -23,7 +23,7 @@ public class Review extends AbstractEntity {
     @JoinColumn(name = "user_id")
     User user;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "book_id")
     Book book;
 
