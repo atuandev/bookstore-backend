@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iuh.dto.ApiResponse;
 import com.iuh.dto.request.DiscountRequest;
 import com.iuh.dto.request.PublisherRequest;
+import com.iuh.dto.response.BookResponse;
 import com.iuh.entity.Discount;
 import com.iuh.entity.Publisher;
 import com.iuh.service.DiscountService;
 import com.iuh.service.PublisherService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -33,27 +36,43 @@ public class DiscountController {
 	DiscountService discountService;
 	
 	@GetMapping
-	public List<Discount> findAll() {
-		return discountService.findAll();
+	public ApiResponse<List<Discount>> findAll() {
+		return ApiResponse.<List<Discount>>builder()
+				.data(discountService.findAll())
+				.build();
 	}
 	
+//    @Operation(summary = "Get all books")
+//    @GetMapping
+//    ApiResponse<List<BookResponse>> getAllBooks() {
+//        return ApiResponse.<List<BookResponse>>builder()
+//                .data(bookService.findAll())
+//                .build();
+//    }
+	
 	@GetMapping("/{id}")
-	public Discount findById(@PathVariable String id) {
-        return discountService.findById(id);
+	public ApiResponse<Discount> findById(@PathVariable String id) {
+        return ApiResponse.<Discount>builder()
+        		.data(discountService.findById(id))
+        		.build();
 	}
 	
 	@PostMapping("/add")
-	public Discount addPublisher(@RequestBody DiscountRequest request) {
-		return discountService.save(request);
+	public ApiResponse<Discount> addPublisher(@RequestBody DiscountRequest request) {
+		return ApiResponse.<Discount>builder()
+				.data(discountService.save(request))
+				.build();	
 	}
 	
 	@PutMapping("/{id}")
-	public Discount updatePublisher(@PathVariable String id ,@RequestBody DiscountRequest request) {
-		log.info("Id: {}",id);
-		return discountService.update(id,request);
+	public ApiResponse<Discount>  updatePublisher(@PathVariable String id ,@RequestBody DiscountRequest request) {
+		return  ApiResponse.<Discount>builder()
+				.data(discountService.update(id,request))
+				.build();
 	}
 	@DeleteMapping("/{id}")
-	public void deletePublisher(@PathVariable String id) {
+	public ApiResponse<Void> deletePublisher(@PathVariable String id) {
 		discountService.delete(id);
+		return ApiResponse.<Void>builder().build();
 	}
 }

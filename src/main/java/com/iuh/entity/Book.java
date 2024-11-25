@@ -73,4 +73,11 @@ public class Book extends AbstractEntity {
         bookImages.add(bookImage);
         bookImage.setBook(this);
     }
+    
+	public Double getDiscountPrice() {
+		if (discount == null) {
+			return price;
+		}
+		return price - (price * discount.getPercent() / 100);
+	}
 }

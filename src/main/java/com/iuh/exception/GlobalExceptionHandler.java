@@ -30,8 +30,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = RuntimeException.class)
     ResponseEntity<ApiResponse<?>> handleRuntimeException(RuntimeException e) {
+    	
+    	e.printStackTrace();
         ErrorCode errorCode = ErrorCode.UNCATEGORIZED;
-
+        
         return ResponseEntity.badRequest()
                 .body(ApiResponse.builder()
                         .code(errorCode.getCode())
