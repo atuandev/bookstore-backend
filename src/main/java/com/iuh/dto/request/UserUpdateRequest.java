@@ -16,6 +16,4 @@ public class UserUpdateRequest {
 
     @NotBlank(message = "INVALID_NAME")
     String name;
-
-    String avatar;
 }
