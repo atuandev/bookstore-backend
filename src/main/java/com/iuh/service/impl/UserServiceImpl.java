@@ -56,13 +56,13 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toUser(request);
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
+        user.setAddresses(new HashSet<>());
         user.setStatus(true);
 
         var roles = new HashSet<Role>();
         roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
         user.setRoles(roles);
-
+        
         try {
             user = userRepository.save(user);
         } catch (DataIntegrityViolationException e) {

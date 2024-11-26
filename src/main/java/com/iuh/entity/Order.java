@@ -1,14 +1,29 @@
 package com.iuh.entity;
 
+import java.util.List;
+
 import com.iuh.enums.OrderStatus;
 import com.iuh.enums.PaymentMethod;
-import jakarta.persistence.*;
-import lombok.*;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 @Setter
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -18,7 +33,7 @@ public class Order extends AbstractEntity {
 
     String receiverName;
 
-    String phone;
+    String receiverPhone;
 
     String address;
 
@@ -35,4 +50,7 @@ public class Order extends AbstractEntity {
     @JoinColumn(name = "user_id")
     User user;
 
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    List<OrderDetail> orderDetails;
+    
 }

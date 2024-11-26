@@ -14,8 +14,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "categories")
+@ToString(callSuper = true)
 public class Category extends AbstractEntity {
-
+	@Column(unique = true)
     String name;
 
     @Column(unique = true)
@@ -23,4 +24,9 @@ public class Category extends AbstractEntity {
 
     @Column(columnDefinition = "TEXT")
     String description;
+
+	public Category orElseThrow(Object object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

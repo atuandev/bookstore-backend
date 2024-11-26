@@ -22,6 +22,9 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount save(DiscountRequest request) {
+    	if (discountRepository.existsByCode(request.getCode())) {
+    		throw new AppException(ErrorCode.DISCOUNT_CODE_EXISTED);
+    	}
         return discountRepository.save(discountMapper.toEntity(request));
     }
 

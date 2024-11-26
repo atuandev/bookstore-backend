@@ -58,7 +58,7 @@ public class UserController {
 
     @Operation(summary = "Get user details")
     @GetMapping("/{userId}")
-    ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId) {
+    ApiResponse<UserResponse> getUser(@PathVariable String userId) {
         return ApiResponse.<UserResponse>builder()
                 .data(userService.findById(userId))
                 .build();
@@ -75,7 +75,7 @@ public class UserController {
     @Operation(summary = "Update user")
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateUser(
-            @PathVariable("userId") String userId, @RequestBody @Valid UserUpdateRequest request) {
+            @PathVariable String userId, @RequestBody @Valid UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .data(userService.update(userId, request))
                 .build();
@@ -83,7 +83,7 @@ public class UserController {
 
     @Operation(summary = "Delete user")
     @DeleteMapping("/{userId}")
-    ApiResponse<String> deleteUser(@PathVariable("userId") String userId) {
+    ApiResponse<String> deleteUser(@PathVariable String userId) {
         userService.delete(userId);
         return ApiResponse.<String>builder().data("User deleted").build();
     }
