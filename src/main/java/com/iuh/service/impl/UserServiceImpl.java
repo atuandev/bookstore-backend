@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Save user to database
+     *
      * @param request UserCreationRequest
      * @return UserResponse
      */
@@ -87,6 +88,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Get user info
+     *
      * @return UserResponse
      */
     @Override
@@ -101,7 +103,8 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Update user by id
-     * @param id User id
+     *
+     * @param id      User id
      * @param request UserUpdateRequest
      * @return UserResponse
      */
@@ -110,11 +113,6 @@ public class UserServiceImpl implements UserService {
     public UserResponse update(String id, UserUpdateRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userMapper.updateUser(user, request);
-
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        var roles = roleRepository.findAllById(request.getRoles());
-        user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -127,9 +125,10 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Find all users with sort by
-     * @param pageNo Page number
+     *
+     * @param pageNo   Page number
      * @param pageSize Page size
-     * @param sortBy Sort by
+     * @param sortBy   Sort by
      * @return PageResponse
      */
     @Override
