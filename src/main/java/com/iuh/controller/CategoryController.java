@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iuh.dto.ApiResponse;
 import com.iuh.dto.request.CategoryRequest;
 import com.iuh.dto.response.CategoryResponse;
+import com.iuh.dto.response.PageResponse;
 import com.iuh.service.CategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,6 +28,7 @@ import lombok.experimental.FieldDefaults;
 @RequestMapping("/categories")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
+@lombok.extern.slf4j.Slf4j
 public class CategoryController {
 	CategoryService categoryService;
 //	CategoryMapper categoryMapper;
@@ -33,13 +36,21 @@ public class CategoryController {
 	@Operation(summary = "Create permission")
 	@PostMapping("/add")
 	ApiResponse<CategoryResponse> create(@RequestBody CategoryRequest request) {
-		return ApiResponse.<CategoryResponse>builder().data(categoryService.save(request))
-				.build();
+		return ApiResponse.<CategoryResponse>builder().data(categoryService.save(request)).build();
 	}
+
 	@GetMapping("/name/{categoryName}")
 	@Operation(summary = "Get category by name")
 	ApiResponse<CategoryResponse> getCategoryByName(@PathVariable String categoryName) {
-        return ApiResponse.<CategoryResponse>builder().data(categoryService.findByName(categoryName)).build();
+		return ApiResponse.<CategoryResponse>builder().data(categoryService.findByName(categoryName)).build();
+	}
+	@GetMapping("/sort")
+	@Operation(summary = "Get all categories with sort FirstPage")
+	ApiResponse<PageResponse<List<CategoryResponse>>> getAllWithSortByName(@RequestParam String sortBy,
+			@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10") int pageSize) {
+		log.info(pageNo + " " + pageSize);
+		return ApiResponse.<PageResponse<List<CategoryResponse>>>builder()
+				.data(categoryService.findAllWithSortBy(pageNo - 1, pageSize, sortBy)).build();
 	}
 
 	@GetMapping
@@ -47,24 +58,27 @@ public class CategoryController {
 	ApiResponse<List<CategoryResponse>> getAll() {
 		return ApiResponse.<List<CategoryResponse>>builder().data(categoryService.findAll()).build();
 	}
+
 	@GetMapping("/{categoryId}")
 	@Operation(summary = "Get category by id")
 	ApiResponse<CategoryResponse> getCategoryById(@PathVariable String categoryId) {
 		return ApiResponse.<CategoryResponse>builder().data(categoryService.findById(categoryId)).build();
 	}
-	
+
 	@PutMapping("/{categoryId}")
 	@Operation(summary = "Update category by id")
 	ApiResponse<CategoryResponse> updateCategoryById(@PathVariable String categoryId,
 			@RequestBody CategoryRequest request) {
 		return ApiResponse.<CategoryResponse>builder().data(categoryService.update(categoryId, request)).build();
 	}
-	
+
 	@DeleteMapping("/{categoryId}")
 	@Operation(summary = "Delete category by id")
 	ApiResponse<Void> deleteCategoryById(@PathVariable String categoryId) {
 		categoryService.delete(categoryId);
 		return ApiResponse.<Void>builder().build();
 	}
+
 	
+
 }

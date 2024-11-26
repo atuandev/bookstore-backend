@@ -138,7 +138,7 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
         book.setDiscount(discountRepository.findByCode(request.getDiscountCode())
-                .orElse(null));
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_DISCOUNT_CODE)));
 
         // update book images
         book.getBookImages().clear();

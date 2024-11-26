@@ -4,12 +4,13 @@ import com.iuh.dto.response.BookResponse;
 import com.iuh.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@RepositoryRestResource
 public interface BookRepository extends JpaRepository<Book, String> {
     Optional<List<BookResponse>> findAllByIsFeaturedTrue();
 
