@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
+//Thong nhat so 1 la thong bao thanh cong, 2 so tiep theo la loai bi loi va so cuoi la loi cu the
 @Getter
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
@@ -48,8 +49,11 @@ public enum ErrorCode {
     BOOK_NOT_FOUND(1035, "Book not found", HttpStatus.NOT_FOUND),
     DISCOUNT_NOT_FOUND(1036, "Discount not found", HttpStatus.NOT_FOUND),
     REVIEW_NOT_FOUND(1400, "Review not found", HttpStatus.NOT_FOUND),
+    
     BOOK_EXISTS(1037, "Book already exists", HttpStatus.BAD_REQUEST),
     DISCOUNT_CODE_EXISTED(1038, "Discount code already exists", HttpStatus.BAD_REQUEST),
+    CATEGORY_NAME_EXISTED(1039, "Category name already exists", HttpStatus.BAD_REQUEST),
+    CATEGORY_SLUG_EXISTED(1040, "Category slug already exists", HttpStatus.BAD_REQUEST),
     ;
 
     int code;

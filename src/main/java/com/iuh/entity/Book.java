@@ -51,19 +51,19 @@ public class Book extends AbstractEntity {
     Boolean status;
 
     @ManyToOne()
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = true)
     Category category;
 
     @ManyToOne()
-    @JoinColumn(name = "publisher_id")
+    @JoinColumn(name = "publisher_id", nullable = true)
     Publisher publisher;
 
-    @ManyToOne()
-    @JoinColumn(name = "discount_id")
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "discount_id", nullable = true)
     Discount discount;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     Set<BookImage> bookImages = new HashSet<>();
 
     public void addBookImage(BookImage bookImage) {

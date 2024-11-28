@@ -10,5 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, String> {
 	Optional<Category> findByName(String name);
+	boolean existsByName(String name);
+	boolean existsBySlug(String slug);
 	void deleteByName(String name);
 }

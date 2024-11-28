@@ -36,6 +36,12 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public CategoryResponse save(CategoryRequest request) {
+		if (categoryRepository.existsByName(request.getName())) {
+            throw new AppException(ErrorCode.CATEGORY_NAME_EXISTED);
+		}
+		if (categoryRepository.existsBySlug(request.getSlug())) {
+			throw new AppException(ErrorCode.CATEGORY_SLUG_EXISTED);
+		}
 		return categoryMapper.toResponse(categoryRepository.save(categoryMapper.toEntity(request)));
 	}
 
@@ -66,6 +72,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void delete(String id) {
+		if (!categoryRepository.existsById(id)) {
+			throw new AppException(ErrorCode.CATEGORY_NOT_FOUND);
+		}
 		categoryRepository.deleteById(id);
 	}
 

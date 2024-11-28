@@ -46,7 +46,7 @@ public class CategoryController {
 	}
 	@GetMapping("/sort")
 	@Operation(summary = "Get all categories with sort FirstPage")
-	ApiResponse<PageResponse<List<CategoryResponse>>> getAllWithSortByName(@RequestParam String sortBy,
+	ApiResponse<PageResponse<List<CategoryResponse>>> getAllWithSortByName(@RequestParam(defaultValue = "name:asc") String sortBy,
 			@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10") int pageSize) {
 		log.info(pageNo + " " + pageSize);
 		return ApiResponse.<PageResponse<List<CategoryResponse>>>builder()

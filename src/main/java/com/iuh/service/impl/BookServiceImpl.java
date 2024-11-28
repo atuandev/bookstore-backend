@@ -10,11 +10,14 @@ import com.iuh.entity.BookImage;
 import com.iuh.exception.AppException;
 import com.iuh.exception.ErrorCode;
 import com.iuh.mapper.BookMapper;
+import com.iuh.repository.BookImageRepository;
 import com.iuh.repository.BookRepository;
 import com.iuh.repository.CategoryRepository;
 import com.iuh.repository.DiscountRepository;
 import com.iuh.repository.PublisherRepository;
 import com.iuh.service.BookService;
+
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -38,128 +41,129 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BookServiceImpl implements BookService {
-    BookRepository bookRepository;
-    CategoryRepository categoryRepository;
-    PublisherRepository publisherRepository;
-    DiscountRepository discountRepository;
-    BookMapper bookMapper;
+	BookRepository bookRepository;
+	BookImageRepository bookImageRepository;
+	CategoryRepository categoryRepository;
+	PublisherRepository publisherRepository;
+	DiscountRepository discountRepository;
+	BookMapper bookMapper;
 
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public BookResponse save(BookCreationRequest request) {
-        Book book = bookMapper.toEntity(request);
+	@Override
+	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
+	public BookResponse save(BookCreationRequest request) {
+		Book book = bookMapper.toEntity(request);
 
-        book.setCategory(categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
+		book.setCategory(categoryRepository.findById(request.getCategoryId())
+				.orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
 
-        book.setPublisher(publisherRepository.findById(request.getPublisherId())
-                .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
+		book.setPublisher(publisherRepository.findById(request.getPublisherId())
+				.orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
-        book.setDiscount(discountRepository.findByCode(request.getDiscountCode())
-                .orElse(null));
+		book.setDiscount(discountRepository.findByCode(request.getDiscountCode()).orElse(null));
 
-        for (BookImageRequest bookImageRequest : request.getBookImages()) {
-            book.addBookImage(BookImage.builder()
-                    .url(bookImageRequest.getUrl())
-                    .build());
-        }
+		try {
+			// Lưu Book trước tiên
+			book = bookRepository.saveAndFlush(book);
 
-        try {
-            book = bookRepository.save(book);
-        } catch (DataIntegrityViolationException e) {
-            throw new AppException(ErrorCode.BOOK_EXISTS);
-        }
+			// Thêm danh sách BookImage
+			for (BookImageRequest bookImageRequest : request.getBookImages()) {
+				BookImage bookImage = BookImage.builder().url(bookImageRequest.getUrl()).book(book) // Gán Book đã được
+																									// lưu
+						.build();
+				book.addBookImage(bookImage);
+			}
 
-        return bookMapper.toResponse(book);
-    }
+			// Lưu các BookImage
+			bookImageRepository.saveAll(book.getBookImages());
 
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<BookResponse> findAll() {
-        return bookRepository.findAll().stream().map(bookMapper::toResponse).toList();
-    }
+		} catch (DataIntegrityViolationException e) {
+			throw new AppException(ErrorCode.BOOK_EXISTS);
+		}
+		return bookMapper.toResponse(book);
+	}
 
-    @Override
-    public PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy) {
-        int page = pageNo > 0 ? pageNo - 1 : 0;
+	@Override
+	@PreAuthorize("hasRole('ADMIN')")
+	public List<BookResponse> findAll() {
+		return bookRepository.findAll().stream().map(bookMapper::toResponse).toList();
+	}
 
-        List<Sort.Order> sorts = new ArrayList<>();
+	@Override
+	public PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy) {
+		int page = pageNo > 0 ? pageNo - 1 : 0;
 
-        if (StringUtils.hasLength(sortBy)) {
-            // Regex to match the pattern of sortBy
-            // Example: name:asc
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(asc|desc)");
-            Matcher matcher = pattern.matcher(sortBy);
-            if (matcher.find()) {
-                if (matcher.group(3).equalsIgnoreCase("asc")) {
-                    sorts.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
-                } else {
-                    sorts.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
-                }
-            }
-        }
+		List<Sort.Order> sorts = new ArrayList<>();
 
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+		if (StringUtils.hasLength(sortBy)) {
+			// Regex to match the pattern of sortBy
+			// Example: name:asc
+			Pattern pattern = Pattern.compile("(\\w+?)(:)(asc|desc)");
+			Matcher matcher = pattern.matcher(sortBy);
+			if (matcher.find()) {
+				if (matcher.group(3).equalsIgnoreCase("asc")) {
+					sorts.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
+				} else {
+					sorts.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
+				}
+			}
+		}
 
-        Page<Book> books = bookRepository.findAll(pageable);
+		Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
 
-        List<BookResponse> items = books.map(bookMapper::toResponse).getContent();
+		Page<Book> books = bookRepository.findAll(pageable);
 
-        return PageResponse.builder()
-                .pageNo(pageable.getPageNumber() + 1)
-                .pageSize(pageable.getPageSize())
-                .totalPages(books.getTotalPages())
-                .items(items)
-                .build();
-    }
+		List<BookResponse> items = books.map(bookMapper::toResponse).getContent();
 
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public BookResponse findById(String id) {
-        return bookRepository.findById(id).map(bookMapper::toResponse)
-                .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
-    }
+		return PageResponse.builder().pageNo(pageable.getPageNumber() + 1).pageSize(pageable.getPageSize())
+				.totalPages(books.getTotalPages()).items(items).build();
+	}
 
-    @Override
-    public BookResponse findBySlug(String slug) {
-        return bookRepository.findBySlug(slug).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
-    }
+	@Override
+	@PreAuthorize("hasRole('ADMIN')")
+	public BookResponse findById(String id) {
+		return bookRepository.findById(id).map(bookMapper::toResponse)
+				.orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+	}
 
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public BookResponse update(String id, BookUpdateRequest request) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
-        bookMapper.toUpdateEntity(book, request);
+	@Override
+	public BookResponse findBySlug(String slug) {
+		return bookRepository.findBySlug(slug).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+	}
 
-        book.setCategory(categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
+	@Override
+	@PreAuthorize("hasRole('ADMIN')")
+	public BookResponse update(String id, BookUpdateRequest request) {
+		Book book = bookRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+		bookMapper.toUpdateEntity(book, request);
 
-        book.setPublisher(publisherRepository.findById(request.getPublisherId())
-                .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
+		book.setCategory(categoryRepository.findById(request.getCategoryId())
+				.orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
 
-        book.setDiscount(discountRepository.findByCode(request.getDiscountCode())
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_DISCOUNT_CODE)));
+		book.setPublisher(publisherRepository.findById(request.getPublisherId())
+				.orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
-        // update book images
-        book.getBookImages().clear();
-        for (BookImageRequest bookImageRequest : request.getBookImages()) {
-            book.addBookImage(BookImage.builder()
-                    .url(bookImageRequest.getUrl())
-                    .build());
-        }
+		book.setDiscount(discountRepository.findByCode(request.getDiscountCode())
+				.orElseThrow(() -> new AppException(ErrorCode.INVALID_DISCOUNT_CODE)));
 
-        try {
-            book = bookRepository.save(book);
-        } catch (DataIntegrityViolationException e) {
-            throw new AppException(ErrorCode.BOOK_EXISTS);
-        }
+		// update book images
+		book.getBookImages().clear();
+		for (BookImageRequest bookImageRequest : request.getBookImages()) {
+			book.addBookImage(BookImage.builder().url(bookImageRequest.getUrl()).build());
+		}
 
-        return bookMapper.toResponse(book);
-    }
+		try {
+			book = bookRepository.save(book);
+		} catch (DataIntegrityViolationException e) {
+			throw new AppException(ErrorCode.BOOK_EXISTS);
+		}
 
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public void delete(String id) {
-        bookRepository.deleteById(id);
-    }
+		return bookMapper.toResponse(book);
+	}
+
+	@Override
+	@PreAuthorize("hasRole('ADMIN')")
+	public void delete(String id) {
+		bookRepository.deleteById(id);
+	}
 }
