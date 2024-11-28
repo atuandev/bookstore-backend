@@ -40,16 +40,17 @@ public class BookController {
                 .build();
     }
 
-    @Operation(summary = "Get all books with pagination, sorting and search(title, author)")
+    @Operation(summary = "Get all books with pagination, sorting, filter(categorySlug) and search(title, author)")
     @GetMapping("/list")
     ApiResponse<PageResponse<Object>> getAllBooksWithSortBy(
             @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
+            @RequestParam(defaultValue = "", required = false) String categorySlug,
             @RequestParam(defaultValue = "", required = false) String search
     ) {
         return ApiResponse.<PageResponse<Object>>builder()
-                .data(bookService.findAllWithSortByAndSearch(pageNo, pageSize, sortBy, search))
+                .data(bookService.findAllWithSortByAndSearch(pageNo, pageSize, sortBy, categorySlug, search))
                 .build();
     }
 

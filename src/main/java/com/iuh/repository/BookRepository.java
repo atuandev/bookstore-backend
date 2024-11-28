@@ -22,10 +22,7 @@ public interface BookRepository extends JpaRepository<Book, String> {
 
     Page<Book> findAllByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(String title, String author, Pageable pageable);
 
-    @Query("SELECT b FROM Book b WHERE b.category.slug = :slug AND b.status = true")
-    Optional<List<Book>> findAllByCategorySlugAndStatusTrue(String slug);
-
-    @Query("SELECT b FROM Book b WHERE b.publisher.slug = :slug AND b.status = true")
-    Optional<List<Book>> findAllByPublisherSlugAndStatusTrue(String slug);
-
+    @Query("SELECT b FROM Book b WHERE b.category.slug = :categorySlug AND (b.title LIKE %:title% OR b.author LIKE %:author%)")
+    Page<Book> findAllByCategory_SlugAndTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase
+            (String categorySlug, String title, String author, Pageable pageable);
 }

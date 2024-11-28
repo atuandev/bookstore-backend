@@ -80,7 +80,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public PageResponse<Object> findAllWithSortByAndSearch(int pageNo, int pageSize, String sortBy, String search) {
+    public PageResponse<Object> findAllWithSortByAndSearch(int pageNo, int pageSize, String sortBy, String categorySlug, String search) {
         int page = pageNo > 0 ? pageNo - 1 : 0;
 
         List<Sort.Order> sorts = new ArrayList<>();
@@ -105,6 +105,9 @@ public class BookServiceImpl implements BookService {
 
         if (StringUtils.hasLength(search)) {
             books = bookRepository.findAllByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(search, search, pageable);
+        } else if (StringUtils.hasLength(categorySlug)) {
+            books = bookRepository.findAllByCategory_SlugAndTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(
+                    categorySlug, search, search, pageable);
         } else {
             books = bookRepository.findAll(pageable);
         }
