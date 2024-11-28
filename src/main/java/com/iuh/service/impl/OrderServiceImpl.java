@@ -61,6 +61,11 @@ public class OrderServiceImpl implements OrderService {
 			if (curBook.getStock() < odr.getQuantity()) {
 				throw new AppException(ErrorCode.BOOK_OUT_OF_STOCK);
 			}
+//			reduce stock of book
+			curBook.setStock(curBook.getStock() - odr.getQuantity());
+			curBook.setSold(curBook.getSold() + odr.getQuantity());
+			bookRepository.save(curBook);
+			
 			OrderDetail orderDetail = orderMapper.toOrderDetail(odr);
 			orderDetail.setBook(bookRepository.findById(odr.getBookId()).orElseThrow(() -> {
 				return new AppException(ErrorCode.BOOK_NOT_FOUND);
@@ -142,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
 		//
 		List<Sort.Order> sorts = new ArrayList<>();
 		//
-		if (StringUtils.hasLength(sortBy)) {
+		if (sortBy != null && StringUtils.hasLength(sortBy)) {
 			// Regex to match the pattern of sortBy
 			// Example: name:asc
 			Pattern pattern = Pattern.compile("(\\w+?)(:)(asc|desc)");
