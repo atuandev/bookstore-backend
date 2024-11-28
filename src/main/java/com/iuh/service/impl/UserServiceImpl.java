@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         var roles = new HashSet<Role>();
         roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
         user.setRoles(roles);
-        
+
         try {
             user = userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy) {
+    public PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy, String search) {
         int page = pageNo > 0 ? pageNo - 1 : 0;
 
         List<Sort.Order> sorts = new ArrayList<>();
@@ -154,7 +154,13 @@ public class UserServiceImpl implements UserService {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
 
-        Page<User> users = userRepository.findAll(pageable);
+        Page<User> users;
+
+        if (StringUtils.hasLength(search)) {
+            users = userRepository.findAllByUsernameContainingIgnoreCaseOrNameContainingIgnoreCaseOrEmailContainingIgnoreCase(search, search, search, pageable);
+        } else {
+            users = userRepository.findAll(pageable);
+        }
 
         List<UserResponse> items = users.map(userMapper::toUserResponse).getContent();
 

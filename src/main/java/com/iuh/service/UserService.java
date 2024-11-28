@@ -20,5 +20,5 @@ public interface UserService {
 
     void delete(String id);
 
-    PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy);
+    PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy, String search);
 }

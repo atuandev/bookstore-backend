@@ -12,7 +12,7 @@ public interface BookService {
 
     List<BookResponse> findAll();
 
-    PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy);
+    PageResponse<Object> findAllWithSortByAndSearch(int pageNo, int pageSize, String sortBy, String search);
 
     BookResponse findById(String id);
 
@@ -21,4 +21,5 @@ public interface BookService {
     BookResponse update(String id, BookUpdateRequest request);
 
     void delete(String id);
+
 }
