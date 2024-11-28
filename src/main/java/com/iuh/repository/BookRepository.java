@@ -1,6 +1,8 @@
 package com.iuh.repository;
 
 import com.iuh.entity.Book;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -24,5 +26,9 @@ public interface BookRepository extends JpaRepository<Book, String> {
 
     @Query("SELECT b FROM Book b WHERE b.publisher.slug = :slug AND b.status = true")
     Optional<List<Book>> findAllByPublisherSlugAndStatusTrue(String slug);
+    
+    Optional<List<Book>> findByTitleContaining(String title, Pageable pageable);
+    
+    boolean existsBySlug(String slug);
 
 }

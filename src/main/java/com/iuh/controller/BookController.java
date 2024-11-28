@@ -28,7 +28,7 @@ public class BookController {
     @PostMapping("/add")
     ApiResponse<BookResponse> createBook(@RequestBody @Valid BookCreationRequest request) {
         return ApiResponse.<BookResponse>builder()
-                .data(bookService.save(request))
+                .data(bookService.addBook(request))
                 .build();
     }
 
@@ -80,5 +80,16 @@ public class BookController {
     ApiResponse<Void> deleteBook(@PathVariable String bookId) {
         bookService.delete(bookId);
         return ApiResponse.<Void>builder().build();
+    }
+    @Operation(summary = "Get book details by name")
+    @GetMapping("/title/{title}")
+    ApiResponse<List<BookResponse>> getBookDetailsByName(@PathVariable String title,
+    		@Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
+            @Min(4) @RequestParam(defaultValue = "4", required = false) int pageSize,
+            @RequestParam(required = false) String sortBy) {
+        return ApiResponse.<List<BookResponse>>builder()
+                .data(bookService.findByTitle(title,pageNo,pageSize,sortBy))
+                .build();
+        
     }
 }

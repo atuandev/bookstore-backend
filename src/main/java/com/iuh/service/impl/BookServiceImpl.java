@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BookServiceImpl implements BookService {
+	
 	BookRepository bookRepository;
 	BookImageRepository bookImageRepository;
 	CategoryRepository categoryRepository;
@@ -54,28 +55,25 @@ public class BookServiceImpl implements BookService {
 	public BookResponse save(BookCreationRequest request) {
 		Book book = bookMapper.toEntity(request);
 
-        book.setCategory(categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
+		book.setCategory(categoryRepository.findById(request.getCategoryId())
+				.orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
 
-        book.setPublisher(publisherRepository.findById(request.getPublisherId())
-                .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
+		book.setPublisher(publisherRepository.findById(request.getPublisherId())
+				.orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
-        book.setDiscount(discountRepository.findByCode(request.getDiscountCode())
-                .orElse(null));
+		book.setDiscount(discountRepository.findByCode(request.getDiscountCode()).orElse(null));
 
-        for (BookImageRequest bookImageRequest : request.getBookImages()) {
-            book.addBookImage(BookImage.builder()
-                    .url(bookImageRequest.getUrl())
-                    .build());
-        }
+		for (BookImageRequest bookImageRequest : request.getBookImages()) {
+			book.addBookImage(BookImage.builder().url(bookImageRequest.getUrl()).build());
+		}
 
-        try {
-            book = bookRepository.save(book);
-        } catch (DataIntegrityViolationException e) {
-            throw new AppException(ErrorCode.BOOK_EXISTS);
-        }
+		try {
+			book = bookRepository.save(book);
+		} catch (DataIntegrityViolationException e) {
+			throw new AppException(ErrorCode.BOOK_EXISTS);
+		}
 
-        return bookMapper.toResponse(book);
+		return bookMapper.toResponse(book);
 	}
 
 	@Override
@@ -86,25 +84,8 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy) {
-		int page = pageNo > 0 ? pageNo - 1 : 0;
-
-		List<Sort.Order> sorts = new ArrayList<>();
-
-		if (StringUtils.hasLength(sortBy)) {
-			// Regex to match the pattern of sortBy
-			// Example: name:asc
-			Pattern pattern = Pattern.compile("(\\w+?)(:)(asc|desc)");
-			Matcher matcher = pattern.matcher(sortBy);
-			if (matcher.find()) {
-				if (matcher.group(3).equalsIgnoreCase("asc")) {
-					sorts.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
-				} else {
-					sorts.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
-				}
-			}
-		}
-
-		Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+		
+		Pageable pageable = getPageable(pageNo, pageSize, sortBy);
 
 		Page<Book> books = bookRepository.findAll(pageable);
 
@@ -121,11 +102,11 @@ public class BookServiceImpl implements BookService {
 				.orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
 	}
 
-    @Override
-    public BookResponse findBySlug(String slug) {
-        return bookRepository.findBySlug(slug).map(bookMapper::toResponse)
-                .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
-    }
+	@Override
+	public BookResponse findBySlug(String slug) {
+		return bookRepository.findBySlug(slug).map(bookMapper::toResponse)
+				.orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+	}
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
@@ -160,6 +141,52 @@ public class BookServiceImpl implements BookService {
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
 	public void delete(String id) {
+		if (!bookRepository.existsById(id)) {
+			throw new AppException(ErrorCode.BOOK_NOT_FOUND);
+		}
 		bookRepository.deleteById(id);
 	}
+
+	@Override
+	public List<BookResponse> findByTitle(String title, int pageNo, int pageSize, String sortBy) {
+
+		Pageable pageable = getPageable(pageNo, pageSize, sortBy);
+		
+		return bookRepository.findByTitleContaining(title, pageable)
+				.orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND))
+				.stream()
+				.map(bookMapper::toResponse)
+				.toList();
+	}
+	
+	private Pageable getPageable(int pageNo, int pageSize, String sortBy) {
+		int page = pageNo > 0 ? pageNo - 1 : 0;
+
+		List<Sort.Order> sorts = new ArrayList<>();
+
+		if (sortBy != null && StringUtils.hasLength(sortBy)) {
+			// Regex to match the pattern of sortBy
+			// Example: name:asc
+			Pattern pattern = Pattern.compile("(\\w+?)(:)(asc|desc)");
+			Matcher matcher = pattern.matcher(sortBy);
+			if (matcher.find()) {
+				if (matcher.group(3).equalsIgnoreCase("asc")) {
+					sorts.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
+				} else {
+					sorts.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
+				}
+			}
+		}
+
+		return PageRequest.of(page, pageSize, Sort.by(sorts));
+	}
+
+	@Override
+	public BookResponse addBook(BookCreationRequest request) {
+		if (bookRepository.existsBySlug(request.getTitle())) {
+			throw new AppException(ErrorCode.BOOK_EXISTS);
+		}
+		return save(request);
+	}
+
 }
