@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class OrderDetailRequest {
-	String bookId;
-	Integer quantity;
+    String bookId;
+    Integer quantity;
+    Double price;
 }

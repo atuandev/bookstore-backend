@@ -50,6 +50,8 @@ public enum ErrorCode {
     REVIEW_NOT_FOUND(1400, "Review not found", HttpStatus.NOT_FOUND),
     BOOK_EXISTS(1037, "Book already exists", HttpStatus.BAD_REQUEST),
     DISCOUNT_CODE_EXISTED(1038, "Discount code already exists", HttpStatus.BAD_REQUEST),
+    BOOK_OUT_OF_STOCK(1039, "Book out of stock", HttpStatus.BAD_REQUEST),
+    ORDER_NOT_FOUND(1040, "Order not found", HttpStatus.NOT_FOUND),
     ;
 
     int code;

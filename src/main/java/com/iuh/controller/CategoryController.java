@@ -27,44 +27,44 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class CategoryController {
-	CategoryService categoryService;
-//	CategoryMapper categoryMapper;
+    CategoryService categoryService;
 
-	@Operation(summary = "Create permission")
-	@PostMapping("/add")
-	ApiResponse<CategoryResponse> create(@RequestBody CategoryRequest request) {
-		return ApiResponse.<CategoryResponse>builder().data(categoryService.save(request))
-				.build();
-	}
-	@GetMapping("/name/{categoryName}")
-	@Operation(summary = "Get category by name")
-	ApiResponse<CategoryResponse> getCategoryByName(@PathVariable String categoryName) {
-        return ApiResponse.<CategoryResponse>builder().data(categoryService.findByName(categoryName)).build();
-	}
+    @Operation(summary = "Create permission")
+    @PostMapping("/add")
+    ApiResponse<CategoryResponse> create(@RequestBody CategoryRequest request) {
+        return ApiResponse.<CategoryResponse>builder().data(categoryService.save(request)).build();
+    }
 
-	@GetMapping
-	@Operation(summary = "Get all categories")
-	ApiResponse<List<CategoryResponse>> getAll() {
-		return ApiResponse.<List<CategoryResponse>>builder().data(categoryService.findAll()).build();
-	}
-	@GetMapping("/{categoryId}")
-	@Operation(summary = "Get category by id")
-	ApiResponse<CategoryResponse> getCategoryById(@PathVariable String categoryId) {
-		return ApiResponse.<CategoryResponse>builder().data(categoryService.findById(categoryId)).build();
-	}
-	
-	@PutMapping("/{categoryId}")
-	@Operation(summary = "Update category by id")
-	ApiResponse<CategoryResponse> updateCategoryById(@PathVariable String categoryId,
-			@RequestBody CategoryRequest request) {
-		return ApiResponse.<CategoryResponse>builder().data(categoryService.update(categoryId, request)).build();
-	}
-	
-	@DeleteMapping("/{categoryId}")
-	@Operation(summary = "Delete category by id")
-	ApiResponse<Void> deleteCategoryById(@PathVariable String categoryId) {
-		categoryService.delete(categoryId);
-		return ApiResponse.<Void>builder().build();
-	}
-	
+    @GetMapping("/slug/{slug}")
+    @Operation(summary = "Get category by slug")
+    ApiResponse<CategoryResponse> getCategoryBySlug(@PathVariable String slug) {
+        return ApiResponse.<CategoryResponse>builder().data(categoryService.findBySlug(slug)).build();
+    }
+
+    @GetMapping
+    @Operation(summary = "Get all categories")
+    ApiResponse<List<CategoryResponse>> getAll() {
+        return ApiResponse.<List<CategoryResponse>>builder().data(categoryService.findAll()).build();
+    }
+
+    @GetMapping("/{categoryId}")
+    @Operation(summary = "Get category by id")
+    ApiResponse<CategoryResponse> getCategoryById(@PathVariable String categoryId) {
+        return ApiResponse.<CategoryResponse>builder().data(categoryService.findById(categoryId)).build();
+    }
+
+    @PutMapping("/{categoryId}")
+    @Operation(summary = "Update category by id")
+    ApiResponse<CategoryResponse> updateCategoryById(@PathVariable String categoryId,
+                                                     @RequestBody CategoryRequest request) {
+        return ApiResponse.<CategoryResponse>builder().data(categoryService.update(categoryId, request)).build();
+    }
+
+    @DeleteMapping("/{categoryId}")
+    @Operation(summary = "Delete category by id")
+    ApiResponse<Void> deleteCategoryById(@PathVariable String categoryId) {
+        categoryService.delete(categoryId);
+        return ApiResponse.<Void>builder().build();
+    }
+
 }

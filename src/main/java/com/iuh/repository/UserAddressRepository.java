@@ -10,9 +10,9 @@ import java.util.List;
 
 @Repository
 public interface UserAddressRepository extends JpaRepository<UserAddress, String> {
-    List<UserAddress> findAllByUserId(String userId);
-
     @Modifying
     @Query("DELETE FROM UserAddress ua WHERE ua.id = :id")
     void deleteUserAddressById(String id);
+
+    List<UserAddress> findAllByOrderByCreatedAtDesc();
 }

@@ -48,7 +48,7 @@ public class UserController {
     ApiResponse<PageResponse<Object>> getAllUsersWithSortBy(
             @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
-            @RequestParam(required = false) String sortBy
+            @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy
     ) {
         SecurityContextHolder.getContext().getAuthentication();
         return ApiResponse.<PageResponse<Object>>builder()
