@@ -103,11 +103,12 @@ public class BookServiceImpl implements BookService {
 
         Page<Book> books;
 
-        if (StringUtils.hasLength(search)) {
-            books = bookRepository.findAllByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(search, search, pageable);
+        if (StringUtils.hasLength(categorySlug) && StringUtils.hasLength(search)) {
+            books = bookRepository.findWithFilterAndSearch(categorySlug, search, search, pageable);
         } else if (StringUtils.hasLength(categorySlug)) {
-            books = bookRepository.findAllByCategory_SlugAndTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(
-                    categorySlug, search, search, pageable);
+            books = bookRepository.findWithFilterAndSearch(categorySlug, "", "", pageable);
+        } else if (StringUtils.hasLength(search)) {
+            books = bookRepository.findAllByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(search, search, pageable);
         } else {
             books = bookRepository.findAll(pageable);
         }
