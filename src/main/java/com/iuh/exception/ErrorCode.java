@@ -54,6 +54,7 @@ public enum ErrorCode {
     DISCOUNT_CODE_EXISTED(1038, "Discount code already exists", HttpStatus.BAD_REQUEST),
     CATEGORY_NAME_EXISTED(1039, "Category name already exists", HttpStatus.BAD_REQUEST),
     CATEGORY_SLUG_EXISTED(1040, "Category slug already exists", HttpStatus.BAD_REQUEST),
+    ORDER_NOT_FOUND(1041, "Order not found", HttpStatus.NOT_FOUND),
     ;
 
     int code;

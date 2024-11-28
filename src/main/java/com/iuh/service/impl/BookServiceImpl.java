@@ -54,33 +54,28 @@ public class BookServiceImpl implements BookService {
 	public BookResponse save(BookCreationRequest request) {
 		Book book = bookMapper.toEntity(request);
 
-		book.setCategory(categoryRepository.findById(request.getCategoryId())
-				.orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
+        book.setCategory(categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
 
-		book.setPublisher(publisherRepository.findById(request.getPublisherId())
-				.orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
+        book.setPublisher(publisherRepository.findById(request.getPublisherId())
+                .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
-		book.setDiscount(discountRepository.findByCode(request.getDiscountCode()).orElse(null));
+        book.setDiscount(discountRepository.findByCode(request.getDiscountCode())
+                .orElse(null));
 
-		try {
-			// Lưu Book trước tiên
-			book = bookRepository.saveAndFlush(book);
+        for (BookImageRequest bookImageRequest : request.getBookImages()) {
+            book.addBookImage(BookImage.builder()
+                    .url(bookImageRequest.getUrl())
+                    .build());
+        }
 
-			// Thêm danh sách BookImage
-			for (BookImageRequest bookImageRequest : request.getBookImages()) {
-				BookImage bookImage = BookImage.builder().url(bookImageRequest.getUrl()).book(book) // Gán Book đã được
-																									// lưu
-						.build();
-				book.addBookImage(bookImage);
-			}
+        try {
+            book = bookRepository.save(book);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCode.BOOK_EXISTS);
+        }
 
-			// Lưu các BookImage
-			bookImageRepository.saveAll(book.getBookImages());
-
-		} catch (DataIntegrityViolationException e) {
-			throw new AppException(ErrorCode.BOOK_EXISTS);
-		}
-		return bookMapper.toResponse(book);
+        return bookMapper.toResponse(book);
 	}
 
 	@Override
@@ -128,7 +123,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public BookResponse findBySlug(String slug) {
-		return bookRepository.findBySlug(slug).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+		return bookRepository.findBySlug(slug).map(bookMapper::toResponse).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
 	}
 
 	@Override
