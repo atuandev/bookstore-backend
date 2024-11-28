@@ -38,7 +38,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     @PreAuthorize("hasRole('ADMIN')")
     @Override
     public List<UserAddressResponse> findAll() {
-        return userAddressRepository.findAll().stream().map(userAddressMapper::toUserAddressResponse).toList();
+        return userAddressRepository.findAllByOrderByCreatedAtDesc().stream().map(userAddressMapper::toUserAddressResponse).toList();
     }
 
     @PreAuthorize("hasRole('ADMIN')")

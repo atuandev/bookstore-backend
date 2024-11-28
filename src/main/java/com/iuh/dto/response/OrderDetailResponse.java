@@ -1,7 +1,5 @@
 package com.iuh.dto.response;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +11,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class OrderDetailReponse {
-	String bookTitle;
-	Integer quantity;
-	Double price;
+public class OrderDetailResponse {
+    String bookTitle;
+    Integer quantity;
+    Double price;
 }

@@ -2,7 +2,6 @@ package com.iuh.service;
 
 import com.iuh.dto.request.CategoryRequest;
 import com.iuh.dto.response.CategoryResponse;
-import com.iuh.entity.Category;
 
 import java.util.List;
 
@@ -12,12 +11,10 @@ public interface CategoryService {
     List<CategoryResponse> findAll();
 
     CategoryResponse findById(String id);
-    
-    CategoryResponse findByName(String name);
+
+    CategoryResponse findBySlug(String slug);
 
     CategoryResponse update(String id, CategoryRequest request);
 
     void delete(String id);
-    
-    void deleteByName(String name);
 }

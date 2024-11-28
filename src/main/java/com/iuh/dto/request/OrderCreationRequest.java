@@ -14,11 +14,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class OrderCreationRequest {
-	String userId;
-	String receiverName;
-	String receiverPhone;
-	String address;
-	String paymentMethod;
-	String orderStatus;
-	List<OrderDetailRequest> orderDetails;
+    String userId;
+    String receiverName;
+    String receiverPhone;
+    String address;
+    String paymentMethod;
+    String orderStatus;
+    Double total;
+    List<OrderDetailRequest> orderDetails;
 }
