@@ -14,10 +14,9 @@ import org.springframework.util.StringUtils;
 
 import com.iuh.dto.request.OrderCreationRequest;
 import com.iuh.dto.request.OrderDetailRequest;
-import com.iuh.dto.response.CategoryResponse;
 import com.iuh.dto.response.OrderResponse;
 import com.iuh.dto.response.PageResponse;
-import com.iuh.entity.Category;
+import com.iuh.entity.Book;
 import com.iuh.entity.Order;
 import com.iuh.entity.OrderDetail;
 import com.iuh.exception.AppException;
@@ -28,6 +27,7 @@ import com.iuh.repository.OrderRepository;
 import com.iuh.repository.UserRepository;
 import com.iuh.service.OrderService;
 
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -44,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
 	OrderMapper orderMapper;
 
 	@Override
+	@Transactional
 	public OrderResponse save(OrderCreationRequest request) {
 
 		Order order = orderMapper.toOrder(request);
@@ -54,6 +55,12 @@ public class OrderServiceImpl implements OrderService {
 		List<OrderDetail> orderDetails = new ArrayList<>();
 		Double total = 0.0;
 		for (OrderDetailRequest odr : request.getOrderDetails()) {
+			Book curBook = bookRepository.findById(odr.getBookId()).orElseThrow(() -> {
+				return new AppException(ErrorCode.BOOK_NOT_FOUND);
+			});
+			if (curBook.getStock() < odr.getQuantity()) {
+				throw new AppException(ErrorCode.BOOK_OUT_OF_STOCK);
+			}
 			OrderDetail orderDetail = orderMapper.toOrderDetail(odr);
 			orderDetail.setBook(bookRepository.findById(odr.getBookId()).orElseThrow(() -> {
 				return new AppException(ErrorCode.BOOK_NOT_FOUND);

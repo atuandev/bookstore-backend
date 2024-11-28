@@ -55,6 +55,7 @@ public enum ErrorCode {
     CATEGORY_NAME_EXISTED(1039, "Category name already exists", HttpStatus.BAD_REQUEST),
     CATEGORY_SLUG_EXISTED(1040, "Category slug already exists", HttpStatus.BAD_REQUEST),
     ORDER_NOT_FOUND(1041, "Order not found", HttpStatus.NOT_FOUND),
+    BOOK_OUT_OF_STOCK(1042, "Book out of stock", HttpStatus.BAD_REQUEST),
     ;
 
     int code;
