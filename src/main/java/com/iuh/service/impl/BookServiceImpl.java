@@ -80,7 +80,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy) {
+    public PageResponse<Object> findAllWithSortByAndSearch(int pageNo, int pageSize, String sortBy, String search) {
         int page = pageNo > 0 ? pageNo - 1 : 0;
 
         List<Sort.Order> sorts = new ArrayList<>();
@@ -101,7 +101,13 @@ public class BookServiceImpl implements BookService {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
 
-        Page<Book> books = bookRepository.findAll(pageable);
+        Page<Book> books;
+
+        if (StringUtils.hasLength(search)) {
+            books = bookRepository.findAllByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(search, search, pageable);
+        } else {
+            books = bookRepository.findAll(pageable);
+        }
 
         List<BookResponse> items = books.map(bookMapper::toResponse).getContent();
 
@@ -163,4 +169,5 @@ public class BookServiceImpl implements BookService {
     public void delete(String id) {
         bookRepository.deleteById(id);
     }
+
 }
