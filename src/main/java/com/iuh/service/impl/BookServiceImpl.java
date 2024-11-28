@@ -121,10 +121,11 @@ public class BookServiceImpl implements BookService {
 				.orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
 	}
 
-	@Override
-	public BookResponse findBySlug(String slug) {
-		return bookRepository.findBySlug(slug).map(bookMapper::toResponse).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
-	}
+    @Override
+    public BookResponse findBySlug(String slug) {
+        return bookRepository.findBySlug(slug).map(bookMapper::toResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+    }
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
