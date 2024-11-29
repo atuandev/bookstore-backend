@@ -3,10 +3,10 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://mysqldb:3306/bookstore?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:${MYSQL_PORT:3306}/bookstore?createDatabaseIfNotExist=true
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASS:root}
   jpa:
     hibernate:
       ddl-auto: update

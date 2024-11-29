@@ -21,6 +21,7 @@ public interface OrderMapper {
     OrderDetail toOrderDetail(OrderDetailRequest request);
 
     @Mapping(source = "book.title", target = "bookTitle")
+    @Mapping(source = "book.slug", target = "slug")
     OrderDetailResponse mapOrderDetailToResponse(OrderDetail orderDetail);
 
     OrderResponse toOrderResponse(Order order);

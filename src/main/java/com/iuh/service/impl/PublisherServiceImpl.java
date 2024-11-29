@@ -9,6 +9,7 @@ import com.iuh.repository.PublisherRepository;
 import com.iuh.service.PublisherService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class PublisherServiceImpl implements PublisherService {
     PublisherMapper publisherMapper;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public Publisher save(PublisherRequest request) {
         return publisherRepository.save(publisherMapper.toEntity(request));
     }
@@ -31,11 +33,13 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public Publisher findById(String id) {
         return publisherRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND));
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public Publisher update(String id, PublisherRequest request) {
         Publisher publisher = findById(id);
         publisherMapper.toUpdateEntity(publisher, request);
@@ -43,6 +47,7 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(String id) {
         publisherRepository.deleteById(id);
     }
