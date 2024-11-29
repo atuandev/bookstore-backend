@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import com.iuh.dto.response.OrderDetailResponse;
 import com.iuh.dto.response.PageResponse;
 import com.iuh.entity.Book;
+import com.iuh.enums.OrderStatus;
 import com.iuh.repository.OrderDetailRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -166,6 +167,16 @@ public class OrderServiceImpl implements OrderService {
                 .totalPages(orders.getTotalPages())
                 .items(items)
                 .build();
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void changeStatus(String id, OrderStatus status) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+
+        order.setOrderStatus(status);
+        orderRepository.save(order);
     }
 
 }

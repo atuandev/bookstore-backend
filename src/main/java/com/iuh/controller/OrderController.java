@@ -4,6 +4,7 @@ import com.iuh.dto.ApiResponse;
 import com.iuh.dto.request.OrderCreationRequest;
 import com.iuh.dto.response.OrderResponse;
 import com.iuh.dto.response.PageResponse;
+import com.iuh.enums.OrderStatus;
 import com.iuh.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -57,6 +58,15 @@ public class OrderController {
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy) {
         return ApiResponse.<PageResponse<Object>>builder()
                 .data(orderService.findAllByUserIdWithSortBy(userId, pageNo, pageSize, sortBy))
+                .build();
+    }
+
+    @Operation(summary = "Change order status")
+    @PatchMapping("/{id}/status")
+    public ApiResponse<Void> changeStatus(@PathVariable String id, @RequestParam OrderStatus status) {
+        orderService.changeStatus(id, status);
+        return ApiResponse.<Void>builder()
+                .message("Order status changed successfully")
                 .build();
     }
 }

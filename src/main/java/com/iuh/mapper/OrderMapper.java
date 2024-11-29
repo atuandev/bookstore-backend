@@ -22,6 +22,7 @@ public interface OrderMapper {
 
     @Mapping(source = "book.title", target = "bookTitle")
     @Mapping(source = "book.slug", target = "slug")
+    @Mapping(source = "book.bookImages", target = "bookImages")
     OrderDetailResponse mapOrderDetailToResponse(OrderDetail orderDetail);
 
     OrderResponse toOrderResponse(Order order);
