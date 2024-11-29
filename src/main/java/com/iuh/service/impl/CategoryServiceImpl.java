@@ -10,6 +10,7 @@ import com.iuh.repository.CategoryRepository;
 import com.iuh.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryMapper categoryMapper;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse save(CategoryRequest request) {
         return categoryMapper.toResponse(categoryRepository.save(categoryMapper.toEntity(request)));
     }
@@ -32,12 +34,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse findById(String id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         return categoryMapper.toResponse(category);
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse update(String id, CategoryRequest request) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 
@@ -46,6 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(String id) {
         categoryRepository.deleteById(id);
     }
