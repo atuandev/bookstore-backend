@@ -93,7 +93,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public OrderResponse findById(String id) {
         return orderRepository.findById(id)
                 .map(orderMapper::toOrderResponse)
