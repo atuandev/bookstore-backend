@@ -58,8 +58,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public List<BookStatisticsResponse> getMostSellingBooks(int limit) {
-        List<BookStatistics> listStat = statisticsRepository.getMostSellingBooks();
-        return listStat.subList(0, limit).stream()
+        List<BookStatistics> listStat = statisticsRepository.getMostSellingBooks(limit);
+        return listStat.stream()
                 .map(stat -> new BookStatisticsResponse(
                         stat.getBookId(),
                         stat.getBookTitle(),
