@@ -46,25 +46,24 @@ public interface StatisticsRepository extends JpaRepository<Statistics, String> 
             JOIN books b ON od.book_id = b.id
             JOIN orders o ON od.order_id = o.id
             GROUP BY b.id, b.title
-            ORDER BY totalSold DESC; -- add WHERE o.order_status = 'DELIVERED' when u only check for completed orders
+            ORDER BY totalSold DESC LIMIT :limit; -- add WHERE o.order_status = 'DELIVERED' when u only check for completed orders
             """)
-    List<BookStatistics> getMostSellingBooks();
-
+    List<BookStatistics> getMostSellingBooks(int limit);
     @Query(nativeQuery = true, value = """
-            SELECT b.id as bookId, b.title as bookTitle, SUM(od.quantity) as totalSold, 
-                   CASE 
-                       WHEN DAY(o.created_at) BETWEEN 1 AND 7 THEN 1
-                       WHEN DAY(o.created_at) BETWEEN 8 AND 14 THEN 2
-                       WHEN DAY(o.created_at) BETWEEN 15 AND 21 THEN 3
-                       WHEN DAY(o.created_at) BETWEEN 22 AND 28 THEN 4
-                       ELSE 5
-                   END as week
+            SELECT b.id as bookId, b.title as bookTitle, SUM(od.quantity) as totalSold,
+                MIN(CASE\s
+                    WHEN DAY(o.created_at) BETWEEN 1 AND 7 THEN 1
+                    WHEN DAY(o.created_at) BETWEEN 8 AND 14 THEN 2
+                    WHEN DAY(o.created_at) BETWEEN 15 AND 21 THEN 3
+                    WHEN DAY(o.created_at) BETWEEN 22 AND 28 THEN 4
+                    ELSE 5
+                END) as week
             FROM order_details od
             JOIN books b ON od.book_id = b.id
             JOIN orders o ON od.order_id = o.id
             WHERE o.order_status <> 'CANCELLED' AND MONTH(o.created_at) = :month AND YEAR(o.created_at) = :year
             GROUP BY b.id, b.title
-            ORDER BY totalSold DESC; -- nhu function tren, fix week later
+            ORDER BY totalSold DESC;
             """)
     List<BookStatistics> getMostSellingBooksByMonth(int month, int year);
 }
