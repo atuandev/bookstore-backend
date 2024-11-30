@@ -1,5 +1,6 @@
 package com.iuh.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
@@ -16,8 +17,12 @@ import lombok.experimental.FieldDefaults;
 public class Statistics {
     @Id
     String month;
-    int totalOrders;
-    double totalImportCost;
-    double totalSoldAmount;
-    double totalProfit;
+    @Column(columnDefinition = "integer default 0")
+    int totalOrders =0;
+    @Column(columnDefinition = "double default 0")
+    double totalImportCost = 0.0;
+    @Column(columnDefinition = "double default 0")
+    double totalSoldAmount = 0.0;
+    @Column(columnDefinition = "double default 0")
+    double totalProfit = 0.0;
 }
