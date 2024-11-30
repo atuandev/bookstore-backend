@@ -57,6 +57,12 @@ public class BookServiceImpl implements BookService {
 
         book.setDiscount(discountRepository.findByCode(request.getDiscountCode())
                 .orElse(null));
+        if(request.getStock() == null || request.getStock() <= 0) {
+            book.setStock(100);
+        }
+        if(request.getSold() == null || request.getSold() <= 0) {
+            book.setSold(0);
+        }
 
         for (BookImageRequest bookImageRequest : request.getBookImages()) {
             book.addBookImage(BookImage.builder()

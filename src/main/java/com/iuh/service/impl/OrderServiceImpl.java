@@ -63,12 +63,13 @@ public class OrderServiceImpl implements OrderService {
 
             Book book = bookRepository.findById(odr.getBookId())
                     .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
-            boolean isOutOfStock = book.getStock() < odr.getQuantity();
+            Integer stock = book.getStock(); //bypass NullPointerException workaround
+            boolean isOutOfStock = (stock == null) || stock < odr.getQuantity();
             if (isOutOfStock) {
                 throw new AppException(ErrorCode.BOOK_OUT_OF_STOCK);
             }
             // Update stock and sold
-            book.setStock(book.getStock() - odr.getQuantity());
+            book.setStock(stock - odr.getQuantity());
             book.setSold(book.getSold() + odr.getQuantity());
             bookRepository.save(book);
             orderDetail.setBook(book);
