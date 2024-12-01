@@ -4,6 +4,7 @@ import com.iuh.dto.request.BookCreationRequest;
 import com.iuh.dto.request.BookUpdateRequest;
 import com.iuh.dto.response.BookResponse;
 import com.iuh.entity.Book;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -14,6 +15,8 @@ public interface BookMapper {
     Book toEntity(BookCreationRequest request);
 
     @Mapping(target = "bookImages", source = "bookImages")
+    @Mapping(target = "discountPrice", ignore = true)
+        // Ignore this field initially
     BookResponse toResponse(Book book);
 
     @Mapping(target = "category", ignore = true)
@@ -21,4 +24,9 @@ public interface BookMapper {
     @Mapping(target = "discount", ignore = true)
     @Mapping(target = "bookImages", ignore = true)
     void toUpdateEntity(@MappingTarget Book category, BookUpdateRequest request);
+
+    @AfterMapping
+    default void setDiscountPrice(@MappingTarget BookResponse response, Book book) {
+        response.setDiscountPrice(book.getDiscountPrice());
+    }
 }
