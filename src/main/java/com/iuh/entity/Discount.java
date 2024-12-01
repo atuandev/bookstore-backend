@@ -29,4 +29,8 @@ public class Discount extends AbstractEntity {
 
     LocalDate endDate;
 
+    public boolean isValid() {
+        LocalDate now = LocalDate.now();
+        return (startDate == null || !now.isBefore(startDate)) && (endDate == null || !now.isAfter(endDate));
+    }
 }

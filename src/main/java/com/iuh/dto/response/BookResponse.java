@@ -28,6 +28,7 @@ public class BookResponse {
     Integer weight;
     Integer publishYear;
     Double price;
+    Double discountPrice;
     Integer stock;
     Integer sold;
     Boolean isNew;
