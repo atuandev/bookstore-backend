@@ -20,12 +20,10 @@ public abstract class AbstractEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-    @Column(name = "created_at")
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     LocalDateTime updatedAt;
