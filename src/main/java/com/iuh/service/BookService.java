@@ -5,12 +5,10 @@ import com.iuh.dto.request.BookUpdateRequest;
 import com.iuh.dto.response.BookResponse;
 import com.iuh.dto.response.PageResponse;
 
-import java.util.List;
-
 public interface BookService {
     BookResponse save(BookCreationRequest request);
 
-    List<BookResponse> findAll();
+    PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String categorySlug, String search);
 
     PageResponse<Object> findAllWithSortByAndSearch(int pageNo, int pageSize, String sortBy, String categorySlug, String search);
 
@@ -22,4 +20,5 @@ public interface BookService {
 
     void delete(String id);
 
+    void changeStatus(String bookId, boolean status);
 }

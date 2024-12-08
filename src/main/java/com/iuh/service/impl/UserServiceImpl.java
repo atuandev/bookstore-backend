@@ -168,6 +168,7 @@ public class UserServiceImpl implements UserService {
                 .pageNo(pageable.getPageNumber() + 1)
                 .pageSize(pageable.getPageSize())
                 .totalPages(users.getTotalPages())
+                .totalElements(users.getTotalElements())
                 .items(items)
                 .build();
     }

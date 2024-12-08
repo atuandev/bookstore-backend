@@ -24,19 +24,27 @@ import java.util.List;
 public class BookController {
     BookService bookService;
 
-    @Operation(summary = "Create book")
+    @Operation(summary = "ADMIN: Create book")
     @PostMapping("/add")
     ApiResponse<BookResponse> createBook(@RequestBody @Valid BookCreationRequest request) {
         return ApiResponse.<BookResponse>builder()
+                .message("Book created successfully")
                 .data(bookService.save(request))
                 .build();
     }
 
-    @Operation(summary = "Get all books")
+    @Operation(summary = "ADMIN: Get all books with pagination, sorting, filter(categorySlug) and search(title, author)")
     @GetMapping
-    ApiResponse<List<BookResponse>> getAllBooks() {
-        return ApiResponse.<List<BookResponse>>builder()
-                .data(bookService.findAll())
+    ApiResponse<PageResponse<Object>> getAllBooks(
+            @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
+            @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
+            @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
+            @RequestParam(required = false) String categorySlug,
+            @RequestParam(defaultValue = "", required = false) String search
+    ) {
+        return ApiResponse.<PageResponse<Object>>builder()
+                .message("Get list books successfully")
+                .data(bookService.findAll(pageNo, pageSize, sortBy, categorySlug, search))
                 .build();
     }
 
@@ -46,18 +54,20 @@ public class BookController {
             @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
-            @RequestParam(defaultValue = "", required = false) String categorySlug,
+            @RequestParam(required = false) String categorySlug,
             @RequestParam(defaultValue = "", required = false) String search
     ) {
         return ApiResponse.<PageResponse<Object>>builder()
+                .message("Get list books successfully")
                 .data(bookService.findAllWithSortByAndSearch(pageNo, pageSize, sortBy, categorySlug, search))
                 .build();
     }
 
-    @Operation(summary = "Get book details by id")
+    @Operation(summary = "ADMIN: Get book details by id")
     @GetMapping("/{bookId}")
     ApiResponse<BookResponse> getBookDetails(@PathVariable String bookId) {
         return ApiResponse.<BookResponse>builder()
+                .message("Get book details successfully")
                 .data(bookService.findById(bookId))
                 .build();
     }
@@ -66,22 +76,35 @@ public class BookController {
     @GetMapping("/slug/{slug}")
     ApiResponse<BookResponse> getBookDetailsBySlug(@PathVariable String slug) {
         return ApiResponse.<BookResponse>builder()
+                .message("Get book details successfully")
                 .data(bookService.findBySlug(slug))
                 .build();
     }
 
-    @Operation(summary = "Update book")
+    @Operation(summary = "ADMIN: Update book")
     @PutMapping("/{bookId}")
     ApiResponse<BookResponse> updateBook(@PathVariable String bookId, @RequestBody @Valid BookUpdateRequest request) {
         return ApiResponse.<BookResponse>builder()
+                .message("Book updated successfully")
                 .data(bookService.update(bookId, request))
                 .build();
     }
 
-    @Operation(summary = "Delete book")
+    @Operation(summary = "ADMIN: Delete book")
     @DeleteMapping("/{bookId}")
     ApiResponse<Void> deleteBook(@PathVariable String bookId) {
         bookService.delete(bookId);
-        return ApiResponse.<Void>builder().build();
+        return ApiResponse.<Void>builder()
+                .message("Book deleted successfully")
+                .build();
+    }
+
+    @Operation(summary = "ADMIN: Change book status")
+    @PatchMapping("/{bookId}/status")
+    ApiResponse<Void> changeBookStatus(@PathVariable String bookId, Boolean status) {
+        bookService.changeStatus(bookId, status);
+        return ApiResponse.<Void>builder()
+                .message("Book status changed successfully")
+                .build();
     }
 }

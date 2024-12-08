@@ -12,8 +12,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class PageResponse<T> {
-    private int pageNo;
-    private int pageSize;
-    private long totalPages;
-    private T items;
+    Integer pageNo;
+    Integer pageSize;
+    Integer totalPages;
+    Long totalElements;
+    T items;
 }

@@ -130,6 +130,7 @@ public class OrderServiceImpl implements OrderService {
                 .pageNo(pageable.getPageNumber() + 1)
                 .pageSize(pageable.getPageSize())
                 .totalPages(orders.getTotalPages())
+                .totalElements(orders.getTotalElements())
                 .items(items)
                 .build();
     }
@@ -164,6 +165,7 @@ public class OrderServiceImpl implements OrderService {
                 .pageNo(pageable.getPageNumber() + 1)
                 .pageSize(pageable.getPageSize())
                 .totalPages(orders.getTotalPages())
+                .totalElements(orders.getTotalElements())
                 .items(items)
                 .build();
     }

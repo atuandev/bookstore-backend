@@ -23,11 +23,11 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private static final String[] PUBLIC_ENDPOINTS = {
+    private static final String[] AUTH_ENDPOINTS = {
             "/users/add", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh"
     };
 
-    private static final String[] SWAGGER_ENDPOINTS = {
+    private static final String[] PUBLIC_ENDPOINTS = {
             "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/books/**", "/categories/**", "/publishers/**"
     };
 
@@ -40,8 +40,8 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                .requestMatchers(SWAGGER_ENDPOINTS).permitAll()
+                .requestMatchers(HttpMethod.POST, AUTH_ENDPOINTS).permitAll()
+                .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
@@ -60,7 +60,7 @@ public class SecurityConfig {
         CorsConfiguration corsConfig = new CorsConfiguration();
 
         corsConfig.setAllowCredentials(true);
-        corsConfig.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
+        corsConfig.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080", "http://localhost:8081"));
         corsConfig.addAllowedMethod("*");
         corsConfig.addAllowedHeader("*");
 
