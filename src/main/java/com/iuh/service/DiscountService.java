@@ -1,14 +1,13 @@
 package com.iuh.service;
 
 import com.iuh.dto.request.DiscountRequest;
+import com.iuh.dto.response.PageResponse;
 import com.iuh.entity.Discount;
-
-import java.util.List;
 
 public interface DiscountService {
     Discount save(DiscountRequest request);
 
-    List<Discount> findAll();
+    PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search);
 
     Discount findById(String id);
 

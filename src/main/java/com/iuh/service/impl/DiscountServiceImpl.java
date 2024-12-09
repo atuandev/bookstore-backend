@@ -1,14 +1,20 @@
 package com.iuh.service.impl;
 
 import com.iuh.dto.request.DiscountRequest;
+import com.iuh.dto.response.PageResponse;
 import com.iuh.entity.Discount;
 import com.iuh.exception.AppException;
 import com.iuh.exception.ErrorCode;
 import com.iuh.mapper.DiscountMapper;
 import com.iuh.repository.DiscountRepository;
 import com.iuh.service.DiscountService;
+import com.iuh.util.PageResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,15 +28,31 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount save(DiscountRequest request) {
-    	if (discountRepository.existsByCode(request.getCode())) {
-    		throw new AppException(ErrorCode.DISCOUNT_CODE_EXISTED);
-    	}
+        if (discountRepository.existsByCode(request.getCode())) {
+            throw new AppException(ErrorCode.DISCOUNT_CODE_EXISTED);
+        }
         return discountRepository.save(discountMapper.toEntity(request));
     }
 
     @Override
-    public List<Discount> findAll() {
-        return discountRepository.findAll();
+    public PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search) {
+        int page = pageNo > 0 ? pageNo - 1 : 0;
+
+        List<Sort.Order> sorts = PageResponseUtil.getSorts(sortBy);
+
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+
+        Page<Discount> discounts = discountRepository.findAllBySearch(search, pageable);
+
+        List<Discount> items = discounts.getContent();
+
+        return PageResponse.builder()
+                .pageNo(pageable.getPageNumber() + 1)
+                .pageSize(pageable.getPageSize())
+                .totalPages(discounts.getTotalPages())
+                .totalElements(discounts.getTotalElements())
+                .items(items)
+                .build();
     }
 
     @Override
