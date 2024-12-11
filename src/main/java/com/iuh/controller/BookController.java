@@ -57,7 +57,7 @@ public class BookController {
     ) {
         return ApiResponse.<PageResponse<Object>>builder()
                 .message("Get list books successfully")
-                .data(bookService.findAllWithSortByAndSearch(pageNo, pageSize, sortBy, categorySlug, search))
+                .data(bookService.findAllBooks(pageNo, pageSize, sortBy, categorySlug, search))
                 .build();
     }
 

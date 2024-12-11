@@ -9,13 +9,11 @@ import com.iuh.exception.ErrorCode;
 import com.iuh.mapper.CategoryMapper;
 import com.iuh.repository.CategoryRepository;
 import com.iuh.service.CategoryService;
-import com.iuh.util.PageResponseUtil;
+import com.iuh.util.PageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -36,23 +34,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search) {
-        int page = pageNo > 0 ? pageNo - 1 : 0;
-
-        List<Sort.Order> sorts = PageResponseUtil.getSorts(sortBy);
-
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+        Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
 
         Page<Category> categories = categoryRepository.findAllByNameContainingIgnoreCase(search, pageable);
 
         List<CategoryResponse> items = categories.map(categoryMapper::toResponse).getContent();
 
-        return PageResponse.builder()
-                .pageNo(pageable.getPageNumber() + 1)
-                .pageSize(pageable.getPageSize())
-                .totalPages(categories.getTotalPages())
-                .totalElements(categories.getTotalElements())
-                .items(items)
-                .build();
+        return PageUtil.getPageResponse(pageable, categories, items);
     }
 
     @Override

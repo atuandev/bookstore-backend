@@ -1,40 +1,34 @@
 package com.iuh.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.iuh.dto.response.OrderDetailResponse;
-import com.iuh.dto.response.PageResponse;
-import com.iuh.entity.Book;
-import com.iuh.enums.OrderStatus;
-import com.iuh.repository.OrderDetailRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
 import com.iuh.dto.request.OrderCreationRequest;
 import com.iuh.dto.request.OrderDetailRequest;
+import com.iuh.dto.response.OrderDetailResponse;
 import com.iuh.dto.response.OrderResponse;
+import com.iuh.dto.response.PageResponse;
+import com.iuh.entity.Book;
 import com.iuh.entity.Order;
 import com.iuh.entity.OrderDetail;
+import com.iuh.enums.OrderStatus;
 import com.iuh.exception.AppException;
 import com.iuh.exception.ErrorCode;
 import com.iuh.mapper.OrderMapper;
 import com.iuh.repository.BookRepository;
+import com.iuh.repository.OrderDetailRepository;
 import com.iuh.repository.OrderRepository;
 import com.iuh.repository.UserRepository;
 import com.iuh.service.OrderService;
-
+import com.iuh.util.PageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -94,90 +88,43 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse findById(String id) {
-        return orderRepository.findById(id)
-                .map(orderMapper::toOrderResponse)
-                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        Order order = getOrderById(id);
+        return orderMapper.toOrderResponse(order);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy) {
-        int page = pageNo > 0 ? pageNo - 1 : 0;
-
-        List<Sort.Order> sorts = new ArrayList<>();
-
-        if (StringUtils.hasLength(sortBy)) {
-            // Regex to match the pattern of sortBy
-            // Example: name:asc
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(asc|desc)");
-            Matcher matcher = pattern.matcher(sortBy);
-            if (matcher.find()) {
-                if (matcher.group(3).equalsIgnoreCase("asc")) {
-                    sorts.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
-                } else {
-                    sorts.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
-                }
-            }
-        }
-
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+    public PageResponse<Object> findAllOrders(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
 
         Page<Order> orders = orderRepository.findAll(pageable);
 
         List<OrderResponse> items = orders.map(orderMapper::toOrderResponse).getContent();
 
-        return PageResponse.builder()
-                .pageNo(pageable.getPageNumber() + 1)
-                .pageSize(pageable.getPageSize())
-                .totalPages(orders.getTotalPages())
-                .totalElements(orders.getTotalElements())
-                .items(items)
-                .build();
+        return PageUtil.getPageResponse(pageable, orders, items);
     }
 
     @Override
-    public PageResponse<Object> findAllByUserIdWithSortBy(String userId, int pageNo, int pageSize, String sortBy) {
-        int page = pageNo > 0 ? pageNo - 1 : 0;
-
-        List<Sort.Order> sorts = new ArrayList<>();
-
-        if (StringUtils.hasLength(sortBy)) {
-            // Regex to match the pattern of sortBy
-            // Example: name:asc
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(asc|desc)");
-            Matcher matcher = pattern.matcher(sortBy);
-            if (matcher.find()) {
-                if (matcher.group(3).equalsIgnoreCase("asc")) {
-                    sorts.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
-                } else {
-                    sorts.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
-                }
-            }
-        }
-
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+    public PageResponse<Object> findAllByUserId(String userId, int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
 
         Page<Order> orders = orderRepository.findAllByUser_Id(userId, pageable);
 
         List<OrderResponse> items = orders.map(orderMapper::toOrderResponse).getContent();
 
-        return PageResponse.builder()
-                .pageNo(pageable.getPageNumber() + 1)
-                .pageSize(pageable.getPageSize())
-                .totalPages(orders.getTotalPages())
-                .totalElements(orders.getTotalElements())
-                .items(items)
-                .build();
+        return PageUtil.getPageResponse(pageable, orders, items);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void changeStatus(String id, OrderStatus status) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
-
+        Order order = getOrderById(id);
         order.setOrderStatus(status);
         orderRepository.save(order);
+    }
+
+    private Order getOrderById(String id) {
+        return orderRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
     }
 
 }
