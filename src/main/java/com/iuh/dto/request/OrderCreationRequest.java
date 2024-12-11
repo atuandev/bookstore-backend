@@ -19,7 +19,6 @@ public class OrderCreationRequest {
     String receiverPhone;
     String address;
     String paymentMethod;
-    String orderStatus;
     Double total;
     List<OrderDetailRequest> orderDetails;
 }

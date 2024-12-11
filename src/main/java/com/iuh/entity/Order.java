@@ -1,5 +1,6 @@
 package com.iuh.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.iuh.enums.OrderStatus;
@@ -52,5 +53,12 @@ public class Order extends AbstractEntity {
 
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     List<OrderDetail> orderDetails;
-    
+
+    public void addOrderDetail(OrderDetail orderDetail) {
+        if (orderDetails == null) {
+            orderDetails = new ArrayList<>();
+        }
+        orderDetails.add(orderDetail);
+        orderDetail.setOrder(this);
+    }
 }

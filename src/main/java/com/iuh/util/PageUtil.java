@@ -43,6 +43,16 @@ public class PageUtil {
         return PageRequest.of(page, pageSize, Sort.by(sorts));
     }
 
+    /**
+     * Get PageResponse object for pagination
+     *
+     * @param pageable Pageable
+     * @param page     Page<T>
+     * @param items    List<E>
+     * @param <T>      T
+     * @param <E>      E
+     * @return PageResponse<Object>
+     */
     public static <T, E> PageResponse<Object> getPageResponse(Pageable pageable, Page<T> page, List<E> items) {
         return PageResponse.builder()
                 .pageNo(pageable.getPageNumber() + 1)

@@ -16,6 +16,7 @@ import com.iuh.repository.DiscountRepository;
 import com.iuh.repository.PublisherRepository;
 import com.iuh.service.BookService;
 import com.iuh.util.PageUtil;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -41,6 +42,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public BookResponse save(BookCreationRequest request) {
         Book book = bookMapper.toEntity(request);
 
@@ -104,6 +106,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public BookResponse update(String id, BookUpdateRequest request) {
         Book book = getBookById(id);
         bookMapper.toUpdateEntity(book, request);
