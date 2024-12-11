@@ -1,13 +1,8 @@
 package com.iuh.mapper;
 
 import com.iuh.dto.request.CategoryRequest;
-import com.iuh.dto.response.BookResponse;
 import com.iuh.dto.response.CategoryResponse;
-import com.iuh.entity.Book;
 import com.iuh.entity.Category;
-
-import java.util.List;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -16,10 +11,10 @@ import org.mapstruct.MappingTarget;
 public interface CategoryMapper {
     Category toEntity(CategoryRequest request);
 
+    @Mapping(target = "createdAt", source = "category.createdAt")
+    @Mapping(target = "updatedAt", source = "category.updatedAt")
     CategoryResponse toResponse(Category category);
-    
+
     void toUpdateEntity(@MappingTarget Category category, CategoryRequest request);
-    
-    List<CategoryResponse> toResponseList(List<Category> categories);
-    
+
 }

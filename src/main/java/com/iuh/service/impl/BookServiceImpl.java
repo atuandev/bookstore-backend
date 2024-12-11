@@ -15,16 +15,15 @@ import com.iuh.repository.CategoryRepository;
 import com.iuh.repository.DiscountRepository;
 import com.iuh.repository.PublisherRepository;
 import com.iuh.service.BookService;
-import com.iuh.util.PageResponseUtil;
+import com.iuh.util.PageUtil;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -43,14 +42,18 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public BookResponse save(BookCreationRequest request) {
         Book book = bookMapper.toEntity(request);
 
-        book.setCategory(categoryRepository.findById(request.getCategoryId()).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
+        book.setCategory(categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
 
-        book.setPublisher(publisherRepository.findById(request.getPublisherId()).orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
+        book.setPublisher(publisherRepository.findById(request.getPublisherId())
+                .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
-        book.setDiscount(discountRepository.findByCode(request.getDiscountCode()).orElse(null));
+        book.setDiscount(discountRepository.findByCode(request.getDiscountCode())
+                .orElse(null));
 
         for (BookImageRequest bookImageRequest : request.getBookImages()) {
             book.addBookImage(BookImage.builder().url(bookImageRequest.getUrl()).build());
@@ -68,44 +71,24 @@ public class BookServiceImpl implements BookService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String categorySlug, String search) {
-        int page = pageNo > 0 ? pageNo - 1 : 0;
-
-        List<Sort.Order> sorts = PageResponseUtil.getSorts(sortBy);
-
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+        Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
 
         Page<Book> books = bookRepository.findWithFilterAndSearch(categorySlug, search, search, pageable);
 
         List<Book> items = books.getContent();
 
-        return PageResponse.builder()
-                .pageNo(pageable.getPageNumber() + 1)
-                .pageSize(pageable.getPageSize())
-                .totalPages(books.getTotalPages())
-                .totalElements(books.getTotalElements())
-                .items(items)
-                .build();
+        return PageUtil.getPageResponse(pageable, books, items);
     }
 
     @Override
-    public PageResponse<Object> findAllWithSortByAndSearch(int pageNo, int pageSize, String sortBy, String categorySlug, String search) {
-        int page = pageNo > 0 ? pageNo - 1 : 0;
-
-        List<Sort.Order> sorts = PageResponseUtil.getSorts(sortBy);
-
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+    public PageResponse<Object> findAllBooks(int pageNo, int pageSize, String sortBy, String categorySlug, String search) {
+        Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
 
         Page<Book> books = bookRepository.findWithFilterAndSearch(categorySlug, search, search, pageable);
 
         List<BookResponse> items = books.map(bookMapper::toResponse).getContent();
 
-        return PageResponse.builder()
-                .pageNo(pageable.getPageNumber() + 1)
-                .pageSize(pageable.getPageSize())
-                .totalPages(books.getTotalPages())
-                .totalElements(books.getTotalElements())
-                .items(items)
-                .build();
+        return PageUtil.getPageResponse(pageable, books, items);
     }
 
     @Override
@@ -117,18 +100,22 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponse findBySlug(String slug) {
-        return bookRepository.findBySlug(slug).map(bookMapper::toResponse).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+        return bookRepository.findBySlug(slug).map(bookMapper::toResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public BookResponse update(String id, BookUpdateRequest request) {
         Book book = getBookById(id);
         bookMapper.toUpdateEntity(book, request);
 
-        book.setCategory(categoryRepository.findById(request.getCategoryId()).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
+        book.setCategory(categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND)));
 
-        book.setPublisher(publisherRepository.findById(request.getPublisherId()).orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
+        book.setPublisher(publisherRepository.findById(request.getPublisherId())
+                .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_FOUND)));
 
         book.setDiscount(discountRepository.findByCode(request.getDiscountCode()).orElse(null));
 

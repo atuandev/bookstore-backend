@@ -11,9 +11,9 @@ public interface OrderService {
 
     OrderResponse findById(String id);
 
-    PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy);
+    PageResponse<Object> findAllOrders(int pageNo, int pageSize, String sortBy);
 
-    PageResponse<Object> findAllByUserIdWithSortBy(String userId, int pageNo, int pageSize, String sortBy);
+    PageResponse<Object> findAllByUserId(String userId, int pageNo, int pageSize, String sortBy);
 
     void changeStatus(String id, OrderStatus status);
 }

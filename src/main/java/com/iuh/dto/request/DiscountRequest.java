@@ -1,5 +1,7 @@
 package com.iuh.dto.request;
 
+import com.iuh.validation.ValidDateRange;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -16,15 +18,18 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@ValidDateRange
 public class DiscountRequest {
 
     @Size(min = 1, message = "INVALID_DISCOUNT_NAME")
     String name;
 
-    @Pattern(regexp = "^[A-Z0-9]+$", message = "INVALID_DISCOUNT_CODE")
+    @Pattern(regexp = "^[A-Z0-9]*$", message = "INVALID_DISCOUNT_CODE")
+    @Size(min = 1, max = 50, message = "INVALID_DISCOUNT_CODE")
     String code;
 
-    @Min(value = 0, message = "INVALID_DISCOUNT_PERCENT")
+    @Min(value = 1, message = "INVALID_DISCOUNT_PERCENT_MIN")
+    @Max(value = 100, message = "INVALID_DISCOUNT_PERCENT_MAX")
     Integer percent;
 
     LocalDate startDate;

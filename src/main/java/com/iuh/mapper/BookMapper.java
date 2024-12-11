@@ -16,7 +16,6 @@ public interface BookMapper {
 
     @Mapping(target = "bookImages", source = "bookImages")
     @Mapping(target = "discountPrice", ignore = true)
-        // Ignore this field initially
     BookResponse toResponse(Book book);
 
     @Mapping(target = "category", ignore = true)

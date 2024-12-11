@@ -22,10 +22,11 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     OrderService orderService;
 
-    @Operation(summary = "Create a new Order")
+    @Operation(summary = "Create a new order")
     @PostMapping
     public ApiResponse<OrderResponse> create(@Valid @RequestBody OrderCreationRequest request) {
         return ApiResponse.<OrderResponse>builder()
+                .message("Order created successfully")
                 .data(orderService.save(request))
                 .build();
     }
@@ -34,30 +35,37 @@ public class OrderController {
     @GetMapping("/{id}")
     public ApiResponse<OrderResponse> getById(@PathVariable String id) {
         return ApiResponse.<OrderResponse>builder()
+                .message("Get order successfully")
                 .data(orderService.findById(id))
                 .build();
     }
 
-    @Operation(summary = "Get all orders with paging and sorting")
+    @Operation(
+            summary = "Get all orders",
+            description = "Get all orders with pagination(pageNo, pageSize) and sortBy(field:direction)")
     @GetMapping("/list")
-    public ApiResponse<PageResponse<Object>> getAllWithSortBy(
+    public ApiResponse<PageResponse<Object>> getAllOrders(
             @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy) {
         return ApiResponse.<PageResponse<Object>>builder()
-                .data(orderService.findAllWithSortBy(pageNo, pageSize, sortBy))
+                .message("Get list orders successfully")
+                .data(orderService.findAllOrders(pageNo, pageSize, sortBy))
                 .build();
     }
 
-    @Operation(summary = "Get all orders of a user with paging and sorting")
+    @Operation(
+            summary = "Get all orders of a user",
+            description = "Get all orders with pagination(pageNo, pageSize) and sortBy(field:direction)")
     @GetMapping("/list/user/{userId}")
-    public ApiResponse<PageResponse<Object>> getAllByUserIdWithSortBy(
+    public ApiResponse<PageResponse<Object>> getAllUserOrders(
             @PathVariable String userId,
             @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy) {
         return ApiResponse.<PageResponse<Object>>builder()
-                .data(orderService.findAllByUserIdWithSortBy(userId, pageNo, pageSize, sortBy))
+                .message("Get list orders successfully")
+                .data(orderService.findAllByUserId(userId, pageNo, pageSize, sortBy))
                 .build();
     }
 

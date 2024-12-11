@@ -1,7 +1,6 @@
 package com.iuh.mapper;
 
 import com.iuh.dto.request.OrderCreationRequest;
-import com.iuh.dto.request.OrderDetailRequest;
 import com.iuh.dto.response.OrderDetailResponse;
 import com.iuh.dto.response.OrderResponse;
 import com.iuh.entity.Order;
@@ -12,18 +11,16 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
 
-    @Mapping(target = "user", ignore = true)
     @Mapping(target = "orderDetails", ignore = true)
     Order toOrder(OrderCreationRequest request);
 
-    @Mapping(target = "order", ignore = true)
-    @Mapping(target = "book", ignore = true)
-    OrderDetail toOrderDetail(OrderDetailRequest request);
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "orderDetails", target = "orderDetails")
+    OrderResponse toOrderResponse(Order order);
 
     @Mapping(source = "book.title", target = "bookTitle")
     @Mapping(source = "book.slug", target = "slug")
     @Mapping(source = "book.bookImages", target = "bookImages")
     OrderDetailResponse mapOrderDetailToResponse(OrderDetail orderDetail);
 
-    OrderResponse toOrderResponse(Order order);
 }

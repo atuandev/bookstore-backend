@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Tag(name = "Book Controller")
 @RestController
 @RequestMapping("/books")
@@ -59,7 +57,7 @@ public class BookController {
     ) {
         return ApiResponse.<PageResponse<Object>>builder()
                 .message("Get list books successfully")
-                .data(bookService.findAllWithSortByAndSearch(pageNo, pageSize, sortBy, categorySlug, search))
+                .data(bookService.findAllBooks(pageNo, pageSize, sortBy, categorySlug, search))
                 .build();
     }
 
