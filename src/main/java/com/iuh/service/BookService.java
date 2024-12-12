@@ -10,7 +10,7 @@ public interface BookService {
 
     PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String categorySlug, String search);
 
-    PageResponse<Object> findAllBooks(int pageNo, int pageSize, String sortBy, String categorySlug, String search);
+    PageResponse<Object> findAllBooksStatusTrue(int pageNo, int pageSize, String sortBy, String categorySlug, String search);
 
     BookResponse findById(String id);
 

@@ -17,7 +17,15 @@ public interface BookRepository extends JpaRepository<Book, String> {
             SELECT b FROM Book b
             WHERE (:categorySlug IS NULL OR b.category.slug = :categorySlug)\s
             AND (LOWER(b.title) LIKE %:title% OR LOWER(b.author) LIKE %:author%)\s
-            AND b.status = true\s
             """)
     Page<Book> findWithFilterAndSearch(String categorySlug, String title, String author, Pageable pageable);
+
+    @Query("""
+            SELECT b FROM Book b
+            WHERE (:categorySlug IS NULL OR b.category.slug = :categorySlug)\s
+            AND (LOWER(b.title) LIKE %:title% OR LOWER(b.author) LIKE %:author%)\s
+            AND b.status = true\s
+            """)
+    Page<Book> findWithFilterAndSearchStatusTrue(String categorySlug, String title, String author, Pageable pageable);
+
 }

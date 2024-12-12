@@ -81,10 +81,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public PageResponse<Object> findAllBooks(int pageNo, int pageSize, String sortBy, String categorySlug, String search) {
+    public PageResponse<Object> findAllBooksStatusTrue(int pageNo, int pageSize, String sortBy, String categorySlug, String search) {
         Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
 
-        Page<Book> books = bookRepository.findWithFilterAndSearch(categorySlug, search, search, pageable);
+        Page<Book> books = bookRepository.findWithFilterAndSearchStatusTrue(categorySlug, search, search, pageable);
 
         List<BookResponse> items = books.map(bookMapper::toResponse).getContent();
 

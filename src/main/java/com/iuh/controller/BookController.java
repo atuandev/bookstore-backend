@@ -31,9 +31,10 @@ public class BookController {
                 .build();
     }
 
-    @Operation(summary = "ADMIN: Get all books with pagination, sorting, filter(categorySlug) and search(title, author)")
+    @Operation(summary = "ADMIN: Get all books",
+            description = "Get all books with pagination, sorting, filter(categorySlug) and search(title, author)")
     @GetMapping
-    ApiResponse<PageResponse<Object>> getAllBooksAdmin(
+    ApiResponse<PageResponse<Object>> getAllBooks(
             @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
@@ -46,9 +47,10 @@ public class BookController {
                 .build();
     }
 
-    @Operation(summary = "Get all books with pagination, sorting, filter(categorySlug) and search(title, author)")
+    @Operation(summary = "Get all books with status true",
+            description = "Get all books with pagination, sorting, filter(categorySlug) and search(title, author) status true")
     @GetMapping("/list")
-    ApiResponse<PageResponse<Object>> getAllBooks(
+    ApiResponse<PageResponse<Object>> getAllBooksStatusTrue(
             @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
@@ -57,7 +59,7 @@ public class BookController {
     ) {
         return ApiResponse.<PageResponse<Object>>builder()
                 .message("Get list books successfully")
-                .data(bookService.findAllBooks(pageNo, pageSize, sortBy, categorySlug, search))
+                .data(bookService.findAllBooksStatusTrue(pageNo, pageSize, sortBy, categorySlug, search))
                 .build();
     }
 
