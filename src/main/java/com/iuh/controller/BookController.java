@@ -33,7 +33,7 @@ public class BookController {
 
     @Operation(summary = "ADMIN: Get all books with pagination, sorting, filter(categorySlug) and search(title, author)")
     @GetMapping
-    ApiResponse<PageResponse<Object>> getAllBooks(
+    ApiResponse<PageResponse<Object>> getAllBooksAdmin(
             @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
@@ -48,7 +48,7 @@ public class BookController {
 
     @Operation(summary = "Get all books with pagination, sorting, filter(categorySlug) and search(title, author)")
     @GetMapping("/list")
-    ApiResponse<PageResponse<Object>> getAllBooksWithSortBy(
+    ApiResponse<PageResponse<Object>> getAllBooks(
             @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
