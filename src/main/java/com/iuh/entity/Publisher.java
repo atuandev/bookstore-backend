@@ -16,6 +16,7 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "publishers")
 public class Publisher extends AbstractEntity {
 
+    @Column(nullable = false)
     String name;
 
     @Column(unique = true)
@@ -28,4 +29,6 @@ public class Publisher extends AbstractEntity {
     String image;
 
     String address;
+
+    Boolean status;
 }
