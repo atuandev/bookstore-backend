@@ -1,5 +1,6 @@
 package com.iuh.dto.response;
 
+import com.iuh.enums.ReviewStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
@@ -15,10 +17,13 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class ReviewResponse {
     String id;
-    String userName;
+    String username;
     String bookTitle;
+    String bookSlug;
+    Set<BookImageResponse> bookImages;
     Integer rating;
     String comment;
+    ReviewStatus status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

@@ -1,5 +1,7 @@
 package com.iuh.dto.request;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,19 +14,11 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class PublisherRequest {
+public class ReviewUpdateRequest {
+    @Min(value = 1, message = "INVALID_RATING")
+    @Max(value = 5, message = "INVALID_RATING")
+    Integer rating;
 
-    @Size(min = 1, message = "INVALID_NAME")
-    String name;
-
-    String slug;
-
-    String description;
-
-    String image;
-
-    String address;
-
-    @Builder.Default
-    Boolean status = true;
+    @Size(min = 1, message = "INVALID_COMMENT")
+    String comment;
 }

@@ -55,6 +55,10 @@ public enum ErrorCode {
     ORDER_NOT_FOUND(1041, "Order not found", HttpStatus.NOT_FOUND),
     INVALID_DATE_RANGE(1042, "End date must be after start date", HttpStatus.BAD_REQUEST),
     PERMISSION_ALREADY_EXISTS(1043, "Permission already exists", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_ID(1044, "Book id must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_RATING(1045, "Rating must be between 1 and 5", HttpStatus.BAD_REQUEST),
+    INVALID_COMMENT(1046, "Comment must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN(1047, "Invalid token", HttpStatus.BAD_REQUEST),
     ;
 
     int code;

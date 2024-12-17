@@ -129,10 +129,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         boolean verified = signedJWT.verify(jwsVerifier);
 
         if (!(verified && expirationTime.after(new Date())))
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.INVALID_TOKEN);
 
         if (invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.INVALID_TOKEN);
 
         return signedJWT;
     }

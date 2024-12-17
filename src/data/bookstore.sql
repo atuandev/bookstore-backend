@@ -78,14 +78,14 @@ INSERT INTO `books` (`id`, `created_at`, `updated_at`, `author`, `description`, 
 	('2a48914e-e2f0-47ee-9f7d-4a0c8d75b270', '2024-11-27 22:41:47.285305', '2024-11-27 22:41:47.285305', 'Yuval Noah Harari', 'Yuval Noah Harari kể lại lịch sử nhân loại một cách sáng tạo và cuốn hút.', 200000, b'1', b'0', 512, 250000, 2020, '23 x 15 x 3 cm', 'sapiens-luoc-su-loai-nguoi', 2, b'1', 100, 'Sapiens: Lược Sử Loài Người', 600, 'b36c7ed7-d6f1-4dc4-8998-33f5528f7a29', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '664d2d60-35f6-40fd-a5a5-a22b53062e40'),
 	('39d6be7c-b2ff-4680-88a1-517a22af6cf0', '2024-11-27 22:41:54.368716', '2024-11-27 22:41:54.368716', 'Tony Buổi Sáng', 'Tập hợp những câu chuyện đời thường hài hước và bài học cuộc sống từ Tony Buổi Sáng.', 85000, b'0', b'0', 280, 110000, 2019, '20 x 14 x 1.5 cm', 'ca-phe-cung-tony', 10, b'1', 100, 'Cà Phê Cùng Tony', 350, '6bbe45ee-db1c-4727-9703-9ed73d00a5e6', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'ec90e568-c831-4652-8324-6a38937c9a83'),
 	('54f2c395-6d30-4795-93d3-d3e3bb3b241d', '2024-11-27 22:41:36.253524', '2024-11-27 22:41:36.253524', 'Dale Carnegie', 'Cuốn sách kỹ năng sống kinh điển giúp bạn thành công trong giao tiếp và quản lý mối quan hệ.', 105000, b'1', b'1', 320, 135000, 2022, '20.5 x 14 x 2.5 cm', 'dac-nhan-tam', 7, b'1', 100, 'Đắc Nhân Tâm', 400, 'aff839ef-70cb-418f-b500-d83ecb15e576', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '972b43a7-e3b2-4a8a-ad47-8c90ed53ba16'),
-	('6be191e1-7151-4824-ac3f-cf347d297287', '2024-11-27 22:41:21.497671', '2024-11-29 19:09:15.935008', 'Paulo Coelho', 'Tác phẩm nổi tiếng của Paulo Coelho về hành trình tìm kiếm ước mơ và ý nghĩa cuộc sống.', 95000, b'0', b'1', 228, 120000, 2021, '20 x 13.5 x 2 cm', 'nha-gia-kim', 6, b'1', 100, 'Nhà Giả Kim', 300, '9e7d752e-8c9e-4666-a2a0-367ede84f09d', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '1'),
-	('71383a12-b01d-4803-9302-a07d1dc9e99a', '2024-11-27 22:42:34.907707', '2024-11-30 10:37:26.273144', 'Victor Hugo', 'Victor Hugo kể câu chuyện cảm động về nhân đạo và công lý.', 300000, b'1', b'0', 1200, 350000, 2020, '24 x 16 x 4 cm', 'nhung-nguoi-khon-kho', 6, b'1', 100, 'Những Người Khốn Khổ', 1500, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '1'),
-	('7802e89f-5f17-472a-ab9b-8f26962054dd', '2024-11-26 16:07:51.259041', '2024-11-26 16:07:51.259041', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 180000, 2024, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2024', 0, b'1', 100, 'Hai Số Phận - Bìa Cứng (Tái Bản 2024)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', '1'),
-	('7a3fae04-a30a-4557-9600-b58238fe4f34', '2024-11-26 15:33:02.362021', '2024-11-26 15:33:02.362021', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 178000, 2023, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2023', 0, b'1', 100, 'Hai Số Phận - Bìa Cứng (Tái Bản 2023)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', '1'),
-	('8ce1d18b-a767-4cb2-83a5-ac97661d50a2', '2024-11-26 16:08:05.825175', '2024-11-26 16:08:05.825731', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 177000, 2022, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2022', 0, b'1', 100, 'Hai Số Phận - Bìa Cứng (Tái Bản 2022)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', '1'),
+	('6be191e1-7151-4824-ac3f-cf347d297287', '2024-11-27 22:41:21.497671', '2024-11-29 19:09:15.935008', 'Paulo Coelho', 'Tác phẩm nổi tiếng của Paulo Coelho về hành trình tìm kiếm ước mơ và ý nghĩa cuộc sống.', 95000, b'0', b'1', 228, 120000, 2021, '20 x 13.5 x 2 cm', 'nha-gia-kim', 6, b'1', 100, 'Nhà Giả Kim', 300, '9e7d752e-8c9e-4666-a2a0-367ede84f09d', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
+	('71383a12-b01d-4803-9302-a07d1dc9e99a', '2024-11-27 22:42:34.907707', '2024-11-30 10:37:26.273144', 'Victor Hugo', 'Victor Hugo kể câu chuyện cảm động về nhân đạo và công lý.', 300000, b'1', b'0', 1200, 350000, 2020, '24 x 16 x 4 cm', 'nhung-nguoi-khon-kho', 6, b'1', 100, 'Những Người Khốn Khổ', 1500, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
+	('7802e89f-5f17-472a-ab9b-8f26962054dd', '2024-11-26 16:07:51.259041', '2024-11-26 16:07:51.259041', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 180000, 2024, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2024', 0, b'1', 100, 'Hai Số Phận - Bìa Cứng (Tái Bản 2024)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
+	('7a3fae04-a30a-4557-9600-b58238fe4f34', '2024-11-26 15:33:02.362021', '2024-11-26 15:33:02.362021', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 178000, 2023, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2023', 0, b'1', 100, 'Hai Số Phận - Bìa Cứng (Tái Bản 2023)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
+	('8ce1d18b-a767-4cb2-83a5-ac97661d50a2', '2024-11-26 16:08:05.825175', '2024-11-26 16:08:05.825731', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 177000, 2022, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2022', 0, b'0', 100, 'Hai Số Phận - Bìa Cứng (Tái Bản 2022)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
 	('bf1346f5-1253-4327-88f6-ff0bcff4a259', '2024-11-27 22:42:21.241832', '2024-12-11 22:15:50.491402', 'Fukuzawa Yukichi', 'Fukuzawa Yukichi khuyến khích tư duy độc lập và học hỏi không ngừng.', 105000, b'1', b'0', 248, 130000, 2019, '19 x 13 x 2 cm', 'khuyen-hoc', 19, b'1', 96, 'Khuyến Học', 400, '671dbce1-9a7b-484a-a016-2332d50d55bb', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '1066c347-337f-47f8-8fa8-41d425cdefcc'),
-	('d534202f-1ac0-4d99-8992-0a55bfed5411', '2024-11-26 16:08:54.017397', '2024-12-08 16:37:43.041951', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 176000, 2019, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2019', 0, b'0', 100, 'Hai Số Phận - Bìa Cứng (Tái Bản 2019)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '1'),
-	('ff0b4555-743e-49df-9f9f-1abdd998419b', '2024-11-26 16:08:10.977203', '2024-12-11 22:15:50.468296', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 175000, 2021, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2021', 10, b'1', 198, 'Hai Số Phận - Bìa Cứng (Tái Bản 2021)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '1');
+	('d534202f-1ac0-4d99-8992-0a55bfed5411', '2024-11-26 16:08:54.017397', '2024-12-12 21:15:11.096693', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 176000, 2019, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2019', 0, b'0', 100, 'Hai Số Phận - Bìa Cứng (Tái Bản 2019)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
+	('ff0b4555-743e-49df-9f9f-1abdd998419b', '2024-11-26 16:08:10.977203', '2024-12-11 22:15:50.468296', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 175000, 2021, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2021', 10, b'1', 198, 'Hai Số Phận - Bìa Cứng (Tái Bản 2021)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5');
 
 -- Dumping structure for table bookstore.book_images
 DROP TABLE IF EXISTS `book_images`;
@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table bookstore.orders: ~13 rows (approximately)
+-- Dumping data for table bookstore.orders: ~10 rows (approximately)
 DELETE FROM `orders`;
 INSERT INTO `orders` (`id`, `created_at`, `updated_at`, `address`, `order_status`, `payment_method`, `receiver_name`, `receiver_phone`, `total`, `user_id`) VALUES
 	('12a5547e-17af-4c37-9f6c-e820eada42cc', '2024-11-30 10:37:26.223350', '2024-11-30 10:37:26.223414', '34/8b Tân Xuân 5', 'PENDING', 'COD', 'Tuan Anh', '0982728717', 1865000, '268a4722-2abf-483a-a58b-ef41dc5d7537'),
@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `order_details` (
   CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table bookstore.order_details: ~23 rows (approximately)
+-- Dumping data for table bookstore.order_details: ~21 rows (approximately)
 DELETE FROM `order_details`;
 INSERT INTO `order_details` (`id`, `created_at`, `updated_at`, `price`, `quantity`, `book_id`, `order_id`) VALUES
 	('0b43f0b1-857a-4993-9797-d9a1db04cdcb', '2024-11-29 12:18:32.408533', '2024-11-29 12:18:32.408533', 105000, 1, 'bf1346f5-1253-4327-88f6-ff0bcff4a259', 'b878ae17-536a-4ba1-ab6a-8015c7eb80fe'),
@@ -263,8 +263,11 @@ CREATE TABLE IF NOT EXISTS `permissions` (
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table bookstore.permissions: ~0 rows (approximately)
+-- Dumping data for table bookstore.permissions: ~2 rows (approximately)
 DELETE FROM `permissions`;
+INSERT INTO `permissions` (`name`, `description`) VALUES
+	('USER_ADD', 'Add user'),
+	('USER_DELETE', 'Delete user');
 
 -- Dumping structure for table bookstore.publishers
 DROP TABLE IF EXISTS `publishers`;
@@ -277,20 +280,21 @@ CREATE TABLE IF NOT EXISTS `publishers` (
   `image` text,
   `name` varchar(255) DEFAULT NULL,
   `slug` varchar(255) DEFAULT NULL,
+  `status` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK439cob4187h6rodiq6n7rg518` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table bookstore.publishers: ~7 rows (approximately)
 DELETE FROM `publishers`;
-INSERT INTO `publishers` (`id`, `created_at`, `updated_at`, `address`, `description`, `image`, `name`, `slug`) VALUES
-	('1', '2024-11-26 15:32:29.000000', '2024-11-26 15:32:30.000000', NULL, NULL, NULL, 'NXB Văn học', 'nxb-van-hoc'),
-	('1066c347-337f-47f8-8fa8-41d425cdefcc', '2024-11-27 22:35:17.151596', '2024-11-27 22:35:17.151739', NULL, NULL, NULL, 'NXB Văn Hóa', 'nxb-van-hoa'),
-	('1ead17a2-b1b3-4ebc-a934-4d6c7768e78e', '2024-11-27 22:36:25.244177', '2024-11-27 22:36:25.244177', NULL, NULL, NULL, 'NXB Hội Nhà Văn', 'nxb-hoi-nha-van'),
-	('664d2d60-35f6-40fd-a5a5-a22b53062e40', '2024-11-27 22:32:24.367719', '2024-11-27 22:32:24.367719', NULL, NULL, NULL, 'NXB Thế Giới', 'nxb-the-gioi'),
-	('714c3e12-62b9-43f1-b63f-023420e4228a', '2024-11-27 22:33:54.583855', '2024-11-27 22:33:54.583855', NULL, NULL, NULL, 'NXB Lao Động', 'nxb-lao-dong'),
-	('972b43a7-e3b2-4a8a-ad47-8c90ed53ba16', '2024-11-27 22:30:39.116859', '2024-11-27 22:30:39.116859', NULL, NULL, NULL, 'NXB Tổng Hợp', 'nxb-tong-hop'),
-	('ec90e568-c831-4652-8324-6a38937c9a83', '2024-11-27 22:33:22.454568', '2024-11-27 22:33:22.454568', NULL, NULL, NULL, 'NXB Trẻ', 'nxb-tre');
+INSERT INTO `publishers` (`id`, `created_at`, `updated_at`, `address`, `description`, `image`, `name`, `slug`, `status`) VALUES
+	('1066c347-337f-47f8-8fa8-41d425cdefcc', '2024-11-27 22:35:17.151596', '2024-11-27 22:35:17.151739', 'Tầng 4, Tòa nhà Bộ Công Thương, số 655 Phạm Văn Đồng, quận Bắc Từ Liêm, Hà Nội', NULL, NULL, 'NXB Công Thương', 'nxb-cong-thuong', b'1'),
+	('1ead17a2-b1b3-4ebc-a934-4d6c7768e78e', '2024-11-27 22:36:25.244177', '2024-11-27 22:36:25.244177', 'Số 65 Nguyễn Du, Hà Nội', NULL, NULL, 'NXB Hội Nhà Văn', 'nxb-hoi-nha-van', b'1'),
+	('664d2d60-35f6-40fd-a5a5-a22b53062e40', '2024-11-27 22:32:24.367719', '2024-11-27 22:32:24.367719', '46 Trần Hưng Đạo, Hàng Bài, Hoàn Kiếm, Hà Nội', NULL, NULL, 'NXB Thế Giới', 'nxb-the-gioi', b'1'),
+	('714c3e12-62b9-43f1-b63f-023420e4228a', '2024-11-27 22:33:54.583855', '2024-11-27 22:33:54.583855', '75 Giảng Võ, Đống Đa, Hà Nội', NULL, NULL, 'NXB Lao Động', 'nxb-lao-dong', b'1'),
+	('972b43a7-e3b2-4a8a-ad47-8c90ed53ba16', '2024-11-27 22:30:39.116859', '2024-12-12 21:20:51.169644', 'Tầng 1 - Tòa nhà VUSTA - 53 Nguyễn Du - Quận Hai Bà Trưng - Hà Nội - Việt Nam', 'Nhà xuất bản Tri thức là nhà xuất bản Việt Nam thành lập vào tháng 9 năm 2005 trực thuộc Liên hiệp các Hội Khoa học và Kỹ thuật Việt Nam (VUSTA).', NULL, 'NXB Tri thức', 'nxb-tri-thuc', b'1'),
+	('a300003a-5c47-4df7-a591-0bdf9142a8b5', '2024-12-12 22:32:29.062879', '2024-12-12 22:32:29.063879', '18 Nguyễn Trường Tộ, phường Trúc Bạch, quận Ba Đình, thành phố Hà Nội ', 'Ra đời trong những ngày tháng khói lửa của cuộc kháng chiến chống Pháp, trưởng thành qua các thời kỳ đấu tranh giải phóng dân tộc và công cuộc xây dựng Tổ quốc XHCN, hơn 70 năm qua, NXB Văn học luôn đồng hành cùng những biến động của đất nước, hoà chung nhịp thở của đời sống nhân dân và phong trào văn nghệ cả nước.', NULL, 'NXB Văn học', 'nxb-van-hoc', b'1'),
+	('ec90e568-c831-4652-8324-6a38937c9a83', '2024-11-27 22:33:22.454568', '2024-12-12 21:16:31.104198', '161B Lý Chính Thắng, Phường Võ Thị Sáu, Quận 3, Hồ Chí Minh', 'Năm năm sau ngày đất nước thống nhất, phong trào thanh thiếu nhi thành phố đã có những bước phát triển vượt bậc cả về số lượng và chất lượng, công việc giáo dục thanh thiếu nhi cần thêm nhiều tài liệu thiết thực, bổ ích, phù hợp với yêu cầu phát triển của địa phương trong tình hình mới, được sự quan tâm lãnh đạo và chỉ đạo của Thành ủy, một số cán bộ Đoàn tâm huyết với việc giáo dục thanh thiếu nhi qua các xuất bản phẩm của Thành đoàn được phân công chuẩn bị lực lượng để thành lập một NXB, trước mắt là in sách phục vụ cho phong trào thiếu nhi thành phố. Trên tinh thần đó, ngày 24-3-1981 UBND TP HCM đã ký quyết định thành lập Nhà xuất bản Măng Non trực thuộc Thành đoàn TP.HCM.', NULL, 'NXB Trẻ', 'nxb-tre', b'1');
 
 -- Dumping structure for table bookstore.reviews
 DROP TABLE IF EXISTS `reviews`;
@@ -298,10 +302,12 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `comment` text,
+  `comment` text NOT NULL,
   `rating` int DEFAULT NULL,
   `book_id` varchar(255) DEFAULT NULL,
   `user_id` varchar(255) DEFAULT NULL,
+  `like_count` int NOT NULL,
+  `status` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK6a9k6xvev80se5rreqvuqr7f9` (`book_id`),
   KEY `FKcgy7qjc1r99dp117y9en6lxye` (`user_id`),
@@ -311,6 +317,8 @@ CREATE TABLE IF NOT EXISTS `reviews` (
 
 -- Dumping data for table bookstore.reviews: ~0 rows (approximately)
 DELETE FROM `reviews`;
+INSERT INTO `reviews` (`id`, `created_at`, `updated_at`, `comment`, `rating`, `book_id`, `user_id`, `like_count`, `status`) VALUES
+	('aefe9139-353a-490a-bb2c-d310a21b0c46', '2024-12-12 23:06:01.184149', '2024-12-12 23:06:01.184149', 'Sach rat hay', 5, '0a3366a6-fe74-4452-83c8-3750cd1d0cd4', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f', 0, b'1');
 
 -- Dumping structure for table bookstore.roles
 DROP TABLE IF EXISTS `roles`;
@@ -357,7 +365,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `UKr43af9ap4edm43mmtq01oddj6` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table bookstore.users: ~2 rows (approximately)
+-- Dumping data for table bookstore.users: ~3 rows (approximately)
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `created_at`, `updated_at`, `avatar`, `email`, `name`, `password`, `status`, `username`) VALUES
 	('0d42394b-35ac-4b8f-9e96-a513388d007d', '2024-12-01 20:16:50.723267', '2024-12-01 20:16:50.723267', NULL, 'tuan@gmail.com', 'anh tuan', '$2a$10$0syVww3PJqxeSe3BdBMs8eY4p19fTOsJzDtFEg4Uw1.IaGcEIiJ7W', b'1', 'anhtuan'),
