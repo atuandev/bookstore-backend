@@ -7,4 +7,4 @@ spring:
   application:
     name: bookstore-api
   profiles:
-    active: dev # spring.profiles.active@
+    active: @spring.profiles.active@

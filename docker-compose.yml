@@ -1,7 +1,7 @@
 services:
   bookstore-api:
     container_name: api-container-bookstore
-    image: api-image-bookstore
+    image: api-image-bookstore:1.0.0
     build:
       context: .
       dockerfile: Dockerfile

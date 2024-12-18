@@ -14,6 +14,12 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+-- Dumping database structure for bookstore
+DROP DATABASE IF EXISTS `bookstore`;
+CREATE DATABASE IF NOT EXISTS `bookstore` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `bookstore`;
+
 -- Dumping structure for table bookstore.addresses
 DROP TABLE IF EXISTS `addresses`;
 CREATE TABLE IF NOT EXISTS `addresses` (
@@ -194,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table bookstore.orders: ~10 rows (approximately)
+-- Dumping data for table bookstore.orders: ~13 rows (approximately)
 DELETE FROM `orders`;
 INSERT INTO `orders` (`id`, `created_at`, `updated_at`, `address`, `order_status`, `payment_method`, `receiver_name`, `receiver_phone`, `total`, `user_id`) VALUES
 	('12a5547e-17af-4c37-9f6c-e820eada42cc', '2024-11-30 10:37:26.223350', '2024-11-30 10:37:26.223414', '34/8b Tân Xuân 5', 'PENDING', 'COD', 'Tuan Anh', '0982728717', 1865000, '268a4722-2abf-483a-a58b-ef41dc5d7537'),
@@ -228,7 +234,7 @@ CREATE TABLE IF NOT EXISTS `order_details` (
   CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table bookstore.order_details: ~21 rows (approximately)
+-- Dumping data for table bookstore.order_details: ~25 rows (approximately)
 DELETE FROM `order_details`;
 INSERT INTO `order_details` (`id`, `created_at`, `updated_at`, `price`, `quantity`, `book_id`, `order_id`) VALUES
 	('0b43f0b1-857a-4993-9797-d9a1db04cdcb', '2024-11-29 12:18:32.408533', '2024-11-29 12:18:32.408533', 105000, 1, 'bf1346f5-1253-4327-88f6-ff0bcff4a259', 'b878ae17-536a-4ba1-ab6a-8015c7eb80fe'),
@@ -302,12 +308,11 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `comment` text NOT NULL,
+  `comment` text,
   `rating` int DEFAULT NULL,
   `book_id` varchar(255) DEFAULT NULL,
   `user_id` varchar(255) DEFAULT NULL,
-  `like_count` int NOT NULL,
-  `status` bit(1) DEFAULT NULL,
+  `status` enum('DELETED','PENDING','REVIEWED') DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK6a9k6xvev80se5rreqvuqr7f9` (`book_id`),
   KEY `FKcgy7qjc1r99dp117y9en6lxye` (`user_id`),
@@ -315,10 +320,11 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   CONSTRAINT `FKcgy7qjc1r99dp117y9en6lxye` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table bookstore.reviews: ~0 rows (approximately)
+-- Dumping data for table bookstore.reviews: ~2 rows (approximately)
 DELETE FROM `reviews`;
-INSERT INTO `reviews` (`id`, `created_at`, `updated_at`, `comment`, `rating`, `book_id`, `user_id`, `like_count`, `status`) VALUES
-	('aefe9139-353a-490a-bb2c-d310a21b0c46', '2024-12-12 23:06:01.184149', '2024-12-12 23:06:01.184149', 'Sach rat hay', 5, '0a3366a6-fe74-4452-83c8-3750cd1d0cd4', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f', 0, b'1');
+INSERT INTO `reviews` (`id`, `created_at`, `updated_at`, `comment`, `rating`, `book_id`, `user_id`, `status`) VALUES
+	('34830e6c-4ac0-45dd-be06-02cdf9520540', '2024-12-17 20:47:28.483819', '2024-12-17 22:40:39.116168', 'Binh thuong', 3, '186beedc-bd41-4d30-aefe-90b42bfe9fe7', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f', 'REVIEWED'),
+	('e6eb96ac-47dd-4ec8-abfe-d23995b25c48', '2024-12-17 20:32:21.840892', '2024-12-17 20:32:21.840892', 'Hay qua!', 5, '186beedc-bd41-4d30-aefe-90b42bfe9fe7', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f', 'DELETED');
 
 -- Dumping structure for table bookstore.roles
 DROP TABLE IF EXISTS `roles`;
@@ -365,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `UKr43af9ap4edm43mmtq01oddj6` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table bookstore.users: ~3 rows (approximately)
+-- Dumping data for table bookstore.users: ~2 rows (approximately)
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `created_at`, `updated_at`, `avatar`, `email`, `name`, `password`, `status`, `username`) VALUES
 	('0d42394b-35ac-4b8f-9e96-a513388d007d', '2024-12-01 20:16:50.723267', '2024-12-01 20:16:50.723267', NULL, 'tuan@gmail.com', 'anh tuan', '$2a$10$0syVww3PJqxeSe3BdBMs8eY4p19fTOsJzDtFEg4Uw1.IaGcEIiJ7W', b'1', 'anhtuan'),

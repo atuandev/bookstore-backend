@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class UserAddressResponse {
     String id;
+    String userId;
     String receiverName;
     String receiverPhone;
     String address;

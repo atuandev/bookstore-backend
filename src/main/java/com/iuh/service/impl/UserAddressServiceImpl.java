@@ -1,17 +1,22 @@
 package com.iuh.service.impl;
 
 import com.iuh.dto.request.UserAddressRequest;
+import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.UserAddressResponse;
+import com.iuh.entity.UserAddress;
 import com.iuh.exception.AppException;
 import com.iuh.exception.ErrorCode;
 import com.iuh.mapper.UserAddressMapper;
 import com.iuh.repository.UserAddressRepository;
 import com.iuh.repository.UserRepository;
 import com.iuh.service.UserAddressService;
+import com.iuh.util.PageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,39 +33,50 @@ public class UserAddressServiceImpl implements UserAddressService {
     UserAddressMapper userAddressMapper;
 
     @Override
+    @Transactional
     public UserAddressResponse save(UserAddressRequest request) {
-        var userAddress = userAddressMapper.toUserAddress(request);
+        UserAddress userAddress = userAddressMapper.toEntity(request);
         userAddress.setUser(userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
-        return userAddressMapper.toUserAddressResponse(userAddressRepository.save(userAddress));
+        return userAddressMapper.toResponse(userAddressRepository.save(userAddress));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
-    public List<UserAddressResponse> findAll() {
-        return userAddressRepository.findAllByOrderByCreatedAtDesc().stream().map(userAddressMapper::toUserAddressResponse).toList();
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search) {
+        Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
+
+        Page<UserAddress> roles = userAddressRepository.findAllWithSearch(search, search, search, pageable);
+
+        List<UserAddressResponse> items = roles.map(userAddressMapper::toResponse).getContent();
+
+        return PageUtil.getPageResponse(pageable, roles, items);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @Override
     public UserAddressResponse findById(String id) {
-        var userAddress = userAddressRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_ADDRESS_NOT_FOUND));
-        return userAddressMapper.toUserAddressResponse(userAddress);
+        var userAddress = getAddressById(id);
+        return userAddressMapper.toResponse(userAddress);
     }
 
     @Override
+    @Transactional
     public UserAddressResponse update(String id, UserAddressRequest request) {
-        var userAddress = userAddressRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_ADDRESS_NOT_FOUND));
-        userAddressMapper.updateUserAddress(userAddress, request);
-
-        return userAddressMapper.toUserAddressResponse(userAddressRepository.save(userAddress));
+        var userAddress = getAddressById(id);
+        userAddressMapper.toUpdate(userAddress, request);
+        return userAddressMapper.toResponse(userAddressRepository.save(userAddress));
     }
 
     @Override
     @Transactional
     public void delete(String id) {
-        userAddressRepository.deleteUserAddressById(id);
+        var userAddress = getAddressById(id);
+        userAddressRepository.deleteUserAddressById(userAddress.getId());
+    }
+
+    private UserAddress getAddressById(String id) {
+        return userAddressRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_ADDRESS_NOT_FOUND));
     }
 }
