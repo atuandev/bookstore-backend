@@ -10,7 +10,7 @@ import com.iuh.dto.request.RoleRequest;
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
     @Mapping(target = "permissions", ignore = true)
-    Role toRole(RoleRequest request);
+    Role toEntity(RoleRequest request);
 
-    RoleResponse toRoleResponse(Role role);
+    RoleResponse toResponse(Role role);
 }
