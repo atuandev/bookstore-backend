@@ -52,11 +52,11 @@ public class UserController {
             @RequestParam(defaultValue = "0", required = false) @Min(0) int pageNo,
             @RequestParam(defaultValue = "12", required = false) @Min(4) int pageSize,
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
-            @RequestParam(required = false) String[] user
+            @RequestParam(required = false) String[] users
     ) {
         return ApiResponse.<PageResponse<Object>>builder()
                 .message("Get list users successfully")
-                .data(userService.findAllWithSpecifications(pageNo, pageSize, sortBy, user)).build();
+                .data(userService.findAllWithSpecifications(pageNo, pageSize, sortBy, users)).build();
     }
 
     @Operation(summary = "ADMIN: Get user details")

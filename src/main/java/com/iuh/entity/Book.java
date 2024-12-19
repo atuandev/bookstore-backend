@@ -1,6 +1,7 @@
 package com.iuh.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.iuh.enums.BookStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,10 +19,14 @@ import java.util.Set;
 @Table(name = "books")
 public class Book extends AbstractEntity {
 
+    @Column(nullable = false)
     String title;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     String slug;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    String thumbnail;
 
     @Column(columnDefinition = "TEXT")
     String description;
@@ -48,7 +53,9 @@ public class Book extends AbstractEntity {
 
     Boolean isFeatured;
 
-    Boolean status;
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    BookStatus status = BookStatus.DRAFT;
 
     @ManyToOne()
     @JoinColumn(name = "category_id")

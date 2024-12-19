@@ -12,10 +12,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class PublisherResponse {
-    String id;
     String name;
     String slug;
-    String address;
-    String image;
-    String description;
 }

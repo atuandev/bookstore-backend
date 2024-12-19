@@ -60,6 +60,7 @@ public enum ErrorCode {
     INVALID_COMMENT(1046, "Comment must not be null", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN(1047, "Invalid token", HttpStatus.BAD_REQUEST),
     INCORRECT_OLD_PASSWORD(1048, "Old password is incorrect", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_THUMBNAIL(1049, "Thumbnail must not be null", HttpStatus.BAD_REQUEST),
     ;
 
     int code;

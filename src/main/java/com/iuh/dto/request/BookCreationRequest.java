@@ -1,5 +1,6 @@
 package com.iuh.dto.request;
 
+import com.iuh.enums.BookStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -23,6 +24,9 @@ public class BookCreationRequest {
 
     @Size(min = 1, message = "INVALID_BOOK_SLUG")
     String slug;
+
+    @Size(min = 1, message = "INVALID_BOOK_THUMBNAIL")
+    String thumbnail;
 
     @Size(min = 1, message = "INVALID_BOOK_DESCRIPTION")
     String description;
@@ -63,7 +67,7 @@ public class BookCreationRequest {
     Boolean isFeatured = false;
 
     @Builder.Default
-    Boolean status = true;
+    BookStatus status = BookStatus.DRAFT;
 
     String categoryId;
 

@@ -1,5 +1,6 @@
 package com.iuh.dto.request;
 
+import com.iuh.enums.BookStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -59,7 +60,7 @@ public class BookUpdateRequest {
 
     Boolean isFeatured;
 
-    Boolean status;
+    BookStatus status;
 
     String categoryId;
 

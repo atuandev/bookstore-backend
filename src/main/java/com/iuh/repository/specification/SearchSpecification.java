@@ -1,6 +1,5 @@
 package com.iuh.repository.specification;
 
-import com.iuh.entity.User;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -12,12 +11,12 @@ import org.springframework.data.jpa.domain.Specification;
 
 @Getter
 @AllArgsConstructor
-public class UserSpecification implements Specification<User> {
+public class SearchSpecification<T> implements Specification<T> {
     private transient SpecSearchCriteria criteria;
 
     @Override
     public Predicate toPredicate(
-            @NonNull final Root<User> root,
+            @NonNull final Root<T> root,
             @NonNull final CriteriaQuery<?> query,
             @NonNull final CriteriaBuilder builder
     ) {

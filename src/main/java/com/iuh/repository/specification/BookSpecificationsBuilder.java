@@ -1,6 +1,6 @@
 package com.iuh.repository.specification;
 
-import com.iuh.entity.User;
+import com.iuh.entity.Book;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -8,15 +8,15 @@ import java.util.List;
 
 import static com.iuh.repository.specification.SearchOperation.*;
 
-public class UserSpecificationsBuilder {
+public class BookSpecificationsBuilder {
     public final List<SpecSearchCriteria> params;
 
-    public UserSpecificationsBuilder() {
+    public BookSpecificationsBuilder() {
         params = new ArrayList<>();
     }
 
     // API
-    public UserSpecificationsBuilder with(
+    public BookSpecificationsBuilder with(
             final String key,
             final String operation,
             final Object value,
@@ -26,7 +26,7 @@ public class UserSpecificationsBuilder {
         return with(null, key, operation, value, prefix, suffix);
     }
 
-    public UserSpecificationsBuilder with(
+    public BookSpecificationsBuilder with(
             final String orPredicate,
             final String key,
             final String operation,
@@ -36,6 +36,7 @@ public class UserSpecificationsBuilder {
     ) {
         SearchOperation searchOperation = SearchOperation.getSimpleOperation(operation.charAt(0));
         if (searchOperation != null) {
+            // username: *admin*
             if (searchOperation == EQUALITY) { // the operation may be complex operation
                 final boolean startWithAsterisk = prefix != null && prefix.contains(ZERO_OR_MORE_REGEX);
                 final boolean endWithAsterisk = suffix != null && suffix.contains(ZERO_OR_MORE_REGEX);
@@ -53,11 +54,11 @@ public class UserSpecificationsBuilder {
         return this;
     }
 
-    public Specification<User> build() {
+    public Specification<Book> build() {
         if (params.isEmpty())
             return null;
 
-        Specification<User> result = new SearchSpecification<>(params.getFirst());
+        Specification<Book> result = new SearchSpecification<>(params.getFirst());
 
         for (int i = 1; i < params.size(); i++) {
             result = params.get(i).isOrPredicate()
@@ -68,12 +69,12 @@ public class UserSpecificationsBuilder {
         return result;
     }
 
-    public UserSpecificationsBuilder with(SearchSpecification<User> spec) {
+    public BookSpecificationsBuilder with(SearchSpecification<Book> spec) {
         params.add(spec.getCriteria());
         return this;
     }
 
-    public UserSpecificationsBuilder with(SpecSearchCriteria criteria) {
+    public BookSpecificationsBuilder with(SpecSearchCriteria criteria) {
         params.add(criteria);
         return this;
     }

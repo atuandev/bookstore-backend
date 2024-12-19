@@ -19,7 +19,7 @@ public interface UserService {
 
     PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search);
 
-    PageResponse<Object> findAllWithSpecifications(int pageNo, int pageSize, String sortBy, String[] user);
+    PageResponse<Object> findAllWithSpecifications(int pageNo, int pageSize, String sortBy, String[] users);
 
     void updateStatus(String id, UserStatus status);
 

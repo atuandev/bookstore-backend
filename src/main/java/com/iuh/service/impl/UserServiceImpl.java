@@ -137,25 +137,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public PageResponse<Object> findAllWithSpecifications(int pageNo, int pageSize, String sortBy, String[] user) {
-        if (user == null || user.length == 0) {
+    public PageResponse<Object> findAllWithSpecifications(int pageNo, int pageSize, String sortBy, String[] users) {
+        if (users == null || users.length == 0) {
             return findAll(pageNo, pageSize, sortBy, "");
         }
 
         UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
         Pattern pattern = Pattern.compile(AppConstant.SEARCH_SPEC_OPERATOR);
 
-        for (String s : user) {
+        for (String s : users) {
             Matcher matcher = pattern.matcher(s);
             if (matcher.find())
                 builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
         }
 
         Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
-        Page<User> users = userRepository.findAll(builder.build(), pageable);
-        List<UserResponse> items = users.map(userMapper::toResponse).getContent();
+        Page<User> usersPage = userRepository.findAll(builder.build(), pageable);
+        List<UserResponse> items = usersPage.map(userMapper::toResponse).getContent();
 
-        return PageUtil.getPageResponse(pageable, users, items);
+        return PageUtil.getPageResponse(pageable, usersPage, items);
     }
 
     @Override
