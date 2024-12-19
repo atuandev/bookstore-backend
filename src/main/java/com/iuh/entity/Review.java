@@ -31,6 +31,6 @@ public class Review extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    ReviewStatus status = ReviewStatus.REVIEWED;
+    ReviewStatus status = ReviewStatus.ACTIVE;
 
 }

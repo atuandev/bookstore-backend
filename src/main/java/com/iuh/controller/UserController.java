@@ -5,6 +5,7 @@ import com.iuh.dto.request.UserCreationRequest;
 import com.iuh.dto.request.UserUpdateRequest;
 import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.UserResponse;
+import com.iuh.enums.UserStatus;
 import com.iuh.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,10 +13,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "User Controller")
 @RestController
@@ -25,52 +23,56 @@ import java.util.List;
 public class UserController {
     UserService userService;
 
-    @Operation(summary = "Create user")
+    @Operation(summary = "Register new user")
     @PostMapping("/add")
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
-                .data(userService.save(request))
-                .build();
+                .message("User created successfully")
+                .data(userService.save(request)).build();
     }
 
-    @Operation(summary = "Get all users")
-    @GetMapping
-    ApiResponse<List<UserResponse>> getAllUsers() {
-        SecurityContextHolder.getContext().getAuthentication();
-
-        return ApiResponse.<List<UserResponse>>builder()
-                .data(userService.findAll())
-                .build();
-    }
-
-    @Operation(summary = "Get all users with pagination, sort by and search(username, name, email)")
-    @GetMapping("/list")
+    @Operation(summary = "ADMIN: Get all users",
+            description = "Get all books with pagination, sorting, and search")
+    @GetMapping()
     ApiResponse<PageResponse<Object>> getAllUsersWithSortByAndSearch(
-            @Min(0) @RequestParam(defaultValue = "0", required = false) int pageNo,
-            @Min(4) @RequestParam(defaultValue = "12", required = false) int pageSize,
+            @RequestParam(defaultValue = "0", required = false) @Min(0) int pageNo,
+            @RequestParam(defaultValue = "12", required = false) @Min(4) int pageSize,
             @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
             @RequestParam(defaultValue = "", required = false) String search
     ) {
-        SecurityContextHolder.getContext().getAuthentication();
         return ApiResponse.<PageResponse<Object>>builder()
-                .data(userService.findAllWithSortBy(pageNo, pageSize, sortBy, search))
-                .build();
+                .message("Get list users successfully")
+                .data(userService.findAll(pageNo, pageSize, sortBy, search)).build();
     }
 
-    @Operation(summary = "Get user details")
+    @Operation(summary = "ADMIN: Get all users with specifications",
+            description = "Get all books with pagination, sorting, and search")
+    @GetMapping("/specifications")
+    ApiResponse<PageResponse<Object>> getAllUsersWithSpecifications(
+            @RequestParam(defaultValue = "0", required = false) @Min(0) int pageNo,
+            @RequestParam(defaultValue = "12", required = false) @Min(4) int pageSize,
+            @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
+            @RequestParam(required = false) String[] user
+    ) {
+        return ApiResponse.<PageResponse<Object>>builder()
+                .message("Get list users successfully")
+                .data(userService.findAllWithSpecifications(pageNo, pageSize, sortBy, user)).build();
+    }
+
+    @Operation(summary = "ADMIN: Get user details")
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUser(@PathVariable String userId) {
         return ApiResponse.<UserResponse>builder()
-                .data(userService.findById(userId))
-                .build();
+                .message("Get user details successfully")
+                .data(userService.findById(userId)).build();
     }
 
     @Operation(summary = "Get user info")
     @GetMapping("/me")
     ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
-                .data(userService.getMyInfo())
-                .build();
+                .message("Get user info successfully")
+                .data(userService.getMyInfo()).build();
     }
 
     @Operation(summary = "Update user")
@@ -78,14 +80,36 @@ public class UserController {
     ApiResponse<UserResponse> updateUser(
             @PathVariable String userId, @RequestBody @Valid UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
-                .data(userService.update(userId, request))
-                .build();
+                .message("User updated successfully")
+                .data(userService.update(userId, request)).build();
     }
 
-    @Operation(summary = "Delete user")
+    @Operation(summary = "ADMIN: Delete user")
     @DeleteMapping("/{userId}")
-    ApiResponse<String> deleteUser(@PathVariable String userId) {
+    ApiResponse<Void> deleteUser(@PathVariable String userId) {
         userService.delete(userId);
-        return ApiResponse.<String>builder().data("User deleted").build();
+        return ApiResponse.<Void>builder().message("User deleted successfully").build();
     }
+
+    @Operation(summary = "ADMIN: Update user status")
+    @PatchMapping("/{userId}/status")
+    ApiResponse<Void> updateUserStatus(@PathVariable String userId, @RequestParam UserStatus status) {
+        userService.updateStatus(userId, status);
+        return ApiResponse.<Void>builder().message("User status updated successfully").build();
+    }
+
+    @Operation(summary = "Update user password")
+    @PatchMapping("/{userId}/update-password")
+    ApiResponse<Void> updatePassword(@PathVariable String userId, @RequestParam String oldPassword, @RequestParam String newPassword) {
+        userService.updatePassword(userId, oldPassword, newPassword);
+        return ApiResponse.<Void>builder().message("Password updated successfully").build();
+    }
+
+    @Operation(summary = "Update avatar")
+    @PatchMapping("/{userId}/update-avatar")
+    ApiResponse<Void> updateAvatar(@PathVariable String userId, @RequestParam String avatar) {
+        userService.updateAvatar(userId, avatar);
+        return ApiResponse.<Void>builder().message("Avatar updated successfully").build();
+    }
+
 }

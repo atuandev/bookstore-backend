@@ -1,5 +1,6 @@
 package com.iuh.service.impl;
 
+import com.iuh.constant.AppConstant;
 import com.iuh.constant.PredefinedRole;
 import com.iuh.dto.request.UserCreationRequest;
 import com.iuh.dto.request.UserUpdateRequest;
@@ -7,29 +8,28 @@ import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.UserResponse;
 import com.iuh.entity.Role;
 import com.iuh.entity.User;
+import com.iuh.enums.UserStatus;
 import com.iuh.exception.AppException;
 import com.iuh.exception.ErrorCode;
 import com.iuh.mapper.UserMapper;
 import com.iuh.repository.RoleRepository;
 import com.iuh.repository.UserRepository;
+import com.iuh.repository.specification.UserSpecificationsBuilder;
 import com.iuh.service.UserService;
+import com.iuh.util.PageUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -53,11 +53,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserResponse save(UserCreationRequest request) {
-        User user = userMapper.toUser(request);
+        User user = userMapper.toEntity(request);
 
+        String avatarName = user.getName().replace(" ", "+");
+        user.setAvatar("https://ui-avatars.com/api/?background=random&rounded=true&bold=true&name=" + avatarName);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setAddresses(new HashSet<>());
-        user.setStatus(true);
 
         var roles = new HashSet<Role>();
         roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
@@ -69,21 +70,14 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.USER_EXISTS);
         }
 
-        return userMapper.toUserResponse(user);
-    }
-
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponse> findAll() {
-        return userMapper.toUserResponseList(userRepository.findAll());
+        return userMapper.toResponse(user);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse findById(String id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-        return userMapper.toUserResponse(user);
+        User user = getUserById(id);
+        return userMapper.toResponse(user);
     }
 
     /**
@@ -98,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        return userMapper.toUserResponse(user);
+        return userMapper.toResponse(user);
     }
 
     /**
@@ -111,10 +105,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse update(String id, UserUpdateRequest request) {
-        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        User user = getUserById(id);
         userMapper.updateUser(user, request);
-
-        return userMapper.toUserResponse(userRepository.save(user));
+        return userMapper.toResponse(userRepository.save(user));
     }
 
     @Override
@@ -124,52 +117,75 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Find all users with sort by
+     * Find all users with sorting and pagination
      *
-     * @param pageNo   Page number
-     * @param pageSize Page size
-     * @param sortBy   Sort by
+     * @param pageNo   int
+     * @param pageSize int
+     * @param sortBy   String
+     * @param search   String
      * @return PageResponse
      */
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy, String search) {
-        int page = pageNo > 0 ? pageNo - 1 : 0;
+    public PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search) {
+        Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
+        Page<User> users = userRepository.findAllAndSearch(search, search, search, search, pageable);
+        List<UserResponse> items = users.map(userMapper::toResponse).getContent();
 
-        List<Sort.Order> sorts = new ArrayList<>();
+        return PageUtil.getPageResponse(pageable, users, items);
+    }
 
-        if (StringUtils.hasLength(sortBy)) {
-            // Regex to match the pattern of sortBy
-            // Example: name:asc
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(asc|desc)");
-            Matcher matcher = pattern.matcher(sortBy);
-            if (matcher.find()) {
-                if (matcher.group(3).equalsIgnoreCase("asc")) {
-                    sorts.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
-                } else {
-                    sorts.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
-                }
-            }
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public PageResponse<Object> findAllWithSpecifications(int pageNo, int pageSize, String sortBy, String[] user) {
+        if (user == null || user.length == 0) {
+            return findAll(pageNo, pageSize, sortBy, "");
         }
 
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+        UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
+        Pattern pattern = Pattern.compile(AppConstant.SEARCH_SPEC_OPERATOR);
 
-        Page<User> users;
-
-        if (StringUtils.hasLength(search)) {
-            users = userRepository.findAllByUsernameContainingIgnoreCaseOrNameContainingIgnoreCaseOrEmailContainingIgnoreCase(search, search, search, pageable);
-        } else {
-            users = userRepository.findAll(pageable);
+        for (String s : user) {
+            Matcher matcher = pattern.matcher(s);
+            if (matcher.find())
+                builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
         }
 
-        List<UserResponse> items = users.map(userMapper::toUserResponse).getContent();
+        Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
+        Page<User> users = userRepository.findAll(builder.build(), pageable);
+        List<UserResponse> items = users.map(userMapper::toResponse).getContent();
 
-        return PageResponse.builder()
-                .pageNo(pageable.getPageNumber() + 1)
-                .pageSize(pageable.getPageSize())
-                .totalPages(users.getTotalPages())
-                .totalElements(users.getTotalElements())
-                .items(items)
-                .build();
+        return PageUtil.getPageResponse(pageable, users, items);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void updateStatus(String id, UserStatus status) {
+        User user = getUserById(id);
+        user.setStatus(status);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updatePassword(String id, String oldPassword, String newPassword) {
+        User user = getUserById(id);
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new AppException(ErrorCode.INCORRECT_OLD_PASSWORD);
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateAvatar(String id, String avatar) {
+        User user = getUserById(id);
+        user.setAvatar(avatar);
+        userRepository.save(user);
+    }
+
+    private User getUserById(String id) {
+        return userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 }

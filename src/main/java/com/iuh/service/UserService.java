@@ -4,13 +4,10 @@ import com.iuh.dto.request.UserCreationRequest;
 import com.iuh.dto.request.UserUpdateRequest;
 import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.UserResponse;
-
-import java.util.List;
+import com.iuh.enums.UserStatus;
 
 public interface UserService {
     UserResponse save(UserCreationRequest request);
-
-    List<UserResponse> findAll();
 
     UserResponse findById(String id);
 
@@ -20,5 +17,13 @@ public interface UserService {
 
     void delete(String id);
 
-    PageResponse<Object> findAllWithSortBy(int pageNo, int pageSize, String sortBy, String search);
+    PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search);
+
+    PageResponse<Object> findAllWithSpecifications(int pageNo, int pageSize, String sortBy, String[] user);
+
+    void updateStatus(String id, UserStatus status);
+
+    void updatePassword(String id, String oldPassword, String newPassword);
+
+    void updateAvatar(String id, String avatar);
 }

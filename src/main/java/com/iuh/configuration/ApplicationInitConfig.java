@@ -3,6 +3,7 @@ package com.iuh.configuration;
 import com.iuh.constant.PredefinedRole;
 import com.iuh.entity.Role;
 import com.iuh.entity.User;
+import com.iuh.enums.UserStatus;
 import com.iuh.repository.RoleRepository;
 import com.iuh.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
-@Slf4j
 public class ApplicationInitConfig {
     @NonFinal
     static final String ADMIN_USERNAME = "admin";
@@ -33,7 +34,7 @@ public class ApplicationInitConfig {
     @Bean
     @ConditionalOnProperty(
             prefix = "spring",
-            value = "datasource.driverClassName",
+            value = "datasource.driver-class-name",
             havingValue = "com.mysql.cj.jdbc.Driver")
     ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
         log.info("Initializing application.....");
@@ -56,7 +57,7 @@ public class ApplicationInitConfig {
                         .username(ADMIN_USERNAME)
                         .password(passwordEncoder.encode(ADMIN_PASSWORD))
                         .name("Admin")
-                        .status(true)
+                        .status(UserStatus.ACTIVE)
                         .roles(roles)
                         .build();
 
