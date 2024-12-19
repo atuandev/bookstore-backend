@@ -1,6 +1,7 @@
 package com.iuh.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.iuh.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +23,7 @@ public class User extends AbstractEntity {
 
     String password;
 
+    @Column(nullable = false)
     String name;
 
     @Column(name = "email", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
@@ -30,7 +32,9 @@ public class User extends AbstractEntity {
     @Column(columnDefinition = "TEXT")
     String avatar;
 
-    Boolean status;
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    UserStatus status = UserStatus.ACTIVE;
 
     @ManyToMany
     Set<Role> roles;

@@ -35,9 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search) {
         Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
-
         Page<Category> categories = categoryRepository.findAllByNameContainingIgnoreCase(search, pageable);
-
         List<CategoryResponse> items = categories.map(categoryMapper::toResponse).getContent();
 
         return PageUtil.getPageResponse(pageable, categories, items);

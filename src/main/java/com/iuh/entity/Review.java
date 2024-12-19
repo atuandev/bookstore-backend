@@ -1,5 +1,6 @@
 package com.iuh.entity;
 
+import com.iuh.enums.ReviewStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,14 +18,19 @@ public class Review extends AbstractEntity {
     @Column(columnDefinition = "TEXT")
     String comment;
 
+    @Column(nullable = false)
     Integer rating;
 
     @ManyToOne()
     @JoinColumn(name = "user_id")
     User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "book_id")
     Book book;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    ReviewStatus status = ReviewStatus.ACTIVE;
 
 }

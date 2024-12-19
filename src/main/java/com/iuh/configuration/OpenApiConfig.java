@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Profile;
 import java.util.List;
 
 @Configuration
-@Profile("!prod")
+//@Profile("!prod")
 public class OpenApiConfig {
 
     @Bean

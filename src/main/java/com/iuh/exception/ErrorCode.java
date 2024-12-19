@@ -54,6 +54,13 @@ public enum ErrorCode {
     BOOK_OUT_OF_STOCK(1040, "Book out of stock", HttpStatus.BAD_REQUEST),
     ORDER_NOT_FOUND(1041, "Order not found", HttpStatus.NOT_FOUND),
     INVALID_DATE_RANGE(1042, "End date must be after start date", HttpStatus.BAD_REQUEST),
+    PERMISSION_ALREADY_EXISTS(1043, "Permission already exists", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_ID(1044, "Book id must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_RATING(1045, "Rating must be between 1 and 5", HttpStatus.BAD_REQUEST),
+    INVALID_COMMENT(1046, "Comment must not be null", HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN(1047, "Invalid token", HttpStatus.BAD_REQUEST),
+    INCORRECT_OLD_PASSWORD(1048, "Old password is incorrect", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_THUMBNAIL(1049, "Thumbnail must not be null", HttpStatus.BAD_REQUEST),
     ;
 
     int code;

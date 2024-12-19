@@ -1,8 +1,5 @@
 package com.iuh.dto.response;
 
-import com.iuh.entity.Category;
-import com.iuh.entity.Discount;
-import com.iuh.entity.Publisher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +18,7 @@ public class BookResponse {
     String id;
     String title;
     String slug;
+    String thumbnail;
     String description;
     String author;
     String size;
@@ -33,9 +31,9 @@ public class BookResponse {
     Integer sold;
     Boolean isNew;
     Boolean isFeatured;
-    Category category;
-    Publisher publisher;
-    Discount discount;
+    CategoryResponse category;
+    PublisherResponse publisher;
+    DiscountResponse discount;
     Set<BookImageResponse> bookImages;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;

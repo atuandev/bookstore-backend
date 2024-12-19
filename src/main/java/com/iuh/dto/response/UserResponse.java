@@ -1,5 +1,6 @@
 package com.iuh.dto.response;
 
+import com.iuh.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class UserResponse {
     String name;
     String email;
     String avatar;
-    Boolean status;
+    UserStatus status;
     Set<RoleResponse> roles;
     Set<UserAddressResponse> addresses;
     LocalDateTime createdAt;

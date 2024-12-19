@@ -1,14 +1,13 @@
 package com.iuh.service;
 
 import com.iuh.dto.request.PermissionRequest;
+import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.PermissionResponse;
-
-import java.util.List;
 
 public interface PermissionService {
     PermissionResponse save(PermissionRequest request);
 
-    List<PermissionResponse> findAll();
+    PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search);
 
-    void delete(String permission);
+    void delete(String name);
 }

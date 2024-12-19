@@ -4,23 +4,25 @@ spring:
       on-profile: dev
   datasource:
     url: jdbc:mysql://localhost:3306/bookstore?createDatabaseIfNotExist=true
-    driverClassName: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_ROOT_USER:root}
     password: ${MYSQL_ROOT_PASSWORD:root}
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
 
 jwt:
   signerKey: uGn1btxMAz77FBExhcThICMJpEWG4fwLu6pJiwlObSIubo7ivat3KSD54PRN0467
   valid-duration: 36000 # seconds
   refreshable-duration: 720000 # seconds
+
 springdoc:
   api-docs:
     enabled: true
   swagger-ui:
     enabled: true
+    
 openapi:
   service:
     title: Bookstore API documentation
