@@ -1,7 +1,10 @@
 package com.iuh.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iuh.constant.AppConstant;
 import com.iuh.constant.PredefinedRole;
+import com.iuh.constant.RedisKey;
 import com.iuh.dto.request.UserCreationRequest;
 import com.iuh.dto.request.UserUpdateRequest;
 import com.iuh.dto.response.PageResponse;
@@ -15,12 +18,15 @@ import com.iuh.mapper.UserMapper;
 import com.iuh.repository.RoleRepository;
 import com.iuh.repository.UserRepository;
 import com.iuh.repository.specification.UserSpecificationsBuilder;
+import com.iuh.service.RedisService;
 import com.iuh.service.UserService;
 import com.iuh.util.PageUtil;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +50,8 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    RedisService<String, String, String> redisService;
+    ObjectMapper redisObjectMapper;
 
     /**
      * Save user to database
@@ -52,6 +60,7 @@ public class UserServiceImpl implements UserService {
      * @return UserResponse
      */
     @Override
+    @Transactional
     public UserResponse save(UserCreationRequest request) {
         User user = userMapper.toEntity(request);
 
@@ -86,11 +95,24 @@ public class UserServiceImpl implements UserService {
      * @return UserResponse
      */
     @Override
-    public UserResponse getMyInfo() {
-        var context = SecurityContextHolder.getContext();
-        String name = context.getAuthentication().getName();
+    public UserResponse getMyInfo() throws JsonProcessingException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        // Check if user info is cached
+        String userJson = redisService.hashGet(RedisKey.USER_INFO, username);
+        if (StringUtils.isNotEmpty(userJson)) {
+            User cachedUser = redisObjectMapper.readValue(userJson, User.class);
+            return userMapper.toResponse(cachedUser);
+        }
+
+        // If not cached, get user info from database
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        // Cache the user info for 1 hour
+        userJson = redisObjectMapper.writeValueAsString(user);
+        redisService.hashSet(RedisKey.USER_INFO, username, userJson);
+        redisService.setExpireHours(RedisKey.USER_INFO, 1);
 
         return userMapper.toResponse(user);
     }
@@ -103,6 +125,7 @@ public class UserServiceImpl implements UserService {
      * @return UserResponse
      */
     @Override
+    @Transactional
     @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse update(String id, UserUpdateRequest request) {
         User user = getUserById(id);

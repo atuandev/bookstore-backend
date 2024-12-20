@@ -11,18 +11,20 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 60000
 jwt:
-  signerKey: uGn1btxMAz77FBExhcThICMJpEWG4fwLu6pJiwlObSIubo7ivat3KSD54PRN0467
-  valid-duration: 36000 # seconds
-  refreshable-duration: 720000 # seconds
-
+  signerKey: ${JWT_SIGNER_KEY:uGn1btxMAz77FBExhcThICMJpEWG4fwLu6pJiwlObSIubo7ivat3KSD54PRN0467}
+  valid-duration: ${JWT_VALID_DURATION:3600} # seconds
+  refreshable-duration: ${JWT_REFRESHABLE_DURATION:864000} # seconds
 springdoc:
   api-docs:
     enabled: true
   swagger-ui:
     enabled: true
-    
 openapi:
   service:
     title: Bookstore API documentation
