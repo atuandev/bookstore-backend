@@ -1,5 +1,6 @@
 package com.iuh.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iuh.dto.ApiResponse;
 import com.iuh.dto.request.UserCreationRequest;
 import com.iuh.dto.request.UserUpdateRequest;
@@ -69,7 +70,7 @@ public class UserController {
 
     @Operation(summary = "Get user info")
     @GetMapping("/me")
-    ApiResponse<UserResponse> getMyInfo() {
+    ApiResponse<UserResponse> getMyInfo() throws JsonProcessingException {
         return ApiResponse.<UserResponse>builder()
                 .message("Get user info successfully")
                 .data(userService.getMyInfo()).build();

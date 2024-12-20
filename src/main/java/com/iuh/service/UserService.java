@@ -1,5 +1,6 @@
 package com.iuh.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iuh.dto.request.UserCreationRequest;
 import com.iuh.dto.request.UserUpdateRequest;
 import com.iuh.dto.response.PageResponse;
@@ -11,7 +12,7 @@ public interface UserService {
 
     UserResponse findById(String id);
 
-    UserResponse getMyInfo();
+    UserResponse getMyInfo() throws JsonProcessingException;
 
     UserResponse update(String id, UserUpdateRequest request);
 
