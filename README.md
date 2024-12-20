@@ -7,6 +7,7 @@
 - Spring Boot
 - Spring Security
 - Spring Data JPA
+- Redis
 - Lombok
 - Mapstruct
 - Swagger UI
@@ -21,21 +22,19 @@
 
 ### Prod mode
 1. Clone project: `git clone git@github.com:atuandev/bookstore-backend.git`
-2. Change profiles at `application.yml` to `prod`
-3. Open terminal `mvn clean package`
-4. Build Image `docker build -t api-image-bookstore .`
-5. Run Container `docker-compose up -d`
+2. Open terminal `mvn clean package -Pprod`
+3. Build Image `docker build -t api-image-bookstore .`
+4. Run Container `docker-compose up -d`
+![image](https://github.com/user-attachments/assets/81e1d4ed-6b1c-426a-8525-570dcff496e8)
 
 ### Dev mode
 1. Clone project: `git clone git@github.com:atuandev/bookstore-backend.git`
-2. Change profiles at `application.yml` to `dev`
-3. Install MySQL from Docker `docker pull mysql:8.4.0`
-4. Run Container Docker `docker run --name mysql-8.4.0 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.4.0`
-
-![image](https://github.com/user-attachments/assets/b59e4dd2-124a-4cce-86d5-2b5a1311af92)
-> Tutorial setup MySQL in Docker: https://www.youtube.com/watch?v=Oa7bpIZ6RxI&t=777s&ab_channel=Devteria
-
-5. Use **Intellij** to run a project
+2. Install MySQL from Docker `docker pull mysql:8.4.0`
+3. Run Container Docker `docker run --name mysql-8.4.0 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.4.0`
+4. Install Redis from Docker `docker pull redis:7.4.1`
+5. Run Container Docker `docker run --name redis-7.4.1 -p 6379:6379 -d redis:7.4.1`
+![image](https://github.com/user-attachments/assets/2d93be6f-c87b-4c9b-8faf-7b005dbfc91f)
+6. Use **Intellij** to run a project
 
 ### Database
 - Use HeidiSQL to connect the database with **username**: `root`, **password**: `root`
