@@ -16,7 +16,7 @@ public interface ReviewMapper {
     @Mapping(target = "username", source = "user.username")
     @Mapping(target = "bookTitle", source = "book.title")
     @Mapping(target = "bookSlug", source = "book.slug")
-    @Mapping(target = "bookImages", source = "book.bookImages")
+    @Mapping(target = "thumbnail", source = "book.thumbnail")
     ReviewResponse toResponse(Review review);
 
     @Mapping(target = "id", ignore = true)

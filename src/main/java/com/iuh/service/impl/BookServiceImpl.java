@@ -5,6 +5,7 @@ import com.iuh.dto.request.BookCreationRequest;
 import com.iuh.dto.request.BookImageRequest;
 import com.iuh.dto.request.BookUpdateRequest;
 import com.iuh.dto.response.BookResponse;
+import com.iuh.dto.response.BookResponseAdmin;
 import com.iuh.dto.response.PageResponse;
 import com.iuh.entity.Book;
 import com.iuh.entity.BookImage;
@@ -12,10 +13,7 @@ import com.iuh.enums.BookStatus;
 import com.iuh.exception.AppException;
 import com.iuh.exception.ErrorCode;
 import com.iuh.mapper.BookMapper;
-import com.iuh.repository.BookRepository;
-import com.iuh.repository.CategoryRepository;
-import com.iuh.repository.DiscountRepository;
-import com.iuh.repository.PublisherRepository;
+import com.iuh.repository.*;
 import com.iuh.repository.specification.BookSpecificationsBuilder;
 import com.iuh.service.BookService;
 import com.iuh.util.PageUtil;
@@ -77,7 +75,7 @@ public class BookServiceImpl implements BookService {
     public PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String categorySlug, String search) {
         Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
         Page<Book> books = bookRepository.findWithFilterAndSearch(categorySlug, search, search, pageable);
-        List<Book> items = books.getContent();
+        List<BookResponseAdmin> items = books.map(bookMapper::toResponseAdmin).getContent();
 
         return PageUtil.getPageResponse(pageable, books, items);
     }
@@ -92,10 +90,10 @@ public class BookServiceImpl implements BookService {
         BookSpecificationsBuilder builder = getBookSpecificationsBuilder(books);
 
         Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
-        Page<Book> usersPage = bookRepository.findAll(builder.build(), pageable);
-        List<Book> items = usersPage.getContent();
+        Page<Book> booksPage = bookRepository.findAll(builder.build(), pageable);
+        List<BookResponseAdmin> items = booksPage.map(bookMapper::toResponseAdmin).getContent();
 
-        return PageUtil.getPageResponse(pageable, usersPage, items);
+        return PageUtil.getPageResponse(pageable, booksPage, items);
     }
 
     @Override
@@ -116,10 +114,10 @@ public class BookServiceImpl implements BookService {
         BookSpecificationsBuilder builder = getBookSpecificationsBuilder(books);
 
         Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
-        Page<Book> usersPage = bookRepository.findAll(builder.build(), pageable);
-        List<BookResponse> items = usersPage.map(bookMapper::toResponse).getContent();
+        Page<Book> booksPage = bookRepository.findAll(builder.build(), pageable);
+        List<BookResponse> items = booksPage.map(bookMapper::toResponse).getContent();
 
-        return PageUtil.getPageResponse(pageable, usersPage, items);
+        return PageUtil.getPageResponse(pageable, booksPage, items);
     }
 
     @Override

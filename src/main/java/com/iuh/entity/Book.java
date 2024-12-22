@@ -49,6 +49,10 @@ public class Book extends AbstractEntity {
 
     Integer sold;
 
+    Integer reviewCount;
+
+    Double reviewStar;
+
     Boolean isNew;
 
     Boolean isFeatured;
