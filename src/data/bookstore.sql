@@ -16,12 +16,10 @@
 
 
 -- Dumping database structure for bookstore
-DROP DATABASE IF EXISTS `bookstore`;
 CREATE DATABASE IF NOT EXISTS `bookstore` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `bookstore`;
 
 -- Dumping structure for table bookstore.addresses
-DROP TABLE IF EXISTS `addresses`;
 CREATE TABLE IF NOT EXISTS `addresses` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
@@ -42,7 +40,6 @@ INSERT INTO `addresses` (`id`, `created_at`, `updated_at`, `address`, `receiver_
 	('53a09f78-70cb-4547-ab3f-dbe2d78a9038', '2024-11-27 20:30:33.603955', '2024-11-27 20:30:33.603955', 'Quận 12, HCM', 'Boi boi', '0928123121', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f');
 
 -- Dumping structure for table bookstore.books
-DROP TABLE IF EXISTS `books`;
 CREATE TABLE IF NOT EXISTS `books` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
@@ -66,6 +63,8 @@ CREATE TABLE IF NOT EXISTS `books` (
   `category_id` varchar(255) DEFAULT NULL,
   `discount_id` varchar(255) DEFAULT NULL,
   `publisher_id` varchar(255) DEFAULT NULL,
+  `review_count` int DEFAULT NULL,
+  `review_star` double DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK67hmc2c9xvynx28p9f1wl6prb` (`slug`),
   KEY `FKleqa3hhc0uhfvurq6mil47xk0` (`category_id`),
@@ -78,24 +77,23 @@ CREATE TABLE IF NOT EXISTS `books` (
 
 -- Dumping data for table bookstore.books: ~14 rows (approximately)
 DELETE FROM `books`;
-INSERT INTO `books` (`id`, `created_at`, `updated_at`, `author`, `description`, `import_price`, `is_featured`, `is_new`, `pages`, `price`, `publish_year`, `size`, `slug`, `sold`, `status`, `stock`, `thumbnail`, `title`, `weight`, `category_id`, `discount_id`, `publisher_id`) VALUES
-	('0a3366a6-fe74-4452-83c8-3750cd1d0cd4', '2024-11-27 22:42:29.373885', '2024-12-01 09:31:33.345025', 'Fumio Sasaki', 'Fumio Sasaki giới thiệu cách tối giản cuộc sống để hạnh phúc hơn.', 95000, b'0', b'1', 300, 115000, 2021, '21 x 14.5 x 2 cm', 'loi-song-toi-gian-cua-nguoi-nhat', 12, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/i/m/image_240804_1.jpg', 'Lối Sống Tối Giản Của Người Nhật', 420, '0c5249aa-ef4e-4354-b578-72e123420e63', 'b55608cb-284f-4c6c-b4ad-20db451fb536', '1ead17a2-b1b3-4ebc-a934-4d6c7768e78e'),
-	('11eb2555-34a8-41b8-a0d8-041331c5a48f', '2024-11-27 22:42:02.541914', '2024-11-27 22:42:02.542717', 'Stephen R. Covey', 'Stephen R. Covey hướng dẫn bạn cách phát triển bản thân và đạt thành công bền vững.', 190000, b'1', b'1', 420, 230000, 2021, '22 x 15 x 2 cm', '7-thoi-quen-hieu-qua', 3, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/8/9/8935280400733.jpg', '7 Thói Quen Hiệu Quả', 500, 'aff839ef-70cb-418f-b500-d83ecb15e576', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '714c3e12-62b9-43f1-b63f-023420e4228a'),
-	('186beedc-bd41-4d30-aefe-90b42bfe9fe7', '2024-11-27 22:42:11.727181', '2024-11-27 22:42:11.727181', 'Nguyễn Nhật Ánh', 'Nguyễn Nhật Ánh kể câu chuyện tuổi thơ trong sáng, bình yên và đậm chất quê hương.', 65000, b'0', b'0', 378, 80000, 2018, '18.5 x 12.5 x 1.8 cm', 'toi-thay-hoa-vang-tren-co-xanh', 20, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/n/n/nna-hvtcx.jpg', 'Tôi Thấy Hoa Vàng Trên Cỏ Xanh', 300, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'ec90e568-c831-4652-8324-6a38937c9a83'),
-	('2a48914e-e2f0-47ee-9f7d-4a0c8d75b270', '2024-11-27 22:41:47.285305', '2024-11-27 22:41:47.285305', 'Yuval Noah Harari', 'Yuval Noah Harari kể lại lịch sử nhân loại một cách sáng tạo và cuốn hút.', 200000, b'1', b'0', 512, 250000, 2020, '23 x 15 x 3 cm', 'sapiens-luoc-su-loai-nguoi', 2, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/flashmagazine/images/page_images/sapiens_luoc_su_loai_nguoi/2023_03_21_16_35_44_1-390x510.jpg', 'Sapiens: Lược Sử Loài Người', 600, 'b36c7ed7-d6f1-4dc4-8998-33f5528f7a29', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '664d2d60-35f6-40fd-a5a5-a22b53062e40'),
-	('39d6be7c-b2ff-4680-88a1-517a22af6cf0', '2024-11-27 22:41:54.368716', '2024-11-27 22:41:54.368716', 'Tony Buổi Sáng', 'Tập hợp những câu chuyện đời thường hài hước và bài học cuộc sống từ Tony Buổi Sáng.', 85000, b'0', b'0', 280, 110000, 2019, '20 x 14 x 1.5 cm', 'ca-phe-cung-tony', 10, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/8/9/8934974180548.jpg', 'Cà Phê Cùng Tony', 350, '6bbe45ee-db1c-4727-9703-9ed73d00a5e6', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'ec90e568-c831-4652-8324-6a38937c9a83'),
-	('54f2c395-6d30-4795-93d3-d3e3bb3b241d', '2024-11-27 22:41:36.253524', '2024-11-27 22:41:36.253524', 'Dale Carnegie', 'Cuốn sách kỹ năng sống kinh điển giúp bạn thành công trong giao tiếp và quản lý mối quan hệ.', 105000, b'1', b'1', 320, 135000, 2022, '20.5 x 14 x 2.5 cm', 'dac-nhan-tam', 7, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/8/9/8935270704704.jpg', 'Đắc Nhân Tâm', 400, 'aff839ef-70cb-418f-b500-d83ecb15e576', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '972b43a7-e3b2-4a8a-ad47-8c90ed53ba16'),
-	('6be191e1-7151-4824-ac3f-cf347d297287', '2024-11-27 22:41:21.497671', '2024-11-29 19:09:15.935008', 'Paulo Coelho', 'Tác phẩm nổi tiếng của Paulo Coelho về hành trình tìm kiếm ước mơ và ý nghĩa cuộc sống.', 95000, b'0', b'1', 228, 120000, 2021, '20 x 13.5 x 2 cm', 'nha-gia-kim', 6, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_36793.jpg', 'Nhà Giả Kim', 300, '9e7d752e-8c9e-4666-a2a0-367ede84f09d', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
-	('71383a12-b01d-4803-9302-a07d1dc9e99a', '2024-11-27 22:42:34.907707', '2024-11-30 10:37:26.273144', 'Victor Hugo', 'Victor Hugo kể câu chuyện cảm động về nhân đạo và công lý.', 300000, b'1', b'0', 2054, 390000, 2017, '21 x 14 x 10.5 cm\r\n', 'nhung-nguoi-khon-kho', 6, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/i/m/image_229206.jpg', 'Những Người Khốn Khổ', 2220, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
-	('7802e89f-5f17-472a-ab9b-8f26962054dd', '2024-11-26 16:07:51.259041', '2024-11-26 16:07:51.259041', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 180000, 2024, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2024', 0, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/h/s/hsp-bia-cung---xuat-in-goc-b1_1.jpg', 'Hai Số Phận - Bìa Cứng (Tái Bản 2024)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
-	('7a3fae04-a30a-4557-9600-b58238fe4f34', '2024-11-26 15:33:02.362021', '2024-11-26 15:33:02.362021', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 178000, 2023, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2023', 0, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/h/s/hsp-bia-cung---xuat-in-goc-b1_1.jpg', 'Hai Số Phận - Bìa Cứng (Tái Bản 2023)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
-	('8ce1d18b-a767-4cb2-83a5-ac97661d50a2', '2024-11-26 16:08:05.825175', '2024-11-26 16:08:05.825731', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 177000, 2022, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2022', 0, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/h/s/hsp-bia-cung---xuat-in-goc-b1_1.jpg', 'Hai Số Phận - Bìa Cứng (Tái Bản 2022)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
-	('bf1346f5-1253-4327-88f6-ff0bcff4a259', '2024-11-27 22:42:21.241832', '2024-12-11 22:15:50.491402', 'Fukuzawa Yukichi', 'Fukuzawa Yukichi khuyến khích tư duy độc lập và học hỏi không ngừng.', 105000, b'1', b'0', 248, 130000, 2019, '19 x 13 x 2 cm', 'khuyen-hoc', 19, 'ACTIVE', 96, 'https://cdn0.fahasa.com/media/catalog/product/i/m/image_214482_1.jpg', 'Khuyến Học', 400, '671dbce1-9a7b-484a-a016-2332d50d55bb', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '1066c347-337f-47f8-8fa8-41d425cdefcc'),
-	('d534202f-1ac0-4d99-8992-0a55bfed5411', '2024-11-26 16:08:54.017397', '2024-12-12 21:15:11.096693', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 176000, 2019, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2019', 0, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/h/s/hsp-bia-cung---xuat-in-goc-b1_1.jpg', 'Hai Số Phận - Bìa Cứng (Tái Bản 2019)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5'),
-	('ff0b4555-743e-49df-9f9f-1abdd998419b', '2024-11-26 16:08:10.977203', '2024-12-11 22:15:50.468296', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 175000, 2021, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2021', 10, 'ACTIVE', 198, 'https://cdn0.fahasa.com/media/catalog/product/h/s/hsp-bia-cung---xuat-in-goc-b1_1.jpg', 'Hai Số Phận - Bìa Cứng (Tái Bản 2021)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5');
+INSERT INTO `books` (`id`, `created_at`, `updated_at`, `author`, `description`, `import_price`, `is_featured`, `is_new`, `pages`, `price`, `publish_year`, `size`, `slug`, `sold`, `status`, `stock`, `thumbnail`, `title`, `weight`, `category_id`, `discount_id`, `publisher_id`, `review_count`, `review_star`) VALUES
+	('0a3366a6-fe74-4452-83c8-3750cd1d0cd4', '2024-11-27 22:42:29.373885', '2024-12-22 20:16:29.666745', 'Fumio Sasaki', 'Fumio Sasaki giới thiệu cách tối giản cuộc sống để hạnh phúc hơn.', 95000, b'0', b'1', 300, 115000, 2021, '21 x 14.5 x 2 cm', 'loi-song-toi-gian-cua-nguoi-nhat', 12, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/i/m/image_240804_1.jpg', 'Lối Sống Tối Giản Của Người Nhật', 420, '0c5249aa-ef4e-4354-b578-72e123420e63', 'b55608cb-284f-4c6c-b4ad-20db451fb536', '1ead17a2-b1b3-4ebc-a934-4d6c7768e78e', 4, 4.75),
+	('11eb2555-34a8-41b8-a0d8-041331c5a48f', '2024-11-27 22:42:02.541914', '2024-11-27 22:42:02.542717', 'Stephen R. Covey', 'Stephen R. Covey hướng dẫn bạn cách phát triển bản thân và đạt thành công bền vững.', 190000, b'1', b'1', 420, 230000, 2021, '22 x 15 x 2 cm', '7-thoi-quen-hieu-qua', 3, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/8/9/8935280400733.jpg', '7 Thói Quen Hiệu Quả', 500, 'aff839ef-70cb-418f-b500-d83ecb15e576', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '714c3e12-62b9-43f1-b63f-023420e4228a', 0, 0),
+	('186beedc-bd41-4d30-aefe-90b42bfe9fe7', '2024-11-27 22:42:11.727181', '2024-11-27 22:42:11.727181', 'Nguyễn Nhật Ánh', 'Nguyễn Nhật Ánh kể câu chuyện tuổi thơ trong sáng, bình yên và đậm chất quê hương.', 65000, b'0', b'0', 378, 80000, 2018, '18.5 x 12.5 x 1.8 cm', 'toi-thay-hoa-vang-tren-co-xanh', 20, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/n/n/nna-hvtcx.jpg', 'Tôi Thấy Hoa Vàng Trên Cỏ Xanh', 300, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'ec90e568-c831-4652-8324-6a38937c9a83', 2, 0),
+	('2a48914e-e2f0-47ee-9f7d-4a0c8d75b270', '2024-11-27 22:41:47.285305', '2024-11-27 22:41:47.285305', 'Yuval Noah Harari', 'Yuval Noah Harari kể lại lịch sử nhân loại một cách sáng tạo và cuốn hút.', 200000, b'1', b'0', 512, 250000, 2020, '23 x 15 x 3 cm', 'sapiens-luoc-su-loai-nguoi', 2, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/flashmagazine/images/page_images/sapiens_luoc_su_loai_nguoi/2023_03_21_16_35_44_1-390x510.jpg', 'Sapiens: Lược Sử Loài Người', 600, 'b36c7ed7-d6f1-4dc4-8998-33f5528f7a29', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '664d2d60-35f6-40fd-a5a5-a22b53062e40', 0, 0),
+	('39d6be7c-b2ff-4680-88a1-517a22af6cf0', '2024-11-27 22:41:54.368716', '2024-11-27 22:41:54.368716', 'Tony Buổi Sáng', 'Tập hợp những câu chuyện đời thường hài hước và bài học cuộc sống từ Tony Buổi Sáng.', 85000, b'0', b'0', 280, 110000, 2019, '20 x 14 x 1.5 cm', 'ca-phe-cung-tony', 10, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/8/9/8934974180548.jpg', 'Cà Phê Cùng Tony', 350, '6bbe45ee-db1c-4727-9703-9ed73d00a5e6', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'ec90e568-c831-4652-8324-6a38937c9a83', 0, 0),
+	('54f2c395-6d30-4795-93d3-d3e3bb3b241d', '2024-11-27 22:41:36.253524', '2024-11-27 22:41:36.253524', 'Dale Carnegie', 'Cuốn sách kỹ năng sống kinh điển giúp bạn thành công trong giao tiếp và quản lý mối quan hệ.', 105000, b'1', b'1', 320, 135000, 2022, '20.5 x 14 x 2.5 cm', 'dac-nhan-tam', 7, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/8/9/8935270704704.jpg', 'Đắc Nhân Tâm', 400, 'aff839ef-70cb-418f-b500-d83ecb15e576', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '972b43a7-e3b2-4a8a-ad47-8c90ed53ba16', 0, 0),
+	('6be191e1-7151-4824-ac3f-cf347d297287', '2024-11-27 22:41:21.497671', '2024-11-29 19:09:15.935008', 'Paulo Coelho', 'Tác phẩm nổi tiếng của Paulo Coelho về hành trình tìm kiếm ước mơ và ý nghĩa cuộc sống.', 95000, b'0', b'1', 228, 120000, 2021, '20 x 13.5 x 2 cm', 'nha-gia-kim', 6, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_36793.jpg', 'Nhà Giả Kim', 300, '9e7d752e-8c9e-4666-a2a0-367ede84f09d', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5', 0, 0),
+	('71383a12-b01d-4803-9302-a07d1dc9e99a', '2024-11-27 22:42:34.907707', '2024-11-30 10:37:26.273144', 'Victor Hugo', 'Victor Hugo kể câu chuyện cảm động về nhân đạo và công lý.', 300000, b'1', b'0', 2054, 390000, 2017, '21 x 14 x 10.5 cm\r\n', 'nhung-nguoi-khon-kho', 6, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/i/m/image_229206.jpg', 'Những Người Khốn Khổ', 2220, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5', 0, 0),
+	('7802e89f-5f17-472a-ab9b-8f26962054dd', '2024-11-26 16:07:51.259041', '2024-11-26 16:07:51.259041', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 180000, 2024, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2024', 0, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/h/s/hsp-bia-cung---xuat-in-goc-b1_1.jpg', 'Hai Số Phận - Bìa Cứng (Tái Bản 2024)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'a300003a-5c47-4df7-a591-0bdf9142a8b5', 0, 0),
+	('7a3fae04-a30a-4557-9600-b58238fe4f34', '2024-11-26 15:33:02.362021', '2024-11-26 15:33:02.362021', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 178000, 2023, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2023', 0, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/h/s/hsp-bia-cung---xuat-in-goc-b1_1.jpg', 'Hai Số Phận - Bìa Cứng (Tái Bản 2023)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'a300003a-5c47-4df7-a591-0bdf9142a8b5', 0, 0),
+	('8ce1d18b-a767-4cb2-83a5-ac97661d50a2', '2024-11-26 16:08:05.825175', '2024-11-26 16:08:05.825731', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 177000, 2022, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2022', 0, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/h/s/hsp-bia-cung---xuat-in-goc-b1_1.jpg', 'Hai Số Phận - Bìa Cứng (Tái Bản 2022)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'b55608cb-284f-4c6c-b4ad-20db451fb536', 'a300003a-5c47-4df7-a591-0bdf9142a8b5', 0, 0),
+	('bf1346f5-1253-4327-88f6-ff0bcff4a259', '2024-11-27 22:42:21.241832', '2024-12-11 22:15:50.491402', 'Fukuzawa Yukichi', 'Fukuzawa Yukichi khuyến khích tư duy độc lập và học hỏi không ngừng.', 105000, b'1', b'0', 248, 130000, 2019, '19 x 13 x 2 cm', 'khuyen-hoc', 19, 'ACTIVE', 96, 'https://cdn0.fahasa.com/media/catalog/product/i/m/image_214482_1.jpg', 'Khuyến Học', 400, '671dbce1-9a7b-484a-a016-2332d50d55bb', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', '1066c347-337f-47f8-8fa8-41d425cdefcc', 0, 0),
+	('d534202f-1ac0-4d99-8992-0a55bfed5411', '2024-11-26 16:08:54.017397', '2024-12-12 21:15:11.096693', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 176000, 2019, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2019', 0, 'ACTIVE', 100, 'https://cdn0.fahasa.com/media/catalog/product/h/s/hsp-bia-cung---xuat-in-goc-b1_1.jpg', 'Hai Số Phận - Bìa Cứng (Tái Bản 2019)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5', 0, 0),
+	('ff0b4555-743e-49df-9f9f-1abdd998419b', '2024-11-26 16:08:10.977203', '2024-12-11 22:15:50.468296', 'Jeffrey Archer', 'Jeffrey Archer là nhà văn người Anh và cũng là một chính trị gia. Ông từng là một thành viên của Quốc hội và Phó Chủ tịch Đảng Bảo thủ.', 150000, b'1', b'1', 768, 175000, 2021, '20.5 x 13.5 x 3 cm', 'hai-so-phan-bia-cung-tai-ban-2021', 10, 'ACTIVE', 198, 'https://cdn0.fahasa.com/media/catalog/product/h/s/hsp-bia-cung---xuat-in-goc-b1_1.jpg', 'Hai Số Phận - Bìa Cứng (Tái Bản 2021)', 685, '4b37a61a-84c9-43ce-906f-46686543e9cc', 'ceffbc44-79e1-4e16-938c-6ce2d4576b20', 'a300003a-5c47-4df7-a591-0bdf9142a8b5', 0, 0);
 
 -- Dumping structure for table bookstore.book_images
-DROP TABLE IF EXISTS `book_images`;
 CREATE TABLE IF NOT EXISTS `book_images` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
@@ -126,7 +124,6 @@ INSERT INTO `book_images` (`id`, `created_at`, `updated_at`, `url`, `book_id`) V
 	('edc397e2-3761-4234-b14f-d8c943529b0c', '2024-11-27 22:41:36.259130', '2024-11-27 22:41:36.259130', 'https://cdn0.fahasa.com/media/catalog/product/8/9/8935270704704.jpg', '54f2c395-6d30-4795-93d3-d3e3bb3b241d');
 
 -- Dumping structure for table bookstore.categories
-DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
@@ -151,7 +148,6 @@ INSERT INTO `categories` (`id`, `created_at`, `updated_at`, `description`, `name
 	('c5de0c4f-7419-4c93-9aea-ac1c9e6da444', '2024-12-08 18:48:28.231746', '2024-12-08 18:48:28.231746', 'Truyền thuyết', 'Truyền thuyết', 'thuyen-thuyet');
 
 -- Dumping structure for table bookstore.discounts
-DROP TABLE IF EXISTS `discounts`;
 CREATE TABLE IF NOT EXISTS `discounts` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
@@ -173,7 +169,6 @@ INSERT INTO `discounts` (`id`, `created_at`, `updated_at`, `code`, `end_date`, `
 	('ceffbc44-79e1-4e16-938c-6ce2d4576b20', '2024-11-30 21:08:21.000000', '2024-11-30 21:08:21.000000', 'BLACKFRIDAY', '2024-12-30', 'Black Friday', 15, '2024-11-20');
 
 -- Dumping structure for table bookstore.invalidated_tokens
-DROP TABLE IF EXISTS `invalidated_tokens`;
 CREATE TABLE IF NOT EXISTS `invalidated_tokens` (
   `id` varchar(255) NOT NULL,
   `expiry_time` datetime(6) DEFAULT NULL,
@@ -184,7 +179,6 @@ CREATE TABLE IF NOT EXISTS `invalidated_tokens` (
 DELETE FROM `invalidated_tokens`;
 
 -- Dumping structure for table bookstore.orders
-DROP TABLE IF EXISTS `orders`;
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
@@ -219,7 +213,6 @@ INSERT INTO `orders` (`id`, `created_at`, `updated_at`, `address`, `order_status
 	('d925df43-b1fd-4eaa-828b-c6aad2a5a8c1', '2024-12-11 22:15:50.410647', '2024-12-11 22:15:50.410647', 'HCM', 'PENDING', 'COD', 'Anh Tuấn', '0908765654', 380000, '9b1c2041-348d-4cb4-98e5-bbf229c4a17f');
 
 -- Dumping structure for table bookstore.order_details
-DROP TABLE IF EXISTS `order_details`;
 CREATE TABLE IF NOT EXISTS `order_details` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
@@ -263,7 +256,6 @@ INSERT INTO `order_details` (`id`, `created_at`, `updated_at`, `price`, `quantit
 	('c8964ab3-066a-4036-80ca-8415f942b2d5', '2024-11-28 18:24:08.415461', '2024-11-28 18:24:08.415461', 150000, 1, 'ff0b4555-743e-49df-9f9f-1abdd998419b', '8b87b99d-40e8-4e07-a276-c7a828e86dd8');
 
 -- Dumping structure for table bookstore.permissions
-DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE IF NOT EXISTS `permissions` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
@@ -277,7 +269,6 @@ INSERT INTO `permissions` (`name`, `description`) VALUES
 	('USER_DELETE', 'Delete user');
 
 -- Dumping structure for table bookstore.publishers
-DROP TABLE IF EXISTS `publishers`;
 CREATE TABLE IF NOT EXISTS `publishers` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
@@ -304,16 +295,15 @@ INSERT INTO `publishers` (`id`, `created_at`, `updated_at`, `address`, `descript
 	('ec90e568-c831-4652-8324-6a38937c9a83', '2024-11-27 22:33:22.454568', '2024-12-12 21:16:31.104198', '161B Lý Chính Thắng, Phường Võ Thị Sáu, Quận 3, Hồ Chí Minh', 'Năm năm sau ngày đất nước thống nhất, phong trào thanh thiếu nhi thành phố đã có những bước phát triển vượt bậc cả về số lượng và chất lượng, công việc giáo dục thanh thiếu nhi cần thêm nhiều tài liệu thiết thực, bổ ích, phù hợp với yêu cầu phát triển của địa phương trong tình hình mới, được sự quan tâm lãnh đạo và chỉ đạo của Thành ủy, một số cán bộ Đoàn tâm huyết với việc giáo dục thanh thiếu nhi qua các xuất bản phẩm của Thành đoàn được phân công chuẩn bị lực lượng để thành lập một NXB, trước mắt là in sách phục vụ cho phong trào thiếu nhi thành phố. Trên tinh thần đó, ngày 24-3-1981 UBND TP HCM đã ký quyết định thành lập Nhà xuất bản Măng Non trực thuộc Thành đoàn TP.HCM.', NULL, 'NXB Trẻ', 'nxb-tre', b'1');
 
 -- Dumping structure for table bookstore.reviews
-DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE IF NOT EXISTS `reviews` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `comment` text,
-  `rating` int DEFAULT NULL,
+  `rating` int NOT NULL,
+  `status` enum('ACTIVE','DISABLED','PENDING') DEFAULT NULL,
   `book_id` varchar(255) DEFAULT NULL,
   `user_id` varchar(255) DEFAULT NULL,
-  `status` enum('DELETED','PENDING','REVIEWED') DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK6a9k6xvev80se5rreqvuqr7f9` (`book_id`),
   KEY `FKcgy7qjc1r99dp117y9en6lxye` (`user_id`),
@@ -321,14 +311,15 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   CONSTRAINT `FKcgy7qjc1r99dp117y9en6lxye` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table bookstore.reviews: ~2 rows (approximately)
+-- Dumping data for table bookstore.reviews: ~1 rows (approximately)
 DELETE FROM `reviews`;
-INSERT INTO `reviews` (`id`, `created_at`, `updated_at`, `comment`, `rating`, `book_id`, `user_id`, `status`) VALUES
-	('34830e6c-4ac0-45dd-be06-02cdf9520540', '2024-12-17 20:47:28.483819', '2024-12-17 22:40:39.116168', 'Binh thuong', 3, '186beedc-bd41-4d30-aefe-90b42bfe9fe7', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f', 'REVIEWED'),
-	('e6eb96ac-47dd-4ec8-abfe-d23995b25c48', '2024-12-17 20:32:21.840892', '2024-12-17 20:32:21.840892', 'Hay qua!', 5, '186beedc-bd41-4d30-aefe-90b42bfe9fe7', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f', 'DELETED');
+INSERT INTO `reviews` (`id`, `created_at`, `updated_at`, `comment`, `rating`, `status`, `book_id`, `user_id`) VALUES
+	('1f9c1483-e9b9-40ed-a345-2abd377618d5', '2024-12-22 20:16:29.650883', '2024-12-22 20:16:29.650883', 'Qua xuat sac', 5, 'ACTIVE', '0a3366a6-fe74-4452-83c8-3750cd1d0cd4', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f'),
+	('70ae1b33-a090-4fe2-bd62-9bdafa334e84', '2024-12-22 20:16:16.704255', '2024-12-22 20:16:16.704255', 'Qua xuat sac', 5, 'ACTIVE', '0a3366a6-fe74-4452-83c8-3750cd1d0cd4', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f'),
+	('c5aceedd-29c3-4aaf-a552-c108c4aef4f0', '2024-12-22 20:15:55.210122', '2024-12-22 20:15:55.210122', 'Qua xuat sac', 5, 'ACTIVE', '0a3366a6-fe74-4452-83c8-3750cd1d0cd4', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f'),
+	('ca5cebfa-184d-4b3d-b7dd-35447a7df9c3', '2024-12-22 20:16:08.676679', '2024-12-22 20:16:08.676679', 'Qua xuat sac', 4, 'ACTIVE', '0a3366a6-fe74-4452-83c8-3750cd1d0cd4', '9b1c2041-348d-4cb4-98e5-bbf229c4a17f');
 
 -- Dumping structure for table bookstore.roles
-DROP TABLE IF EXISTS `roles`;
 CREATE TABLE IF NOT EXISTS `roles` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
@@ -342,7 +333,6 @@ INSERT INTO `roles` (`name`, `description`) VALUES
 	('USER', 'User role');
 
 -- Dumping structure for table bookstore.roles_permissions
-DROP TABLE IF EXISTS `roles_permissions`;
 CREATE TABLE IF NOT EXISTS `roles_permissions` (
   `role_name` varchar(255) NOT NULL,
   `permissions_name` varchar(255) NOT NULL,
@@ -356,7 +346,6 @@ CREATE TABLE IF NOT EXISTS `roles_permissions` (
 DELETE FROM `roles_permissions`;
 
 -- Dumping structure for table bookstore.users
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` varchar(255) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
@@ -372,15 +361,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `UKr43af9ap4edm43mmtq01oddj6` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table bookstore.users: ~0 rows (approximately)
+-- Dumping data for table bookstore.users: ~3 rows (approximately)
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `created_at`, `updated_at`, `avatar`, `email`, `name`, `password`, `status`, `username`) VALUES
 	('0d42394b-35ac-4b8f-9e96-a513388d007d', '2024-12-01 20:16:50.723267', '2024-12-01 20:16:50.723267', 'https://ui-avatars.com/api/?background=random&rounded=true&bold=true&name=anh+tuan', 'tuan@gmail.com', 'anh tuan', '$2a$10$0syVww3PJqxeSe3BdBMs8eY4p19fTOsJzDtFEg4Uw1.IaGcEIiJ7W', 'ACTIVE', 'anhtuan'),
 	('268a4722-2abf-483a-a58b-ef41dc5d7537', '2024-11-29 12:17:43.055830', '2024-11-30 10:35:36.371551', 'https://ui-avatars.com/api/?background=random&rounded=true&bold=true&name=Son+Tung', 'sontung@gmail.com', 'Son Tung', '$2a$10$yrggAneP6/iNd2pTEGgy/uf6Xvh1eP5silSsixip6dU6eD3TPB05i', 'ACTIVE', 'sontung'),
-	('9b1c2041-348d-4cb4-98e5-bbf229c4a17f', '2024-11-25 14:23:09.381710', '2024-12-19 19:41:59.532409', 'https://ui-avatars.com/api/?background=random&rounded=true&bold=true&name=Admin', 'atuandev@gmail.com', 'Nguyễn Phan Anh Tuấn', '$2a$10$ttvCQi07u/IFlfV9xLuR6u60jKNdpZfTV.X3Yb.XG2coUrr.HYFG2', 'ACTIVE', 'admin');
+	('9b1c2041-348d-4cb4-98e5-bbf229c4a17f', '2024-11-25 14:23:09.381710', '2024-12-23 15:28:49.892460', 'https://ui-avatars.com/api/?background=random&rounded=true&bold=true&name=Anh+Tuan', 'atuandev@gmail.com', 'Nguyen Phan Anh Tuan', '$2a$10$dTo9vuSZZMo5k6NFqu8nPOdCuvoIbNMZuldAouO28asrPtyk74aki', 'ACTIVE', 'admin');
 
 -- Dumping structure for table bookstore.users_roles
-DROP TABLE IF EXISTS `users_roles`;
 CREATE TABLE IF NOT EXISTS `users_roles` (
   `user_id` varchar(255) NOT NULL,
   `roles_name` varchar(255) NOT NULL,

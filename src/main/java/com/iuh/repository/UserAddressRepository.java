@@ -20,5 +20,14 @@ public interface UserAddressRepository extends JpaRepository<UserAddress, String
                  OR LOWER(ua.receiverName) LIKE %:receiverName%\s
                  OR LOWER(ua.receiverPhone) LIKE %:receiverPhone%
             """)
-    Page<UserAddress> findAllWithSearch(String address, String receiverName, String receiverPhone, Pageable pageable);
+    Page<UserAddress> findAll(String address, String receiverName, String receiverPhone, Pageable pageable);
+
+    @Query("""
+                 SELECT ua FROM UserAddress ua\s
+                 WHERE ua.user.id = :userId\s
+                 AND (LOWER(ua.address) LIKE %:address%\s
+                 OR LOWER(ua.receiverName) LIKE %:receiverName%\s
+                 OR LOWER(ua.receiverPhone) LIKE %:receiverPhone%)
+            """)
+    Page<UserAddress> findAllByUserId(String userId, String address, String receiverName, String receiverPhone, Pageable pageable);
 }

@@ -9,6 +9,8 @@ public interface UserAddressService {
 
     PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search);
 
+    PageResponse<Object> findAllByUserId(String userId, int pageNo, int pageSize, String sortBy, String search);
+
     UserAddressResponse findById(String id);
 
     UserAddressResponse update(String id, UserAddressRequest request);

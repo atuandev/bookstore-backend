@@ -1,5 +1,6 @@
 package com.iuh.dto.response;
 
+import com.iuh.enums.BookStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class BookResponse {
+public class BookResponseAdmin {
     String id;
     String title;
     String slug;
@@ -25,6 +26,7 @@ public class BookResponse {
     Integer pages;
     Integer weight;
     Integer publishYear;
+    Double importPrice;
     Double price;
     Double discountPrice;
     Integer stock;
@@ -33,6 +35,7 @@ public class BookResponse {
     Double reviewStar;
     Boolean isNew;
     Boolean isFeatured;
+    BookStatus status;
     CategoryResponse category;
     PublisherResponse publisher;
     DiscountResponse discount;

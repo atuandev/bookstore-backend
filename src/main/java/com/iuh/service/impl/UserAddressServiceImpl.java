@@ -3,6 +3,7 @@ package com.iuh.service.impl;
 import com.iuh.dto.request.UserAddressRequest;
 import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.UserAddressResponse;
+import com.iuh.entity.User;
 import com.iuh.entity.UserAddress;
 import com.iuh.exception.AppException;
 import com.iuh.exception.ErrorCode;
@@ -36,8 +37,8 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Transactional
     public UserAddressResponse save(UserAddressRequest request) {
         UserAddress userAddress = userAddressMapper.toEntity(request);
-        userAddress.setUser(userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        userAddress.setUser(user);
         return userAddressMapper.toResponse(userAddressRepository.save(userAddress));
     }
 
@@ -46,11 +47,22 @@ public class UserAddressServiceImpl implements UserAddressService {
     public PageResponse<Object> findAll(int pageNo, int pageSize, String sortBy, String search) {
         Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
 
-        Page<UserAddress> roles = userAddressRepository.findAllWithSearch(search, search, search, pageable);
+        Page<UserAddress> addresses = userAddressRepository.findAll(search, search, search, pageable);
 
-        List<UserAddressResponse> items = roles.map(userAddressMapper::toResponse).getContent();
+        List<UserAddressResponse> items = addresses.map(userAddressMapper::toResponse).getContent();
 
-        return PageUtil.getPageResponse(pageable, roles, items);
+        return PageUtil.getPageResponse(pageable, addresses, items);
+    }
+
+    @Override
+    public PageResponse<Object> findAllByUserId(String userId, int pageNo, int pageSize, String sortBy, String search) {
+        Pageable pageable = PageUtil.getPageable(pageNo, pageSize, sortBy);
+
+        Page<UserAddress> addresses = userAddressRepository.findAllByUserId(userId, search, search, search, pageable);
+
+        List<UserAddressResponse> items = addresses.map(userAddressMapper::toResponse).getContent();
+
+        return PageUtil.getPageResponse(pageable, addresses, items);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

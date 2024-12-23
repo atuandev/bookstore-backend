@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Data
 @Builder
@@ -20,7 +19,7 @@ public class ReviewResponse {
     String username;
     String bookTitle;
     String bookSlug;
-    Set<BookImageResponse> bookImages;
+    String thumbnail;
     Integer rating;
     String comment;
     ReviewStatus status;

@@ -13,8 +13,8 @@ spring:
     show-sql: true
   data:
     redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
+      host: localhost
+      port: 6379
       timeout: 60000
 jwt:
   signerKey: ${JWT_SIGNER_KEY:uGn1btxMAz77FBExhcThICMJpEWG4fwLu6pJiwlObSIubo7ivat3KSD54PRN0467}

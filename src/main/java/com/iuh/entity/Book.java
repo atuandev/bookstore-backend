@@ -49,6 +49,10 @@ public class Book extends AbstractEntity {
 
     Integer sold;
 
+    Integer reviewCount;
+
+    Double reviewStar;
+
     Boolean isNew;
 
     Boolean isFeatured;
@@ -71,7 +75,7 @@ public class Book extends AbstractEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<BookImage> bookImages = new HashSet<>();
+    Set<BookImage> bookImages;
 
     public void addBookImage(BookImage bookImage) {
         if (bookImages == null) {

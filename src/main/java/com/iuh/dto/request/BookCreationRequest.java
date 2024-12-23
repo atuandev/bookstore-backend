@@ -67,6 +67,12 @@ public class BookCreationRequest {
     Boolean isFeatured = false;
 
     @Builder.Default
+    Integer reviewCount = 0;
+
+    @Builder.Default
+    Double reviewStar = 0.0;
+
+    @Builder.Default
     BookStatus status = BookStatus.DRAFT;
 
     String categoryId;

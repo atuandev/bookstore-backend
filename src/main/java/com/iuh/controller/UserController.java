@@ -3,6 +3,8 @@ package com.iuh.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iuh.dto.ApiResponse;
 import com.iuh.dto.request.UserCreationRequest;
+import com.iuh.dto.request.UserUpdateAvatarRequest;
+import com.iuh.dto.request.UserUpdatePasswordRequest;
 import com.iuh.dto.request.UserUpdateRequest;
 import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.UserResponse;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,7 +82,7 @@ public class UserController {
     @Operation(summary = "Update user")
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateUser(
-            @PathVariable String userId, @RequestBody @Valid UserUpdateRequest request) {
+            @PathVariable String userId, @RequestBody @Valid UserUpdateRequest request) throws JsonProcessingException {
         return ApiResponse.<UserResponse>builder()
                 .message("User updated successfully")
                 .data(userService.update(userId, request)).build();
@@ -92,24 +95,30 @@ public class UserController {
         return ApiResponse.<Void>builder().message("User deleted successfully").build();
     }
 
+    @SneakyThrows
     @Operation(summary = "ADMIN: Update user status")
     @PatchMapping("/{userId}/status")
-    ApiResponse<Void> updateUserStatus(@PathVariable String userId, @RequestParam UserStatus status) {
+    ApiResponse<Void> updateUserStatus(@PathVariable String userId,
+                                       @RequestParam UserStatus status) {
         userService.updateStatus(userId, status);
         return ApiResponse.<Void>builder().message("User status updated successfully").build();
     }
 
+    @SneakyThrows
     @Operation(summary = "Update user password")
     @PatchMapping("/{userId}/update-password")
-    ApiResponse<Void> updatePassword(@PathVariable String userId, @RequestParam String oldPassword, @RequestParam String newPassword) {
-        userService.updatePassword(userId, oldPassword, newPassword);
+    ApiResponse<Void> updatePassword(@PathVariable String userId,
+                                     @RequestBody @Valid UserUpdatePasswordRequest request) {
+        userService.updatePassword(userId, request);
         return ApiResponse.<Void>builder().message("Password updated successfully").build();
     }
 
+    @SneakyThrows
     @Operation(summary = "Update avatar")
     @PatchMapping("/{userId}/update-avatar")
-    ApiResponse<Void> updateAvatar(@PathVariable String userId, @RequestParam String avatar) {
-        userService.updateAvatar(userId, avatar);
+    ApiResponse<Void> updateAvatar(@PathVariable String userId,
+                                   @RequestBody @Valid UserUpdateAvatarRequest request) {
+        userService.updateAvatar(userId, request);
         return ApiResponse.<Void>builder().message("Avatar updated successfully").build();
     }
 

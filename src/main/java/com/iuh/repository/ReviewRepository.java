@@ -16,14 +16,14 @@ public interface ReviewRepository extends JpaRepository<Review, String> {
               OR LOWER(r.user.username) LIKE %:username%
               OR LOWER(r.user.name) LIKE %:name%
               OR LOWER(r.book.title) LIKE %:title%)
-              AND (:status IS NULL OR r.status = :status)
+              AND r.status = :status
             """)
     Page<Review> findAllWithSearch(String comment, String username, String name, String title, ReviewStatus status, Pageable pageable);
 
     @Query("""
               SELECT r FROM Review r\s
               WHERE  r.book.id =:bookId\s
-              AND r.status = 'REVIEWED'
+              AND r.status = 'ACTIVE'
             """)
     Page<Review> findAllByBookId(String bookId, Pageable pageable);
 
@@ -31,14 +31,21 @@ public interface ReviewRepository extends JpaRepository<Review, String> {
               SELECT r FROM Review r\s
               WHERE  r.book.id =:bookId\s
               AND r.rating = :rating\s
-              AND r.status = 'REVIEWED'
+              AND r.status = 'ACTIVE'
             """)
     Page<Review> findAllByBookIdAndRating(String bookId, int rating, Pageable pageable);
 
     @Query("""
+              SELECT AVG(r.rating) FROM Review r\s
+              WHERE  r.book.id =:bookId\s
+              AND r.status = 'ACTIVE'
+            """)
+    Double getReviewStarByBookId(String bookId);
+
+    @Query("""
               SELECT r FROM Review r\s
               WHERE  r.user.id = :userId\s
-              AND r.status = 'REVIEWED'
+              AND r.status = 'ACTIVE'
             """)
     Page<Review> findAllWithSearchByUserId(String userId, Pageable pageable);
 }

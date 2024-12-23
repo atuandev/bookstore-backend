@@ -4,6 +4,7 @@ import com.iuh.dto.request.ReviewCreationRequest;
 import com.iuh.dto.request.ReviewUpdateRequest;
 import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.ReviewResponse;
+import com.iuh.entity.Book;
 import com.iuh.entity.Review;
 import com.iuh.enums.ReviewStatus;
 import com.iuh.exception.AppException;
@@ -40,8 +41,13 @@ public class ReviewServiceImpl implements ReviewService {
 
         review.setUser(userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
-        review.setBook(bookRepository.findById(request.getBookId())
-                .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND)));
+
+        Book book = bookRepository.findById(request.getBookId())
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+        // Increase review count of book and update review star
+        book.setReviewCount(book.getReviewCount() + 1);
+        book.setReviewStar((book.getReviewStar() * (book.getReviewCount() - 1) + request.getRating()) / book.getReviewCount());
+        review.setBook(book);
 
         return reviewMapper.toResponse(reviewRepository.save(review));
     }
@@ -101,6 +107,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void delete(String reviewId) {
+        // Decrease review count of book
+        Book book = getReviewById(reviewId).getBook();
+        book.setReviewCount(book.getReviewCount() - 1);
+        book.setReviewStar((book.getReviewStar() * (book.getReviewCount() + 1) - book.getReviewStar()) / book.getReviewCount());
+
         reviewRepository.deleteById(reviewId);
     }
 

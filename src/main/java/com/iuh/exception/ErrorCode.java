@@ -61,6 +61,8 @@ public enum ErrorCode {
     INVALID_TOKEN(1047, "Invalid token", HttpStatus.BAD_REQUEST),
     INCORRECT_OLD_PASSWORD(1048, "Old password is incorrect", HttpStatus.BAD_REQUEST),
     INVALID_BOOK_THUMBNAIL(1049, "Thumbnail must not be null", HttpStatus.BAD_REQUEST),
+    JSON_PROCESSING_ERROR(1050, "Json processing error", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_AVATAR(1051, "Avatar must not be null", HttpStatus.BAD_REQUEST),
     ;
 
     int code;
