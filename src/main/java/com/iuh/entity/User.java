@@ -41,5 +41,5 @@ public class User extends AbstractEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    Set<UserAddress> addresses = new HashSet<>();
+    Set<UserAddress> addresses;
 }

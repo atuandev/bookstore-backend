@@ -23,7 +23,6 @@ public class UserResponse {
     String avatar;
     UserStatus status;
     Set<RoleResponse> roles;
-    Set<UserAddressResponse> addresses;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

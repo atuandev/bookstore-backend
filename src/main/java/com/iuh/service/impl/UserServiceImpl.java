@@ -88,6 +88,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse findById(String id) {
         User user = getUserById(id);
+        updateCacheUser(user, 1);
         return userMapper.toResponse(user);
     }
 

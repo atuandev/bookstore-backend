@@ -42,6 +42,20 @@ public class UserAddressController {
                 .data(userAddressService.findAll(pageNo, pageSize, sortBy, search)).build();
     }
 
+    @Operation(summary = "ADMIN: Get all user addresses")
+    @GetMapping("/user/{userId}")
+    ApiResponse<PageResponse<Object>> getAllByUserId(
+            @PathVariable String userId,
+            @RequestParam(defaultValue = "0", required = false) @Min(0) int pageNo,
+            @RequestParam(defaultValue = "12", required = false) @Min(4) int pageSize,
+            @RequestParam(defaultValue = "createdAt:desc", required = false) String sortBy,
+            @RequestParam(defaultValue = "", required = false) String search
+    ) {
+        return ApiResponse.<PageResponse<Object>>builder()
+                .message("Get all user addresses")
+                .data(userAddressService.findAllByUserId(userId, pageNo, pageSize, sortBy, search)).build();
+    }
+
     @Operation(summary = "Get user address details")
     @GetMapping("/{addressId}")
     ApiResponse<UserAddressResponse> getUserAddressDetails(@PathVariable String addressId) {

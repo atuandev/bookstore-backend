@@ -366,7 +366,7 @@ DELETE FROM `users`;
 INSERT INTO `users` (`id`, `created_at`, `updated_at`, `avatar`, `email`, `name`, `password`, `status`, `username`) VALUES
 	('0d42394b-35ac-4b8f-9e96-a513388d007d', '2024-12-01 20:16:50.723267', '2024-12-01 20:16:50.723267', 'https://ui-avatars.com/api/?background=random&rounded=true&bold=true&name=anh+tuan', 'tuan@gmail.com', 'anh tuan', '$2a$10$0syVww3PJqxeSe3BdBMs8eY4p19fTOsJzDtFEg4Uw1.IaGcEIiJ7W', 'ACTIVE', 'anhtuan'),
 	('268a4722-2abf-483a-a58b-ef41dc5d7537', '2024-11-29 12:17:43.055830', '2024-11-30 10:35:36.371551', 'https://ui-avatars.com/api/?background=random&rounded=true&bold=true&name=Son+Tung', 'sontung@gmail.com', 'Son Tung', '$2a$10$yrggAneP6/iNd2pTEGgy/uf6Xvh1eP5silSsixip6dU6eD3TPB05i', 'ACTIVE', 'sontung'),
-	('9b1c2041-348d-4cb4-98e5-bbf229c4a17f', '2024-11-25 14:23:09.381710', '2024-12-19 19:41:59.532409', 'https://ui-avatars.com/api/?background=random&rounded=true&bold=true&name=Admin', 'atuandev@gmail.com', 'Nguyễn Phan Anh Tuấn', '$2a$10$ttvCQi07u/IFlfV9xLuR6u60jKNdpZfTV.X3Yb.XG2coUrr.HYFG2', 'ACTIVE', 'admin');
+	('9b1c2041-348d-4cb4-98e5-bbf229c4a17f', '2024-11-25 14:23:09.381710', '2024-12-23 15:28:49.892460', 'https://ui-avatars.com/api/?background=random&rounded=true&bold=true&name=Anh+Tuan', 'atuandev@gmail.com', 'Nguyen Phan Anh Tuan', '$2a$10$dTo9vuSZZMo5k6NFqu8nPOdCuvoIbNMZuldAouO28asrPtyk74aki', 'ACTIVE', 'admin');
 
 -- Dumping structure for table bookstore.users_roles
 CREATE TABLE IF NOT EXISTS `users_roles` (
