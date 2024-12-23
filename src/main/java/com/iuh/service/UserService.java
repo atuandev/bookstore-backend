@@ -2,6 +2,8 @@ package com.iuh.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iuh.dto.request.UserCreationRequest;
+import com.iuh.dto.request.UserUpdateAvatarRequest;
+import com.iuh.dto.request.UserUpdatePasswordRequest;
 import com.iuh.dto.request.UserUpdateRequest;
 import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.UserResponse;
@@ -14,7 +16,7 @@ public interface UserService {
 
     UserResponse getMyInfo() throws JsonProcessingException;
 
-    UserResponse update(String id, UserUpdateRequest request);
+    UserResponse update(String id, UserUpdateRequest request) throws JsonProcessingException;
 
     void delete(String id);
 
@@ -22,9 +24,9 @@ public interface UserService {
 
     PageResponse<Object> findAllWithSpecifications(int pageNo, int pageSize, String sortBy, String[] users);
 
-    void updateStatus(String id, UserStatus status);
+    void updateStatus(String id, UserStatus status) throws JsonProcessingException;
 
-    void updatePassword(String id, String oldPassword, String newPassword);
+    void updatePassword(String id, UserUpdatePasswordRequest request) throws JsonProcessingException;
 
-    void updateAvatar(String id, String avatar);
+    void updateAvatar(String id, UserUpdateAvatarRequest request) throws JsonProcessingException;
 }

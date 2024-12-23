@@ -6,6 +6,8 @@ import com.iuh.constant.AppConstant;
 import com.iuh.constant.PredefinedRole;
 import com.iuh.constant.RedisKey;
 import com.iuh.dto.request.UserCreationRequest;
+import com.iuh.dto.request.UserUpdateAvatarRequest;
+import com.iuh.dto.request.UserUpdatePasswordRequest;
 import com.iuh.dto.request.UserUpdateRequest;
 import com.iuh.dto.response.PageResponse;
 import com.iuh.dto.response.UserResponse;
@@ -95,24 +97,23 @@ public class UserServiceImpl implements UserService {
      * @return UserResponse
      */
     @Override
-    public UserResponse getMyInfo() throws JsonProcessingException {
+    public UserResponse getMyInfo() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         // Check if user info is cached
         String userJson = redisService.hashGet(RedisKey.USER_INFO, username);
         if (StringUtils.isNotEmpty(userJson)) {
-            User cachedUser = redisObjectMapper.readValue(userJson, User.class);
-            return userMapper.toResponse(cachedUser);
+            try {
+                User cachedUser = redisObjectMapper.readValue(userJson, User.class);
+                return userMapper.toResponse(cachedUser);
+            } catch (JsonProcessingException e) {
+                throw new AppException(ErrorCode.JSON_PROCESSING_ERROR);
+            }
         }
 
-        // If not cached, get user info from database
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-        // Cache the user info for 1 hour
-        userJson = redisObjectMapper.writeValueAsString(user);
-        redisService.hashSet(RedisKey.USER_INFO, username, userJson);
-        redisService.setExpireHours(RedisKey.USER_INFO, 1);
+        // If not cached, get user info from database and cache it
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        updateCacheUser(user, 1);
 
         return userMapper.toResponse(user);
     }
@@ -130,13 +131,21 @@ public class UserServiceImpl implements UserService {
     public UserResponse update(String id, UserUpdateRequest request) {
         User user = getUserById(id);
         userMapper.updateUser(user, request);
-        return userMapper.toResponse(userRepository.save(user));
+        User updatedUser = userRepository.save(user);
+
+        // Update cache
+        updateCacheUser(updatedUser, 2);
+        return userMapper.toResponse(updatedUser);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(String id) {
+        User user = getUserById(id);
         userRepository.deleteById(id);
+
+        // Remove from cache
+        deleteCacheUser(user.getUsername());
     }
 
     /**
@@ -187,28 +196,51 @@ public class UserServiceImpl implements UserService {
         User user = getUserById(id);
         user.setStatus(status);
         userRepository.save(user);
+
+        // Update cache
+        updateCacheUser(user, 1);
     }
 
     @Override
-    public void updatePassword(String id, String oldPassword, String newPassword) {
+    public void updatePassword(String id, UserUpdatePasswordRequest request) {
         User user = getUserById(id);
 
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
             throw new AppException(ErrorCode.INCORRECT_OLD_PASSWORD);
         }
 
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
+
+        // Update cache
+        updateCacheUser(user, 1);
     }
 
     @Override
-    public void updateAvatar(String id, String avatar) {
+    public void updateAvatar(String id, UserUpdateAvatarRequest request) {
         User user = getUserById(id);
-        user.setAvatar(avatar);
+        user.setAvatar(request.getAvatar());
         userRepository.save(user);
+
+        // Update cache
+        updateCacheUser(user, 1);
     }
 
     private User getUserById(String id) {
         return userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    private void updateCacheUser(User user, int expireHours) {
+        try {
+            String userJson = redisObjectMapper.writeValueAsString(user);
+            redisService.hashSet(RedisKey.USER_INFO, user.getUsername(), userJson);
+            redisService.setExpireHours(RedisKey.USER_INFO, expireHours);
+        } catch (JsonProcessingException e) {
+            throw new AppException(ErrorCode.JSON_PROCESSING_ERROR);
+        }
+    }
+
+    private void deleteCacheUser(String username) {
+        redisService.delete(RedisKey.USER_INFO, username);
     }
 }
