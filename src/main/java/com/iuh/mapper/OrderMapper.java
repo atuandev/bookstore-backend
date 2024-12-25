@@ -15,12 +15,11 @@ public interface OrderMapper {
     Order toOrder(OrderCreationRequest request);
 
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "orderDetails", target = "orderDetails")
     OrderResponse toOrderResponse(Order order);
 
     @Mapping(source = "book.title", target = "bookTitle")
     @Mapping(source = "book.slug", target = "slug")
-    @Mapping(source = "book.bookImages", target = "bookImages")
-    OrderDetailResponse mapOrderDetailToResponse(OrderDetail orderDetail);
+    @Mapping(source = "book.thumbnail", target = "thumbnail")
+    OrderDetailResponse toOrderDetailResponse(OrderDetail orderDetail);
 
 }

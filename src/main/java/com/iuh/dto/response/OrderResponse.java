@@ -1,5 +1,7 @@
 package com.iuh.dto.response;
 
+import com.iuh.enums.OrderStatus;
+import com.iuh.enums.PaymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,8 +21,8 @@ public class OrderResponse {
     String receiverName;
     String receiverPhone;
     String address;
-    String paymentMethod;
-    String orderStatus;
+    PaymentMethod paymentMethod;
+    OrderStatus orderStatus;
     Double total;
     String userId;
     List<OrderDetailResponse> orderDetails;
