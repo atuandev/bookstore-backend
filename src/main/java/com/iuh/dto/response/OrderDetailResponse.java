@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,7 +14,7 @@ import java.util.Set;
 public class OrderDetailResponse {
     String bookTitle;
     String slug;
-    Set<BookImageResponse> bookImages;
+    String thumbnail;
     Integer quantity;
     Double price;
 }
