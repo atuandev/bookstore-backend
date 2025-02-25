@@ -3,7 +3,6 @@ package com.iuh.dto.request;
 import com.iuh.enums.BookStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,9 +61,9 @@ public class BookUpdateRequest {
 
     BookStatus status;
 
-    String categoryId;
+    String categorySlug;
 
-    String publisherId;
+    String publisherSlug;
 
     String discountCode;
 

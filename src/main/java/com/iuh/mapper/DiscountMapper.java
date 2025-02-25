@@ -1,6 +1,7 @@
 package com.iuh.mapper;
 
 import com.iuh.dto.request.DiscountRequest;
+import com.iuh.dto.response.DiscountResponse;
 import com.iuh.entity.Discount;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -10,4 +11,6 @@ public interface DiscountMapper {
     Discount toEntity(DiscountRequest request);
 
     void toUpdateEntity(@MappingTarget Discount category, DiscountRequest request);
+
+    DiscountResponse toResponse(Discount discount);
 }
