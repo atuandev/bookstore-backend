@@ -40,6 +40,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,6 +49,9 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserServiceImpl implements UserService {
+    private static final int DEFAULT_CACHE_HOURS = 1;
+    private static final int EXTENDED_CACHE_HOURS = 2;
+
     UserRepository userRepository;
     RoleRepository roleRepository;
     UserMapper userMapper;
@@ -88,35 +92,19 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse findById(String id) {
         User user = getUserById(id);
-        updateCacheUser(user, 1);
+        cacheUser(user, DEFAULT_CACHE_HOURS);
         return userMapper.toResponse(user);
     }
 
     /**
-     * Get user info
+     * Get user info from cache or database
      *
      * @return UserResponse
      */
     @Override
     public UserResponse getMyInfo() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        // Check if user info is cached
-        String userJson = redisService.hashGet(RedisKey.USER_INFO, username);
-        if (StringUtils.isNotEmpty(userJson)) {
-            try {
-                User cachedUser = redisObjectMapper.readValue(userJson, User.class);
-                return userMapper.toResponse(cachedUser);
-            } catch (JsonProcessingException e) {
-                throw new AppException(ErrorCode.JSON_PROCESSING_ERROR);
-            }
-        }
-
-        // If not cached, get user info from database and cache it
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        updateCacheUser(user, 1);
-
-        return userMapper.toResponse(user);
+        String username = getCurrentUsername();
+        return getUserResponseFromCacheOrDatabase(username);
     }
 
     /**
@@ -134,8 +122,7 @@ public class UserServiceImpl implements UserService {
         userMapper.updateUser(user, request);
         User updatedUser = userRepository.save(user);
 
-        // Update cache
-        updateCacheUser(updatedUser, 2);
+        cacheUser(updatedUser, EXTENDED_CACHE_HOURS);
         return userMapper.toResponse(updatedUser);
     }
 
@@ -144,9 +131,7 @@ public class UserServiceImpl implements UserService {
     public void delete(String id) {
         User user = getUserById(id);
         userRepository.deleteById(id);
-
-        // Remove from cache
-        deleteCacheUser(user.getUsername());
+        removeCachedUser(user.getUsername());
     }
 
     /**
@@ -197,9 +182,7 @@ public class UserServiceImpl implements UserService {
         User user = getUserById(id);
         user.setStatus(status);
         userRepository.save(user);
-
-        // Update cache
-        updateCacheUser(user, 1);
+        cacheUser(user, DEFAULT_CACHE_HOURS);
     }
 
     @Override
@@ -212,9 +195,7 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
-
-        // Update cache
-        updateCacheUser(user, 1);
+        cacheUser(user, DEFAULT_CACHE_HOURS);
     }
 
     @Override
@@ -222,26 +203,82 @@ public class UserServiceImpl implements UserService {
         User user = getUserById(id);
         user.setAvatar(request.getAvatar());
         userRepository.save(user);
-
-        // Update cache
-        updateCacheUser(user, 1);
+        cacheUser(user, DEFAULT_CACHE_HOURS);
     }
 
+    /**
+     * Get user by ID or throw exception if not found
+     */
     private User getUserById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 
-    private void updateCacheUser(User user, int expireHours) {
+    /**
+     * Get current authenticated username
+     */
+    private String getCurrentUsername() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    /**
+     * Get user from cache or database based on username
+     */
+    private UserResponse getUserResponseFromCacheOrDatabase(String username) {
+        // Try to get user from cache
+        User cachedUser = getCachedUser(username);
+        if (cachedUser != null) {
+            log.debug("Cache hit for user: {}", username);
+            return userMapper.toResponse(cachedUser);
+        }
+
+        // If not in cache, get from database and cache it
+        log.debug("Cache miss for user: {}, fetching from database", username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        cacheUser(user, DEFAULT_CACHE_HOURS);
+        return userMapper.toResponse(user);
+    }
+
+    /**
+     * Get user from cache
+     */
+    private User getCachedUser(String username) {
+        String userJson = redisService.hashGet(RedisKey.USER_INFO, username);
+        if (StringUtils.isEmpty(userJson)) {
+            return null;
+        }
+
+        try {
+            return redisObjectMapper.readValue(userJson, User.class);
+        } catch (JsonProcessingException e) {
+            log.error("Error deserializing cached user: {}", username, e);
+            removeCachedUser(username); // Remove invalid cache entry
+            return null;
+        }
+    }
+
+    /**
+     * Cache user with specified expiration
+     */
+    private void cacheUser(User user, int expireHours) {
         try {
             String userJson = redisObjectMapper.writeValueAsString(user);
             redisService.hashSet(RedisKey.USER_INFO, user.getUsername(), userJson);
             redisService.setExpireHours(RedisKey.USER_INFO, expireHours);
+            log.debug("User cached successfully: {}", user.getUsername());
         } catch (JsonProcessingException e) {
-            throw new AppException(ErrorCode.JSON_PROCESSING_ERROR);
+            log.error("Error serializing user for caching: {}", user.getUsername(), e);
+            // Continue without caching - fail gracefully
         }
     }
 
-    private void deleteCacheUser(String username) {
+    /**
+     * Remove user from cache
+     */
+    private void removeCachedUser(String username) {
         redisService.delete(RedisKey.USER_INFO, username);
+        log.debug("Removed user from cache: {}", username);
     }
 }
