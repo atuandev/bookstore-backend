@@ -47,7 +47,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public BookResponse save(BookCreationRequest request) {
+    public BookResponseAdmin save(BookCreationRequest request) {
         Book book = bookMapper.toEntity(request);
 
         setAssociations(book, request.getCategorySlug(), request.getPublisherSlug(), request.getDiscountCode());
@@ -108,8 +108,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public BookResponse findById(String id) {
-        return bookMapper.toResponse(getBookById(id));
+    public BookResponseAdmin findById(String id) {
+        return bookMapper.toResponseAdmin(getBookById(id));
     }
 
     @Override
@@ -122,7 +122,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public BookResponse update(String id, BookUpdateRequest request) {
+    public BookResponseAdmin update(String id, BookUpdateRequest request) {
         Book book = getBookById(id);
         bookMapper.toUpdateEntity(book, request);
 
@@ -150,10 +150,10 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findById(bookId).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
     }
 
-    private BookResponse saveBook(Book book) {
+    private BookResponseAdmin saveBook(Book book) {
         try {
             Book savedBook = bookRepository.save(book);
-            return bookMapper.toResponse(savedBook);
+            return bookMapper.toResponseAdmin(savedBook);
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.BOOK_EXISTS);
         }
