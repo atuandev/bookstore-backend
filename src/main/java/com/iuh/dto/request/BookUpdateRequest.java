@@ -25,6 +25,9 @@ public class BookUpdateRequest {
     @Size(min = 1, message = "INVALID_BOOK_SLUG")
     String slug;
 
+    @Size(min = 1, message = "INVALID_BOOK_THUMBNAIL")
+    String thumbnail;
+
     @Size(min = 1, message = "INVALID_BOOK_DESCRIPTION")
     String description;
 
@@ -58,6 +61,10 @@ public class BookUpdateRequest {
     Boolean isNew;
 
     Boolean isFeatured;
+
+    Integer reviewCount;
+
+    Double reviewStar;
 
     BookStatus status;
 
