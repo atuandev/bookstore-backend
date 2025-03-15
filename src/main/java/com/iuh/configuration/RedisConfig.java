@@ -30,8 +30,8 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     Integer redisPort;
 
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_DATE;
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
@@ -75,7 +75,7 @@ public class RedisConfig {
         module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DATE_TIME_FORMATTER));
         module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DATE_TIME_FORMATTER));
 
-        // Add LocalDate serialization/deserialization
+        // Configure LocalDate serialization/deserialization
         module.addSerializer(LocalDate.class, new LocalDateSerializer(DATE_FORMATTER));
         module.addDeserializer(LocalDate.class, new LocalDateDeserializer(DATE_FORMATTER));
 
