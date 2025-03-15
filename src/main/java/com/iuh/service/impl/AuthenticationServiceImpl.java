@@ -1,41 +1,39 @@
 package com.iuh.service.impl;
 
-import java.text.ParseException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.StringJoiner;
-import java.util.UUID;
-
+import com.iuh.dto.request.AuthenticationRequest;
+import com.iuh.dto.request.IntrospectRequest;
+import com.iuh.dto.request.LogoutRequest;
+import com.iuh.dto.request.RefreshRequest;
 import com.iuh.dto.response.AuthenticationResponse;
 import com.iuh.dto.response.IntrospectResponse;
 import com.iuh.entity.InvalidatedToken;
 import com.iuh.entity.User;
+import com.iuh.exception.AppException;
+import com.iuh.exception.ErrorCode;
+import com.iuh.repository.InvalidatedTokenRepository;
+import com.iuh.repository.UserRepository;
 import com.iuh.service.AuthenticationService;
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.iuh.dto.request.AuthenticationRequest;
-import com.iuh.dto.request.IntrospectRequest;
-import com.iuh.dto.request.LogoutRequest;
-import com.iuh.dto.request.RefreshRequest;
-import com.iuh.exception.AppException;
-import com.iuh.exception.ErrorCode;
-import com.iuh.repository.InvalidatedTokenRepository;
-import com.iuh.repository.UserRepository;
-import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.MACSigner;
-import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
-
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
-import lombok.extern.slf4j.Slf4j;
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.StringJoiner;
+import java.util.UUID;
 
 @Slf4j
 @Service
