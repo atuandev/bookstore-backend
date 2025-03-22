@@ -17,9 +17,7 @@ public interface OrderMapper {
     @Mapping(source = "user.id", target = "userId")
     OrderResponse toOrderResponse(Order order);
 
-    @Mapping(source = "book.title", target = "bookTitle")
-    @Mapping(source = "book.slug", target = "slug")
-    @Mapping(source = "book.thumbnail", target = "thumbnail")
+    @Mapping(source = "book.id", target = "bookId")
     OrderDetailResponse toOrderDetailResponse(OrderDetail orderDetail);
 
 }
